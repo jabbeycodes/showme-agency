@@ -110,13 +110,23 @@
     .field-error{min-height:18px;margin:0;color:#ff9d8b;font-size:12px;font-weight:600}
     .form-actions{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:26px}
     .form-actions .btn{font-family:inherit;cursor:pointer}
+    .form-actions .btn:disabled{cursor:wait;opacity:.68;transform:none;box-shadow:none}
+    .form-actions .btn:disabled::before{transform:scaleX(0)}
     .email-alternative{display:inline-block;border:0;background:none;color:var(--text-muted);font:600 14px/1.5 'Public Sans',sans-serif;text-underline-offset:4px;transition:color var(--dur-fast) var(--ease)}
     .email-alternative:hover,.email-alternative:focus-visible{color:var(--mint)}
-    .form-status{display:none;margin:18px 0 0;padding:13px 15px;border-left:3px solid var(--mint);background:rgba(36,189,164,.09);color:#dffcf5;font-weight:600}
+    .honeypot{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;border:0!important}
+    .form-status{display:none;margin:18px 0 0;padding:13px 15px;border-left:3px solid var(--coral);background:rgba(242,101,75,.09);color:#ffe5df;font-weight:600}
     .form-status.visible{display:block}
     .contact-details{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;margin-top:30px;padding-top:24px;border-top:1px solid var(--night-line);color:var(--text-muted);font-size:14px}
     .contact-details a{color:var(--text);font-weight:700;text-decoration-color:var(--coral);text-underline-offset:4px;transition:color var(--dur-fast) var(--ease)}
     .contact-details a:hover,.contact-details a:focus-visible{color:var(--mint)}
+    .whatsapp-preference{margin:18px 0 0;text-align:center;font-size:14px}
+    .whatsapp-preference a{color:var(--text-muted);font-weight:700;text-decoration-color:var(--mint);text-underline-offset:4px;transition:color var(--dur-fast) var(--ease)}
+    .whatsapp-preference a:hover,.whatsapp-preference a:focus-visible{color:var(--mint)}
+    .contact-success{margin-top:50px;padding:clamp(30px,5vw,56px);border:1px solid rgba(36,189,164,.48);background:rgba(36,189,164,.07);animation:contact-success-in var(--dur) var(--ease) both}
+    .contact-success h3{font-size:clamp(28px,4vw,42px);color:var(--text)}
+    .contact-success p{max-width:680px;margin:16px 0 0;color:var(--text-muted);font-size:18px}
+    @keyframes contact-success-in{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
     footer{background:var(--ink);color:#fff;padding:28px 0}
     .foot{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;font-size:14px}
     .foot a{color:#fff;text-decoration-color:var(--mint);text-underline-offset:3px}
@@ -396,6 +406,10 @@
           <p class="section-lead">Tell us about your business — we'll reply within one business day.</p>
         </div>
         <form class="contact-form" id="contactForm" novalidate>
+          <div class="honeypot" aria-hidden="true">
+            <label for="contactWebsite">Website</label>
+            <input id="contactWebsite" name="website" type="text" autocomplete="off" tabindex="-1">
+          </div>
           <div class="form-grid">
             <div class="field">
               <label for="contactName">Your name</label>
@@ -437,15 +451,16 @@
             </div>
           </div>
           <div class="form-actions">
-            <button class="btn primary" type="submit">Send via WhatsApp <span aria-hidden="true">→</span></button>
+            <button class="btn primary" type="submit">Request my free audit <span aria-hidden="true">→</span></button>
             <a class="email-alternative" id="emailAlternative" href="mailto:josh@showmeworld.app">Prefer email? Send it by email instead</a>
           </div>
-          <p class="form-status" id="formStatus" role="status" aria-live="polite">Opening WhatsApp — just press send to reach us.</p>
+          <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
           <div class="contact-details">
             <a href="mailto:josh@showmeworld.app">josh@showmeworld.app</a>
             <a href="https://wa.me/13364572361" target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a>
           </div>
         </form>
+        <p class="whatsapp-preference"><a href="https://wa.me/13364572361?text=Hi%20ShowMe%20Digital%20Agency%2C%20I%27d%20like%20to%20chat%20about%20a%20free%20digital%20audit." target="_blank" rel="noopener noreferrer">Prefer to chat now? Message us on WhatsApp →</a></p>
       </div>
     </section>
   </main>
@@ -480,6 +495,7 @@
       var contactForm=document.getElementById('contactForm');
       var emailAlternative=document.getElementById('emailAlternative');
       var formStatus=document.getElementById('formStatus');
+      var submitButton=contactForm&&contactForm.querySelector('[type="submit"]');
       function contactValues(){
         return {
           name:contactForm.querySelector('[name="name"]').value.trim(),
@@ -524,6 +540,25 @@
         if(firstInvalid)firstInvalid.focus();
         return !firstInvalid;
       }
+      function showContactSuccess(values){
+        var panel=document.createElement('div');
+        var heading=document.createElement('h3');
+        var text=document.createElement('p');
+        panel.className='contact-success';
+        panel.setAttribute('role','status');
+        panel.setAttribute('tabindex','-1');
+        heading.textContent='Request received.';
+        text.textContent='Thanks '+values.name+' — we\'ve sent the next steps to '+values.email+'. We reply within one business day.';
+        panel.appendChild(heading);
+        panel.appendChild(text);
+        contactForm.replaceWith(panel);
+        panel.focus({preventScroll:true});
+      }
+      function openWhatsAppFallback(values){
+        formStatus.textContent="Couldn't reach our server — opening WhatsApp instead.";
+        formStatus.classList.add('visible');
+        window.location.assign('https://wa.me/13364572361?text='+encodeURIComponent(enquiryMessage(values)));
+      }
       if(contactForm){
         contactForm.addEventListener('input',function(event){
           var field=event.target.closest('.field');
@@ -535,12 +570,31 @@
           }
           formStatus.classList.remove('visible');
         });
-        contactForm.addEventListener('submit',function(event){
+        contactForm.addEventListener('submit',async function(event){
           event.preventDefault();
           if(!validateContact())return;
-          var message=enquiryMessage(contactValues());
-          window.open('https://wa.me/13364572361?text='+encodeURIComponent(message),'_blank','noopener,noreferrer');
-          formStatus.classList.add('visible');
+          var values=contactValues();
+          var honeypot=contactForm.querySelector('[name="website"]');
+          if(honeypot&&honeypot.value){
+            showContactSuccess(values);
+            return;
+          }
+          submitButton.disabled=true;
+          submitButton.innerHTML='Sending…';
+          try{
+            var response=await fetch('/api/lead',{
+              method:'POST',
+              headers:{'Content-Type':'application/json'},
+              body:JSON.stringify(values)
+            });
+            var result=response.status===200?await response.json():null;
+            if(response.status!==200||!result||result.ok!==true)throw new Error('Lead request failed');
+            showContactSuccess(values);
+          }catch(error){
+            submitButton.disabled=false;
+            submitButton.innerHTML='Request my free audit <span aria-hidden="true">→</span>';
+            openWhatsAppFallback(values);
+          }
         });
         emailAlternative.addEventListener('click',function(){
           var values=contactValues();
