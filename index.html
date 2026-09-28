@@ -6,7 +6,18 @@
   <meta name="color-scheme" content="dark light" />
   <meta name="theme-color" content="#07111f" />
   <link rel="icon" href="data:," />
-  <title>ShowMe Digital Agency</title>
+  <title>ShowMe Digital Agency — Build. Grow. Automate.</title>
+  <meta name="description" content="ShowMe Digital Agency is your digital business partner in Accra, Ghana. We build websites, grow demand, and automate the systems behind your customer journey. Start with a free digital business audit." />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="ShowMe Digital Agency" />
+  <meta property="og:title" content="ShowMe Digital Agency — Build. Grow. Automate." />
+  <meta property="og:description" content="Your digital business partner in Accra, Ghana. Websites, growth, brand, business technology, AI & automation, and software. Start with a free digital business audit." />
+  <meta property="og:url" content="https://agency.showmeworld.app/" />
+  <meta property="og:image" content="https://raw.githubusercontent.com/jabbeycodes/showme-agency/main/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="ShowMe Digital Agency — Build. Grow. Automate." />
+  <meta name="twitter:description" content="Your digital business partner in Accra, Ghana. Start with a free digital business audit." />
+  <meta name="twitter:image" content="https://raw.githubusercontent.com/jabbeycodes/showme-agency/main/og-image.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -316,13 +327,26 @@
       .hero-copy,.hero-art,.hero-art img,.hero-note,.hero-note::after,.hero-line>span,.hero .eyebrow,.hero .lead,.hero .actions,[data-reveal]{opacity:1!important;transform:none!important}
       .scroll-progress{display:none}
     }
+    .process{padding:88px 0;background:var(--soft)}
+    .process h2{font-size:clamp(34px,4.6vw,56px);max-width:18ch;margin:14px 0 0}
+    .process-list{list-style:none;margin:44px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+    .process-list li{background:#fff;border:1px solid var(--line);border-radius:12px;padding:26px 22px;box-shadow:var(--shadow)}
+    .process-list b{display:block;font-size:15px;letter-spacing:.04em;color:var(--coral-dark);margin-bottom:10px}
+    .process-list span{color:var(--muted);font-size:15px}
+    @media(max-width:900px){.process-list{grid-template-columns:1fr 1fr}}
+    @media(max-width:560px){.process-list{grid-template-columns:1fr}}
+    .privacy{padding:64px 0;border-top:1px solid var(--line)}
+    .privacy h2{font-size:clamp(26px,3.4vw,38px);margin:0 0 12px}
+    .privacy p{color:var(--muted);max-width:70ch;margin:0}
+    .foot{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;justify-content:space-between}
+    .foot-links{display:flex;gap:18px}
   </style>
 </head>
 <body>
   <div class="scroll-progress" aria-hidden="true"></div>
   <header class="topbar">
     <nav class="wrap nav" aria-label="Primary navigation">
-      <a href="#fit">Who it’s for</a><a href="#services">Six divisions</a><a href="#pricing">Pricing</a>
+      <a href="#fit">Who it’s for</a><a href="#services">Six divisions</a><a href="#pricing">Pricing</a><a href="#process">How it works</a>
       <a class="cta" href="#contact">Free digital audit</a>
     </nav>
   </header>
@@ -399,6 +423,19 @@
       </div>
     </section>
 
+    <section class="process" id="process">
+      <div class="wrap">
+        <p class="kicker">How it works</p>
+        <h2>From first audit to steady growth in four steps.</h2>
+        <ol class="process-list">
+          <li><b>01 · Free audit</b><span>We review your website, visibility, and systems, then hand you a clear score and three priorities to keep.</span></li>
+          <li><b>02 · Growth plan</b><span>You get a plain-English plan: what we will build, what it costs, and what changes first.</span></li>
+          <li><b>03 · Launch in 7 days</b><span>Your site, lead system, and reporting go live within 7 days of onboarding — or month 1 is free.</span></li>
+          <li><b>04 · Grow monthly</b><span>We run your demand, follow up every lead, and report weekly. You watch the numbers.</span></li>
+        </ol>
+      </div>
+    </section>
+
     <section class="contact" id="contact">
       <div class="wrap">
         <div class="contact-head">
@@ -463,8 +500,14 @@
         <p class="whatsapp-preference"><a href="https://wa.me/13364572361?text=Hi%20ShowMe%20Digital%20Agency%2C%20I%27d%20like%20to%20chat%20about%20a%20free%20digital%20audit." target="_blank" rel="noopener noreferrer">Prefer to chat now? Message us on WhatsApp →</a></p>
       </div>
     </section>
+    <section class="privacy" id="privacy">
+      <div class="wrap">
+        <h2>Privacy, plainly stated.</h2>
+        <p>When you request an audit or contact us, we collect only what you share — your name, business, email, and phone number — and use it solely to respond to your enquiry and, if you become a client, to deliver our services. We never sell your information or share it with third parties for marketing. To review or delete your details at any time, email <a href="mailto:josh@showmeworld.app">josh@showmeworld.app</a>.</p>
+      </div>
+    </section>
   </main>
-  <footer><div class="wrap foot"><span>ShowMe Digital Agency · Accra, Ghana · Founded by Joshua Abbey</span><a href="mailto:josh@showmeworld.app">josh@showmeworld.app</a></div></footer>
+  <footer><div class="wrap foot"><span>ShowMe Digital Agency · Accra, Ghana · Founded by Joshua Abbey</span><span class="foot-links"><a href="#privacy">Privacy</a><a href="mailto:josh@showmeworld.app">josh@showmeworld.app</a></span></div></footer>
   <script>
     (function(){
       var reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -555,6 +598,7 @@
         panel.focus({preventScroll:true});
       }
       function openWhatsAppFallback(values){
+          if(window.__smeTrack)window.__smeTrack('whatsapp_click');
         formStatus.textContent="Couldn't reach our server — opening WhatsApp instead.";
         formStatus.classList.add('visible');
         window.location.assign('https://wa.me/13364572361?text='+encodeURIComponent(enquiryMessage(values)));
@@ -590,6 +634,7 @@
             var result=response.status===200?await response.json():null;
             if(response.status!==200||!result||result.ok!==true)throw new Error('Lead request failed');
             showContactSuccess(values);
+            if(window.__smeTrack)window.__smeTrack('lead_submitted');
           }catch(error){
             submitButton.disabled=false;
             submitButton.innerHTML='Request my free audit <span aria-hidden="true">→</span>';
@@ -723,6 +768,13 @@
         startMesh();
       }
     }());
+  </script>
+  <script>
+    (function(){
+      function track(e){try{fetch('/api/event',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({event:e}),keepalive:true});}catch(_){}}
+      window.__smeTrack=track;
+      track('pageview');
+    })();
   </script>
 </body>
 </html>
