@@ -1,22 +1,34 @@
 # ShowMe Digital Agency
 
-Public website for **agency.showmeworld.app** — "Your Digital Business Partner: Build. Grow. Automate."
+Conversion-focused multi-page website for **agency.showmeworld.app**.
 
-## Structure
+## Positioning
 
-- `index.html` — the complete site (single self-contained file: HTML + CSS + JS)
+**Turn attention into customers.**
 
-## Deployment
+ShowMe is positioned as a growth-and-automation partner for Ghanaian businesses, connecting acquisition, landing pages, WhatsApp, follow-up, CRM, reporting, automation, business technology and custom software.
 
-The live site is served from a Cloudflare Worker (`showme-agency`) that serves
-this file inline. After changing `index.html`, redeploy the worker with the
-latest file so the live site picks it up.
+## Pages
 
-## Sections
+- `index.html` — homepage / core positioning
+- `services.html` — ShowMe Growth System
+- `industries.html` — priority verticals and fit
+- `audit.html` — free 6-point Digital Growth Audit
+- `about.html` — differentiation / Why ShowMe
+- `styles.css` — shared design system
+- `site.js` — audit-to-WhatsApp conversion flow
 
-- Hero — Build. Grow. Automate.
-- Who it's for
-- Six divisions: Web & Commerce, Growth, Brand, Business Technology, AI & Automation, Software
-- Pricing
-- Free digital business audit
-- Contact (form submits via WhatsApp)
+## Core offer
+
+ShowMe Growth: **GHS 3,200/month**, 3-month minimum. Ad spend is separate; recommended from GHS 1,500/month.
+
+Pilot language is intentionally explicit: qualifying first-five clients may receive month 1 at GHS 1,600 **as part of the 3-month engagement**.
+
+## Deployment note
+
+The previous production setup served a single inline `index.html` from a Cloudflare Worker. The new site is multi-page. Production routing/static asset handling must serve the HTML pages plus `styles.css` and `site.js` before this branch is deployed as-is.
+
+## Contact
+
+- Email: josh@showmeworld.app
+- WhatsApp: +1 336 457 2361
