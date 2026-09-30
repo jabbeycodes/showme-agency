@@ -513,9 +513,14 @@ footer.site-footer { background: #040b14; border-top: 1px solid var(--night-line
   .mobile-cta { display: flex; }
   body { padding-bottom: 72px; }
 
-  /* Mobile nav panel */
+  /* Mobile nav panel.
+     NOTE: .topbar uses backdrop-filter, which makes it the containing block for
+     position:fixed descendants. So `top`/`left`/`right` are relative to the
+     topbar (full-width, at viewport top) and we set an explicit height rather
+     than `bottom:0` (which would collapse to the header's height). */
   .nav-links.mobile-open {
-    display: grid; position: fixed; top: var(--header-h); left: 0; right: 0; bottom: 0;
+    display: grid; position: fixed; top: var(--header-h); left: 0; right: 0;
+    height: calc(100dvh - var(--header-h));
     z-index: 55; background: var(--night); padding: 20px; gap: 4px; overflow-y: auto;
     align-content: start; border-top: 1px solid var(--night-line);
   }
