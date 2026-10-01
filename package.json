@@ -1,0 +1,17 @@
+{
+  "name": "showme-agency",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Public website for agency.showmeworld.app — ShowMe Digital Agency (Build. Grow. Automate.)",
+  "type": "module",
+  "scripts": {
+    "build:site": "node scripts/build.mjs",
+    "check": "node scripts/check.mjs",
+    "build": "npm run build:site && npm run check",
+    "serve": "node scripts/serve.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "UNLICENSED"
+}
