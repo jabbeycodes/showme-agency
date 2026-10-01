@@ -17,7 +17,9 @@ Cloudflare Worker.
 
 ```
 scripts/          build tooling & content (source of truth)
-  data.mjs        all copy: services, industries, FAQs, prices, contacts
+  data.mjs        all copy: services, industries, FAQs, contacts, insights index
+  prices.mjs      published "from" prices, bundles and payment terms
+  articles/       full Insights article bodies (HTML fragments)
   render.mjs      head/SEO, header (mega-menu), footer, cards, JSON-LD
   templates.mjs   service + industry detail page templates
   pages.mjs       one-off pages (home, pricing, contact, etc.)
@@ -28,10 +30,11 @@ static/           hand-authored assets copied into /public as-is
   styles.css      shared design system (dark-first, brand palette)
   site.js         nav, mega-menu, forms, FAQ, reveal, analytics beacons
   assets/         images (hero-owner.webp)
-  og-image.png    social share image (also kept at repo root, see note)
+  og-image.png    1200x630 social share image
+  favicon.*, icon-*.png, apple-touch-icon.png, site.webmanifest   icon set
 public/           GENERATED site (committed) — do not edit by hand
 worker/           Cloudflare Worker (serves /public, handles /api/*)
-og-image.png      kept at repo root because OG tags point at the raw GitHub URL
+og-image.png      copy of static/og-image.png (OG tags now use https://agency.showmeworld.app/og-image.png)
 ```
 
 ## Build & check
@@ -58,16 +61,33 @@ missing its single `<h1>`, title, meta description, canonical, skip link or
 
 ## Real facts baked into the site (do not change without founder input)
 
-- ShowMe Growth retainer: **GHS 3,200/month**, **3-month minimum**, paid
-  monthly in advance by MoMo or bank transfer.
+- ShowMe Growth retainer: **GHS 3,200/month**, **3-month minimum**, billed
+  monthly in advance (MoMo, bank transfer or card).
 - Ad spend is **separate** and prepaid in cedis (recommended from **GHS 1,500/mo**).
 - Guarantee: **live within 7 days of onboarding, or month 1 is free.**
 - First-5-clients offer: **month 1 for GHS 1,600.**
 - Contacts: **josh@showmeworld.app**, WhatsApp **+1 336 457 2361**.
 - Founder: **Joshua Abbey**, **Accra, Ghana**.
 
-Everything else is priced as a **custom quote** (or a clearly marked
-`From GHS [TBD]` placeholder) until the founder confirms real figures.
+## Pricing (set Oct 2026, in `scripts/prices.mjs`)
+
+All services now carry a published GHS "from" price plus an indicative USD guide
+(at roughly GHS 11.5 per USD; the proposal fixes the exact USD amount).
+Benchmarked against BVM Digital and Agodoo's public prices (see the audit in
+`/workspace/competitor-audit/report.md`): ShowMe sits mid-market on price and
+includes more as standard (preview before final payment, 30 days of launch
+support, WhatsApp lead capture, training, ownership).
+
+| Item | From |
+|---|---|
+| Launch bundle (site + Brand Essentials + GBP + 3 mo care) | GHS 11,500 |
+| Grow bundle (site + WhatsApp AI assistant + GBP) | GHS 12,500 + Growth retainer |
+| Scale bundle (store + full identity + 3 automations + 3 mo care) | GHS 24,500 |
+| Automation Audit (credited in full toward a build within 60 days) | GHS 1,500 |
+
+Payment terms: 50% deposit / 50% on launch (after the client approves a working
+preview), retainers monthly in advance, MoMo / bank transfer / card, USD quotes
+for US/UK/Canada clients.
 
 ## Lead pipeline (unchanged contract)
 
@@ -99,40 +119,35 @@ Static Assets so the multi-page site is served correctly.
 The Worker runs custom code **only** for `/api/lead` and `/api/event`
 (reproducing the previous handlers), and serves `public/` for everything else.
 
-## What the founder still needs to provide (placeholders)
+## Content status
 
-Every item below is marked in the HTML with a dashed "PLACEHOLDER" style and an
-`<!-- TODO(founder): ... -->` comment. Search the code for `TODO(founder)` to
-find them.
+All former `PLACEHOLDER` boxes and `TODO(founder)` comments have been replaced
+with finished copy (prices, bundles, payment terms, process durations, founder
+bio with a branded monogram, WhatsApp "Book a free call" with email fallback,
+six full Insights articles, Terms and Privacy). No testimonials, client names,
+logos, results or stats are shown anywhere: `/work/` uses clearly labelled
+**sample project** concepts, the founding-client programme and written
+guarantees instead. Add real case studies only with client permission and real
+numbers.
 
-**Proof & trust**
-- [ ] Real case studies on `/work/` (client, industry, challenge, what we did, result metric).
-- [ ] Real testimonials (name, business, permission to publish) on `/work/` and home.
-- [ ] Client logos (if any).
+### ⚠️ Legal review recommended
 
-**Pricing**
-- [ ] Bundle contents/prices for Launch / Grow / Scale on `/pricing/` (or keep as custom quote).
-- [ ] Real starting figures for `From GHS [TBD]` services (e.g. Automation Audit fee).
-- [ ] Project payment split (deposit/milestones), accepted card methods, USD terms for diaspora.
-- [ ] Confirm whether to offer "preview before final payment" as a formal guarantee.
+`/terms/` and `/privacy/` were drafted for a Ghana-based digital agency with
+reference to the Data Protection Act, 2012 (Act 843), the Electronic
+Transactions Act, 2008 (Act 772) and the Alternative Dispute Resolution Act,
+2010 (Act 798). They are **not** a substitute for advice from a Ghanaian lawyer.
+Before relying on them, have them reviewed, and confirm whether ShowMe needs to
+register with the Data Protection Commission as a data controller.
 
-**Process**
-- [ ] Indicative durations for each delivery phase (Discover → Support).
+### Things worth double-checking
 
-**About**
-- [ ] Joshua Abbey bio + professional photo.
-- [ ] Description of the other ShowMe brand products (ecosystem).
-- [ ] Which diaspora/international markets to highlight and whether USD quoting is offered.
+- USD guide figures if the cedi moves significantly (update `scripts/prices.mjs`).
+- The 30-day launch support, 60-day audit credit window, 14-day cancellation
+  notice and 21-day data-request response time are new commitments introduced
+  with this content; adjust in `prices.mjs`, `pages.mjs` and the legal pages if
+  you want different terms.
+- The `showmeworld.app` link on `/about/` assumes the parent site is live.
 
-**Contact**
-- [ ] Cal.com / Calendly booking link to embed on `/contact/`.
+### Deployment
 
-**Legal**
-- [ ] Reviewed Terms of Service (`/terms/` is a placeholder).
-- [ ] Confirm Ghana Data Protection Act requirements for `/privacy/`.
-
-**Insights**
-- [ ] Expand the three draft article outlines in `/insights/` into full articles.
-
-**Deployment**
 - [ ] Real `LEADS` KV namespace id in `worker/wrangler.toml`.
