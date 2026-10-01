@@ -1,9 +1,12 @@
+import { readFileSync } from 'node:fs';
 // ============================================================================
 // ShowMe Digital Agency — site content data
 // Single source of truth for pages, services and industries. Copy is original.
 // Real facts (prices, guarantee, contacts) are centralised in `site` and the
 // growth-retainer service so they stay consistent and easy to update.
 // ============================================================================
+
+import { PRICES } from './prices.mjs';
 
 export const site = {
   name: 'ShowMe Digital Agency',
@@ -16,7 +19,7 @@ export const site = {
   whatsappDisplay: '+1 336 457 2361',
   founder: 'Joshua Abbey',
   location: 'Accra, Ghana',
-  ogImage: 'https://raw.githubusercontent.com/jabbeycodes/showme-agency/main/og-image.png',
+  ogImage: 'https://agency.showmeworld.app/og-image.png',
   // Real, existing facts — do not change without founder input.
   facts: {
     retainerPrice: 'GHS 3,200',
@@ -31,6 +34,13 @@ export const site = {
 export function wa(text) {
   return 'https://wa.me/' + site.whatsappNumber + (text ? '?text=' + encodeURIComponent(text) : '');
 }
+
+// "Book a free call" opens WhatsApp with a prefilled message (no calendar
+// tool), with email as the fallback for anyone not on WhatsApp.
+export const BOOK_CALL_TEXT = "Hi Josh, I'd like to book a free 20-minute call with ShowMe.\n\nMy name: \nBusiness: \nWhat I need help with: \nBest day and time for a call (and my time zone): ";
+export const bookCallUrl = wa(BOOK_CALL_TEXT);
+export const bookCallMailto = 'mailto:' + site.email + '?subject=' + encodeURIComponent('Book a free call with ShowMe') +
+  '&body=' + encodeURIComponent("Hi Josh,\n\nI'd like to book a free 20-minute call.\n\nMy name: \nBusiness: \nWhat I need help with: \nBest day and time (and my time zone): \nPhone/WhatsApp: \n");
 
 // ---- Divisions --------------------------------------------------------------
 export const divisions = [
@@ -51,9 +61,14 @@ export const divisions = [
 export const divisionBySlug = Object.fromEntries(divisions.map(d => [d.slug, d]));
 
 // ---- Services ---------------------------------------------------------------
-// Every non-Growth service is priced as a custom quote (placeholder for a real
-// "From GHS [TBD]" once the founder confirms). Growth keeps its real numbers.
-const CUSTOM = { price: 'Custom quote', note: 'Every project is scoped to what you actually need, so pricing is a custom quote after a short discovery call.', placeholder: true };
+// Published "from" prices (GHS, with an indicative USD guide for diaspora
+// clients). Benchmarked against the Ghanaian market (see README). The Growth
+// retainer keeps its real, founder-set numbers below.
+function P(slug) {
+  const p = PRICES[slug];
+  if (!p) throw new Error('No price defined for service: ' + slug);
+  return { price: p.price, usd: p.usd, note: p.note, placeholder: false };
+}
 
 export const services = [
   // ===== Web & Commerce =====
@@ -79,9 +94,9 @@ export const services = [
       { t: 'Build', d: 'We develop, wire up enquiry capture, and add SEO foundations.' },
       { t: 'Launch', d: 'We go live, train your team and hand over full access.' }
     ],
-    pricing: CUSTOM,
+    pricing: P('business-websites'),
     faqs: [
-      { q: 'How long does a website take?', a: 'Most business sites launch within a few weeks of onboarding, depending on how quickly content and approvals come through. Indicative timelines are shared in your plan.' },
+      { q: 'How long does a website take?', a: 'A typical business website takes 3–5 weeks from the signed proposal: about a week for discovery and design, two to three weeks to build, then review and launch. Quick content and approvals keep it at the shorter end.' },
       { q: 'Can I update it myself?', a: 'Yes. We build with content you can edit and train your team at handover, so you are never locked into a developer for small changes.' },
       { q: 'Do I own the website?', a: 'You own your domain, content and assets. We hand over full access at launch.' }
     ],
@@ -109,7 +124,7 @@ export const services = [
       { t: 'Build', d: 'We wire in payments, inventory and WhatsApp reordering.' },
       { t: 'Launch', d: 'We test real payments, go live and train your team.' }
     ],
-    pricing: CUSTOM,
+    pricing: P('ecommerce-momo'),
     faqs: [
       { q: 'Which payment methods can you set up?', a: 'MTN MoMo, Telecel Cash, card and bank transfer via providers such as Paystack. We confirm the right mix for your customers during discovery.' },
       { q: 'Can customers reorder on WhatsApp?', a: 'Yes. We can add a WhatsApp reordering flow so repeat customers place orders in a couple of taps.' },
@@ -138,7 +153,7 @@ export const services = [
       { t: 'Build', d: 'We build, add tracking and connect your lead capture.' },
       { t: 'Optimise', d: 'We watch conversions and refine headlines and layout.' }
     ],
-    pricing: CUSTOM,
+    pricing: P('landing-pages-funnels'),
     faqs: [
       { q: 'Do I need a full website first?', a: 'No. A landing page can stand alone for a campaign, though it works best alongside your main site.' },
       { q: 'Can you run the ads too?', a: 'Yes — see our Paid Ads service, or bundle both inside the ShowMe Growth retainer.' },
@@ -167,7 +182,7 @@ export const services = [
       { t: 'Build', d: 'We add reminders and optional payments.' },
       { t: 'Launch', d: 'We go live and train your team on the dashboard.' }
     ],
-    pricing: CUSTOM,
+    pricing: P('booking-online-ordering'),
     faqs: [
       { q: 'Can it take deposits?', a: 'Yes. We can require a deposit or full payment via MoMo or card to reduce no-shows.' },
       { q: 'Will it send reminders?', a: 'Yes — automatic confirmations and reminders by WhatsApp, SMS or email, depending on your setup.' },
@@ -196,7 +211,7 @@ export const services = [
       { t: 'Maintain', d: 'We keep everything updated and handle small changes.' },
       { t: 'Report', d: 'You get a simple summary of what we did each month.' }
     ],
-    pricing: CUSTOM,
+    pricing: P('website-care'),
     faqs: [
       { q: 'Do I have to have built my site with you?', a: 'Not always — tell us what you are running and we will confirm whether we can take it on during a quick review.' },
       { q: 'What counts as a small change?', a: 'Text edits, swapping images, adding a page section and similar tasks. Larger work is quoted separately.' },
@@ -230,11 +245,12 @@ export const services = [
     // Real pricing — do not change without founder input.
     pricing: {
       price: site.facts.retainerPrice + ' / month',
-      note: 'Paid monthly in advance by MoMo or bank transfer, with a ' + site.facts.retainerMinimum + '. Ad spend is separate and prepaid in cedis (we recommend at least ' + site.facts.adSpendMin + '/month).',
+      usd: 'About USD 280 / month',
+      note: 'Billed monthly in advance (MoMo, bank transfer or card), with a ' + site.facts.retainerMinimum + '. Ad spend is separate and prepaid in cedis (we recommend at least ' + site.facts.adSpendMin + '/month).',
       placeholder: false
     },
     faqs: [
-      { q: 'What does the retainer cost?', a: site.facts.retainerPrice + ' per month with a ' + site.facts.retainerMinimum + ', paid in advance by MoMo or bank transfer. Ad spend is separate and prepaid in cedis; we recommend at least ' + site.facts.adSpendMin + '/month.' },
+      { q: 'What does the retainer cost?', a: site.facts.retainerPrice + ' per month with a ' + site.facts.retainerMinimum + ', billed monthly in advance by MoMo, bank transfer or card. Ad spend is separate and prepaid in cedis; we recommend at least ' + site.facts.adSpendMin + '/month.' },
       { q: 'Is ad spend included?', a: 'No. The retainer covers our management, landing page and lead system. Ad spend is paid separately and goes directly to the ad platforms.' },
       { q: 'What is the guarantee?', a: site.facts.guarantee + ' We guarantee our speed and execution, not inflated lead promises.' },
       { q: 'Is there an introductory offer?', a: 'For our first five clients, month 1 is ' + site.facts.pilotPrice + ' (50% off) with full delivery. The standard plan begins in month 2 unless you cancel.' }
@@ -263,7 +279,7 @@ export const services = [
       { t: 'Grow', d: 'We build reviews and keep the profile active.' },
       { t: 'Report', d: 'You see rankings, calls and directions each month.' }
     ],
-    pricing: CUSTOM,
+    pricing: P('local-seo-gbp'),
     faqs: [
       { q: 'How long until I see results?', a: 'Local visibility usually improves over the first few months as the profile strengthens and reviews grow. We report progress monthly.' },
       { q: 'Can you get me more reviews?', a: 'Yes — we set up an ethical review-generation flow that makes it easy for happy customers to leave honest reviews.' },
@@ -293,7 +309,7 @@ export const services = [
       { t: 'Grow', d: 'We publish content and build relevant links.' },
       { t: 'Report', d: 'You get monthly rankings, traffic and enquiry data.' }
     ],
-    pricing: CUSTOM,
+    pricing: P('seo-programme'),
     faqs: [
       { q: 'How is this different from Local SEO?', a: 'Local SEO focuses on your map presence and nearby searches. The SEO programme covers your whole site and content to rank more broadly.' },
       { q: 'How long does SEO take?', a: 'SEO compounds over months, not days. We focus on quick technical wins first, then build momentum with content and links.' },
@@ -322,7 +338,7 @@ export const services = [
       { t: 'Reinforce', d: 'We strengthen reviews and trusted sources.' },
       { t: 'Track', d: 'We report monthly on AI mentions and recommendations.' }
     ],
-    pricing: CUSTOM,
+    pricing: P('ai-search-visibility'),
     faqs: [
       { q: 'Can you guarantee an AI assistant will recommend me?', a: 'No. AI answers change constantly and no one controls them. We improve the signals that make a recommendation more likely and track the results honestly.' },
       { q: 'Is this the same as SEO?', a: 'It overlaps but is not identical. Good SEO helps, but AI visibility also depends on structured answers, profiles and reputation across sources AI tools trust.' },
@@ -352,7 +368,7 @@ export const services = [
       { t: 'Optimise', d: 'We cut what fails and scale what works.' },
       { t: 'Report', d: 'You see spend, leads and cost per lead monthly.' }
     ],
-    pricing: CUSTOM,
+    pricing: P('paid-ads'),
     faqs: [
       { q: 'Is ad spend included in your fee?', a: 'No. Our fee covers management and reporting. Ad spend is separate and goes directly to Google or Meta.' },
       { q: 'What budget do I need?', a: 'It depends on your market and goal. For the Growth retainer we recommend at least ' + site.facts.adSpendMin + '/month in ad spend; we will advise on the right level for you.' },
@@ -382,7 +398,7 @@ export const services = [
       { t: 'Manage', d: 'We schedule, post and handle community replies.' },
       { t: 'Report', d: 'You get a monthly performance summary.' }
     ],
-    pricing: CUSTOM,
+    pricing: P('social-media'),
     faqs: [
       { q: 'Which platforms do you manage?', a: 'Usually Instagram, Facebook, TikTok and LinkedIn — we focus on where your customers actually spend time.' },
       { q: 'Do you create the visuals?', a: 'Yes, all post and story design is included and kept on-brand.' },
@@ -411,7 +427,7 @@ export const services = [
       { t: 'Optimise', d: 'We add SEO, schema and internal links.' },
       { t: 'Measure', d: 'We track rankings and traffic over time.' }
     ],
-    pricing: CUSTOM,
+    pricing: P('content-marketing'),
     faqs: [
       { q: 'Do you write the content or do I?', a: 'We write it, working from a short briefing with you so it stays accurate and in your voice.' },
       { q: 'How often will you publish?', a: 'We agree a cadence that fits your goals and budget — often a set number of pieces per month.' },
@@ -440,7 +456,7 @@ export const services = [
       { t: 'Send', d: 'We schedule and send at the right times.' },
       { t: 'Report', d: 'You see opens, clicks and conversions.' }
     ],
-    pricing: CUSTOM,
+    pricing: P('email-sms'),
     faqs: [
       { q: 'Do I need a big list to start?', a: 'No. We help you start capturing contacts and make the most of the list you already have.' },
       { q: 'Is this compliant?', a: 'We use opt-in best practice and clear unsubscribe options so your messaging stays respectful and compliant.' },
@@ -469,7 +485,7 @@ export const services = [
       { t: 'Visualise', d: 'We build a dashboard around your key numbers.' },
       { t: 'Advise', d: 'We report monthly and recommend next steps.' }
     ],
-    pricing: CUSTOM,
+    pricing: P('analytics-reporting'),
     faqs: [
       { q: 'Can you fix tracking that is already broken?', a: 'Yes. A common first step is auditing and repairing existing analytics and conversion tracking.' },
       { q: 'Will I understand the reports?', a: 'That is the point. Reports are in plain English and focus on enquiries and revenue, not vanity metrics.' },
@@ -500,7 +516,7 @@ export const services = [
       { t: 'System', d: 'We build the guidelines and assets you need.' },
       { t: 'Handover', d: 'You receive all files and usage rules.' }
     ],
-    pricing: { price: 'Custom quote', note: 'Two common starting points — Essentials (logo and core assets) and a full identity system. We quote after understanding your scope.', placeholder: true },
+    pricing: P('brand-identity'),
     faqs: [
       { q: "What's the difference between Essentials and the full system?", a: 'Essentials covers your logo, colours, fonts and a mini guide. The full system adds complete guidelines, stationery and a social kit for larger or fast-growing brands.' },
       { q: 'Do I own the logo and files?', a: 'Yes. You receive all source files and full ownership at handover.' },
@@ -529,7 +545,7 @@ export const services = [
       { t: 'Refine', d: 'You review and we finalise.' },
       { t: 'Handover', d: 'You get print-ready and editable files.' }
     ],
-    pricing: CUSTOM,
+    pricing: P('marketing-collateral'),
     faqs: [
       { q: 'Do I need a brand identity first?', a: 'It helps. If you do not have one, we can start with Brand Identity or work within your existing style.' },
       { q: 'Will I get editable files?', a: 'Yes — templates your team can reuse, plus print-ready versions.' },
@@ -558,7 +574,7 @@ export const services = [
       { t: 'Edit', d: 'We deliver polished, web-ready files.' },
       { t: 'Deliver', d: 'You receive an organised image and video library.' }
     ],
-    pricing: { price: 'Custom quote', note: 'Photography and video are quoted per shoot based on location, scope and deliverables. Availability may depend on scheduling in Accra.', placeholder: true },
+    pricing: P('photography-video'),
     faqs: [
       { q: 'Where do you shoot?', a: 'On location at your business, or an agreed venue. We confirm logistics during planning.' },
       { q: 'Do I own the images?', a: 'Yes, you receive full rights to the delivered files for your marketing.' },
@@ -587,7 +603,7 @@ export const services = [
       { t: 'Refine', d: 'We tighten copy and visuals with you.' },
       { t: 'Handover', d: 'You get an editable master file.' }
     ],
-    pricing: CUSTOM,
+    pricing: P('pitch-decks'),
     faqs: [
       { q: 'Do you write the content?', a: 'We shape the structure and refine your copy. You provide the facts and numbers; we make them clear and persuasive.' },
       { q: 'Which format do I get?', a: 'An editable master (for example in your preferred presentation tool) plus an export for sharing.' },
@@ -618,7 +634,7 @@ export const services = [
       { t: 'Migrate', d: 'We move your data with minimal disruption.' },
       { t: 'Train', d: 'We onboard your team and hand over admin.' }
     ],
-    pricing: { price: 'Custom quote', note: 'Setup is quoted based on team size and migration needs. Microsoft licence fees are paid separately to Microsoft.', placeholder: true },
+    pricing: P('microsoft-365'),
     faqs: [
       { q: 'Do the Microsoft licences cost extra?', a: 'Yes. Our fee covers setup, migration and training; the monthly Microsoft licence fees are paid to Microsoft based on how many users you have.' },
       { q: 'Can you move my old emails?', a: 'Yes, migration from most common providers is part of the service.' },
@@ -647,7 +663,7 @@ export const services = [
       { t: 'Migrate', d: 'We move files in and set up backups.' },
       { t: 'Train', d: 'We train the team on the new system.' }
     ],
-    pricing: CUSTOM,
+    pricing: P('cloud-document-management'),
     faqs: [
       { q: 'Which platform do you use?', a: 'Usually Microsoft 365 or Google Workspace — we recommend the best fit for your tools and budget.' },
       { q: 'Can you set permissions?', a: 'Yes. We control who can see and edit what, so sensitive files stay protected.' },
@@ -676,7 +692,7 @@ export const services = [
       { t: 'Connect', d: 'We link your website, WhatsApp and email.' },
       { t: 'Train', d: 'We train your team and set up reporting.' }
     ],
-    pricing: CUSTOM,
+    pricing: P('crm-setup'),
     faqs: [
       { q: 'Which CRM do you recommend?', a: 'We match the tool to your size and budget rather than forcing one platform — from lightweight options to full CRMs.' },
       { q: 'Can it capture WhatsApp leads?', a: 'Yes. We connect your website and WhatsApp so enquiries land in the CRM automatically where possible.' },
@@ -705,7 +721,7 @@ export const services = [
       { t: 'Train', d: 'We run practical sessions with your team.' },
       { t: 'Document', d: 'We leave simple guides behind.' }
     ],
-    pricing: CUSTOM,
+    pricing: P('it-consulting-training'),
     faqs: [
       { q: 'Do you offer one-off sessions?', a: 'Yes — a single training or advisory session, or ongoing support, depending on your needs.' },
       { q: 'Can you train non-technical staff?', a: 'Absolutely. We keep training practical and jargon-free.' },
@@ -736,7 +752,7 @@ export const services = [
       { t: 'Connect', d: 'We connect it to WhatsApp with human hand-off.' },
       { t: 'Improve', d: 'We refine answers as real questions come in.' }
     ],
-    pricing: CUSTOM,
+    pricing: P('whatsapp-ai-assistant'),
     faqs: [
       { q: 'Will it replace my team?', a: 'No — it handles repetitive questions and qualifies leads, then hands off to a human for anything that needs a person.' },
       { q: 'Does it use the official WhatsApp API?', a: 'We recommend the right setup for your volume and budget, including the official WhatsApp Business API where appropriate.' },
@@ -765,7 +781,7 @@ export const services = [
       { t: 'Connect', d: 'We route orders to your team with confirmations.' },
       { t: 'Launch', d: 'We test real orders and go live.' }
     ],
-    pricing: CUSTOM,
+    pricing: P('whatsapp-ordering-booking'),
     faqs: [
       { q: 'How do customers pay?', a: 'With a MoMo payment link (and card where set up) sent right inside the chat, so they never leave WhatsApp.' },
       { q: 'Do I need a website too?', a: 'No, though it pairs well with an online store. The WhatsApp flow can work on its own.' },
@@ -795,7 +811,7 @@ export const services = [
       { t: 'Build', d: 'We build and test each automation.' },
       { t: 'Support', d: 'We monitor and refine as you grow.' }
     ],
-    pricing: { price: 'Custom quote', note: 'We usually start with an Automation Audit to find the highest-value workflows, then quote the build. Third-party tool subscriptions are separate.', placeholder: true },
+    pricing: P('business-process-automation'),
     faqs: [
       { q: 'Where should I start?', a: 'Most clients start with an Automation Audit so we target the workflows that save the most time first.' },
       { q: 'Which tools do you use?', a: 'Reliable automation platforms such as Make or n8n, connected to the apps you already use.' },
@@ -824,10 +840,11 @@ export const services = [
       { t: 'Prioritise', d: 'We rank opportunities by value and effort.' },
       { t: 'Recommend', d: 'You get a roadmap and a place to start.' }
     ],
-    pricing: { price: 'From GHS [TBD]', note: 'The Automation Audit is a paid entry offer. The fee is a placeholder until the founder confirms it; it can be credited toward a build.', placeholder: true },
+    pricing: P('automation-audit'),
     faqs: [
-      { q: 'Why is the audit paid?', a: 'It is real, focused work that gives you a usable roadmap even if you build nothing with us. The fee can be credited toward a build.' },
-      { q: 'How much does it cost?', a: 'The fee is being finalised. Message us and we will confirm the current price.' },
+      { q: 'Why is the audit paid?', a: 'It is real, focused work: interviews, process mapping and a written roadmap you keep even if you build nothing with us. If you do build, the full fee is credited back.' },
+      { q: 'How long does it take?', a: 'Usually 5–7 working days: a 60–90 minute discovery session, our analysis, then a walkthrough of your roadmap.' },
+      { q: 'How much does it cost?', a: 'A fixed GHS 1,500 (about USD 130). The full fee is credited toward any automation build you start with us within 60 days, so if you go ahead, the audit is effectively free.' },
       { q: 'What do I get at the end?', a: 'A prioritised roadmap of what to automate first, with time and cost estimates and a clear starting point.' }
     ],
     related: ['business-process-automation', 'whatsapp-ai-assistant', 'ai-knowledge-base']
@@ -853,7 +870,7 @@ export const services = [
       { t: 'Secure', d: 'We restrict access to your team.' },
       { t: 'Maintain', d: 'We set up a way to keep it current.' }
     ],
-    pricing: CUSTOM,
+    pricing: P('ai-knowledge-base'),
     faqs: [
       { q: 'Is my data kept private?', a: 'Yes. We design the setup so your knowledge base is restricted to your team and handled responsibly.' },
       { q: 'What documents can it use?', a: 'SOPs, policies, product info, FAQs and most common document formats.' },
@@ -884,7 +901,7 @@ export const services = [
       { t: 'Build', d: 'We develop in stages you can review.' },
       { t: 'Launch', d: 'We deploy, train and hand over.' }
     ],
-    pricing: CUSTOM,
+    pricing: P('custom-web-apps'),
     faqs: [
       { q: 'How do you scope a custom project?', a: 'We start with discovery to define users, features and phases, then quote so you can start with a focused first version.' },
       { q: 'Can we build in phases?', a: 'Yes — we recommend launching a focused first version, then adding features as you learn.' },
@@ -913,7 +930,7 @@ export const services = [
       { t: 'Build', d: 'We develop and test on real devices.' },
       { t: 'Launch', d: 'We publish to the stores and support launch.' }
     ],
-    pricing: CUSTOM,
+    pricing: P('mobile-apps'),
     faqs: [
       { q: 'Do I really need an app?', a: 'Often a fast mobile website is enough. We will tell you honestly whether an app is the right investment for your goal.' },
       { q: 'iOS, Android or both?', a: 'We recommend based on where your customers are; cross-platform builds can cover both efficiently.' },
@@ -942,7 +959,7 @@ export const services = [
       { t: 'Build', d: 'We build dashboards and internal tools.' },
       { t: 'Train', d: 'We onboard your team.' }
     ],
-    pricing: CUSTOM,
+    pricing: P('dashboards-internal-systems'),
     faqs: [
       { q: 'Can you connect my existing tools?', a: 'In most cases, yes — we connect common business apps, spreadsheets and databases.' },
       { q: 'Do you build on top of spreadsheets?', a: 'We can start from your spreadsheets and move you to something more reliable as you grow.' },
@@ -971,7 +988,7 @@ export const services = [
       { t: 'Build', d: 'We develop and test in stages.' },
       { t: 'Iterate', d: 'We launch and improve with real usage.' }
     ],
-    pricing: CUSTOM,
+    pricing: P('integrations-saas'),
     faqs: [
       { q: 'Can you integrate my payment and accounting tools?', a: 'In most cases, yes — we connect common payment, accounting and business tools so data flows without manual entry.' },
       { q: 'I have a SaaS idea — where do we start?', a: 'With discovery to define the smallest version worth launching, then a phased build so you learn from real users early.' },
@@ -1003,7 +1020,7 @@ export const industries = [
     whatWeBuild: ['A trust-building site aimed at diaspora buyers', 'Enquiry capture that works across time zones', 'Clear presentation of pricing (USD quotes as needed)', 'Automated first responses so no lead waits'],
     starter: 'A diaspora-focused landing page and lead system, paired with ads targeting key markets abroad.',
     relatedServices: ['landing-pages-funnels', 'growth-retainer', 'whatsapp-ai-assistant', 'business-websites'],
-    todo: 'Confirm which diaspora markets and currencies to prioritise, and whether USD quoting is offered.'
+    note: 'We focus on buyers in the US, UK and Canada. Developers and agents can be quoted in cedis; diaspora-facing businesses abroad can be quoted and invoiced in USD and pay by card or international transfer.'
   },
   {
     slug: 'private-healthcare', title: 'Private Healthcare & Dental',
@@ -1086,15 +1103,17 @@ export const faqGroups = [
   { title: 'General', items: [
     { q: 'Where is ShowMe based and who do you work with?', a: 'ShowMe Digital Agency is based in ' + site.location + ', founded by ' + site.founder + '. We work with ambitious businesses across Ghana — from small teams getting online to established companies modernising how they operate.' },
     { q: 'What makes ShowMe different?', a: 'We are one accountable partner across six divisions — web, growth, brand, business technology, AI and software — so you are not juggling freelancers. And we lead with proof, not promises: we guarantee our speed and execution, not inflated lead numbers.' },
-    { q: 'Do you work with businesses outside Accra?', a: 'Yes. We work with businesses across Ghana, and we serve diaspora and international clients too.' }
+    { q: 'Do you work with businesses outside Accra?', a: 'Yes. We work with businesses across Ghana, mostly remotely, and with diaspora clients in the US, UK and Canada, who can be quoted in USD.' }
   ]},
   { title: 'Pricing & payment', items: [
-    { q: 'How much is the ShowMe Growth retainer?', a: site.facts.retainerPrice + ' per month with a ' + site.facts.retainerMinimum + ', paid in advance by MoMo or bank transfer. Ad spend is separate and prepaid in cedis; we recommend at least ' + site.facts.adSpendMin + '/month.' },
-    { q: 'How is everything else priced?', a: 'Web, brand, technology, AI and software projects are scoped and quoted separately after a short discovery call, so you only pay for what you actually need.' },
-    { q: 'What payment methods do you accept?', a: 'MTN MoMo and bank transfer for the retainer. Project payment terms are confirmed in your proposal.' }
+    { q: 'How much is the ShowMe Growth retainer?', a: site.facts.retainerPrice + ' per month with a ' + site.facts.retainerMinimum + ', billed monthly in advance by MoMo, bank transfer or card. Ad spend is separate and prepaid in cedis; we recommend at least ' + site.facts.adSpendMin + '/month.' },
+    { q: 'How is everything else priced?', a: 'Every service has a published "from" price on our pricing page, so you know the starting point before we talk. Your fixed quote follows a short discovery call, based on exactly what you need.' },
+    { q: 'What payment methods do you accept?', a: 'Mobile Money (MTN MoMo, Telecel Cash, AT Money), bank transfer and debit or credit card via a secure payment link. Diaspora clients can pay USD quotes by card or international bank transfer.' },
+    { q: 'What are your payment terms?', a: 'Projects are 50% deposit to start and 50% on launch, and you approve a working preview before that final payment is due. Retainers and monthly plans are billed monthly in advance.' },
+    { q: 'Do you quote in US dollars?', a: 'Yes. Clients in the US, UK and Canada can receive a USD quote. Indicative USD prices are shown on our pricing page, and the exact figure is fixed in your proposal.' }
   ]},
   { title: 'Timelines', items: [
-    { q: 'How fast can you launch?', a: 'For the Growth retainer, your landing page, lead system and reporting go live within 7 days of onboarding — or month 1 is free. Larger projects follow indicative timelines shared in your plan.' },
+    { q: 'How fast can you launch?', a: 'For the Growth retainer, your landing page, lead system and reporting go live within 7 days of onboarding — or month 1 is free. A business website typically takes 3–5 weeks, an online store 5–8 weeks and a custom web app first version 6–10 weeks.' },
     { q: 'What do you need from me to hit those timelines?', a: 'Timely content, approvals and access. We tell you exactly what we need up front so nothing stalls.' }
   ]},
   { title: 'Websites & e-commerce', items: [
@@ -1116,27 +1135,48 @@ export const faqGroups = [
   ]}
 ];
 
-// ---- Insights (blog) starter outlines --------------------------------------
-export const insights = [
+// ---- Insights (blog) --------------------------------------------------------
+// Full article bodies live in scripts/articles/*.html (original copy).
+function article(file) {
+  return readFileSync(new URL('./articles/' + file, import.meta.url), 'utf8');
+}
+function words(html) { return html.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length; }
+
+const insightList = [
   {
-    slug: 'get-recommended-by-ai-assistants',
+    slug: 'get-recommended-by-ai-assistants', file: 'ai-assistants.html', topic: 'AI search',
     title: 'How to get your Ghanaian business recommended by AI assistants',
-    excerpt: 'AI answers are becoming the new front page. Here is how to structure your content, profiles and reputation so tools like ChatGPT, Gemini and Perplexity name your business.',
-    draft: true,
-    outline: ['Why AI answers matter for local businesses', 'How AI assistants choose what to recommend', 'Structured content and FAQs with schema', 'Complete, consistent profiles across trusted sources', 'Reviews and reputation signals', 'How to track your AI visibility over time']
+    excerpt: 'AI answers are becoming the new front page. Here is how to structure your content, profiles and reputation so tools like ChatGPT, Gemini and Perplexity name your business.'
   },
   {
-    slug: 'accept-mobile-money-on-your-website',
+    slug: 'ai-search-visibility-for-ghana-businesses', file: 'ai-search-ghana.html', topic: 'AI search',
+    title: 'AI search visibility for Ghanaian businesses: a plain-English guide',
+    excerpt: 'What AI search actually is, how it differs from traditional SEO, what to realistically expect and how to judge anyone offering to help.'
+  },
+  {
+    slug: 'local-seo-google-business-profile-ghana', file: 'local-seo-gbp.html', topic: 'Local SEO',
+    title: 'Local SEO in Ghana: getting the most from your Google Business Profile',
+    excerpt: 'How to claim, complete and maintain your Google Business Profile so nearby customers find you in the map pack, trust you and get in touch.'
+  },
+  {
+    slug: 'accept-mobile-money-on-your-website', file: 'momo.html', topic: 'E-commerce',
     title: 'How to accept Mobile Money payments on your website in Ghana',
-    excerpt: 'A plain-English guide to taking MoMo, card and bank payments online — what your options are, what they cost and how to avoid abandoned checkouts.',
-    draft: true,
-    outline: ['Why MoMo checkout matters for Ghanaian shoppers', 'Your options: MoMo, Telecel Cash, card and bank transfer', 'Payment providers and what to look for', 'Reducing abandoned carts at checkout', 'Adding WhatsApp reordering for repeat customers']
+    excerpt: 'A plain-English guide to taking MoMo, card and bank payments online: your options, what to look for in a provider and how to avoid abandoned checkouts.'
   },
   {
-    slug: 'follow-up-every-whatsapp-lead',
+    slug: 'follow-up-every-whatsapp-lead', file: 'followup.html', topic: 'Lead follow-up',
     title: 'Never lose another WhatsApp lead: a simple follow-up system',
-    excerpt: 'Most Ghanaian businesses lose sales to slow replies. Here is a simple system — part automation, part discipline — to make sure every WhatsApp enquiry gets followed up.',
-    draft: true,
-    outline: ['Why speed of reply decides who wins the sale', 'Capturing every enquiry in one place', 'Instant first responses with an AI assistant', 'Qualifying leads before a human steps in', 'Reminders so no follow-up is forgotten', 'Measuring response time and conversion']
+    excerpt: 'Most businesses lose sales to slow replies. Here is a simple system, part automation and part discipline, to make sure every WhatsApp enquiry gets followed up.'
+  },
+  {
+    slug: 'whatsapp-automation-for-ghana-businesses', file: 'whatsapp-automation.html', topic: 'Automation',
+    title: 'WhatsApp automation for Ghanaian businesses: what to automate and how',
+    excerpt: 'Orders, payments, bookings, reminders and FAQs: what you can safely automate on WhatsApp, the tools involved, costs to plan for and mistakes to avoid.'
   }
 ];
+
+export const insights = insightList.map(a => {
+  const body = article(a.file);
+  const wc = words(body);
+  return { ...a, body, wordCount: wc, readMins: Math.max(1, Math.round(wc / 220)), published: '2026-10-01', publishedLabel: '1 October 2026' };
+});

@@ -2,7 +2,7 @@
 // ShowMe Digital Agency — rendering helpers and shared partials
 // Pure string templates. No framework, output is plain static HTML.
 // ============================================================================
-import { site, divisions, services, servicesByDivision, industries, serviceBySlug } from './data.mjs';
+import { site, divisions, services, servicesByDivision, industries, serviceBySlug, bookCallUrl, bookCallMailto } from './data.mjs';
 
 export function esc(s) {
   return String(s == null ? '' : s)
@@ -15,7 +15,7 @@ export function url(path) {
 }
 
 // ---- Head / SEO -------------------------------------------------------------
-export function head({ title, description, path, jsonLd = [], noindex = false }) {
+export function head({ title, description, path, jsonLd = [], noindex = false, ogType = 'website' }) {
   const canonical = url(path);
   const ld = jsonLd.map(obj => `\n  <script type="application/ld+json">${JSON.stringify(obj)}</script>`).join('');
   return `<!doctype html>
@@ -25,16 +25,22 @@ export function head({ title, description, path, jsonLd = [], noindex = false })
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="dark light" />
   <meta name="theme-color" content="#07111f" />
-  <link rel="icon" href="data:," />
+  <link rel="icon" href="/favicon.ico" sizes="32x32" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
   <title>${esc(title)}</title>
   <meta name="description" content="${esc(description)}" />${noindex ? '\n  <meta name="robots" content="noindex,follow" />' : ''}
   <link rel="canonical" href="${esc(canonical)}" />
-  <meta property="og:type" content="website" />
+  <meta property="og:type" content="${esc(ogType)}" />
   <meta property="og:site_name" content="${esc(site.name)}" />
   <meta property="og:title" content="${esc(title)}" />
   <meta property="og:description" content="${esc(description)}" />
   <meta property="og:url" content="${esc(canonical)}" />
   <meta property="og:image" content="${esc(site.ogImage)}" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="ShowMe Digital Agency: Build. Grow. Automate. Websites, growth and automation for Ghanaian businesses." />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="${esc(title)}" />
   <meta name="twitter:description" content="${esc(description)}" />
@@ -158,8 +164,9 @@ export function footer() {
       ${col('Company', [
         { href: '/about/', label: 'About' },
         { href: '/free-audit/', label: 'Free audit' },
-        { href: '/contact/', label: 'Contact' },
-        { href: '/faq/', label: 'FAQ' }
+        { href: '/contact/', label: 'Contact & booking' },
+        { href: '/faq/', label: 'FAQ' },
+        { href: '/about/#partners', label: 'Partners & careers' }
       ])}
       ${col('Legal', [
         { href: '/privacy/', label: 'Privacy' },
@@ -203,8 +210,9 @@ export function ctaBand(opts = {}) {
       </div>
       <div class="btn-row" data-reveal>
         <a class="btn" href="/free-audit/"><span>Get your free audit →</span></a>
-        <a class="btn whatsapp" href="${'https://wa.me/' + site.whatsappNumber}" target="_blank" rel="noopener"><span>Chat on WhatsApp</span></a>
+        <a class="btn whatsapp" href="${esc(bookCallUrl)}" target="_blank" rel="noopener"><span>Book a free call</span></a>
       </div>
+      <p class="cta-fallback" data-reveal>Not on WhatsApp? <a href="${esc(bookCallMailto)}">Email ${esc(site.email)}</a> to book instead.</p>
     </div>
   </section>`;
 }
@@ -223,9 +231,7 @@ export function faqAccordion(faqs, idPrefix) {
 
 // ---- Cards ------------------------------------------------------------------
 export function serviceCard(s) {
-  const priceLine = s.pricing && s.pricing.price && s.pricing.price !== 'Custom quote'
-    ? `<span class="price-from">${esc(s.pricing.price)}</span>`
-    : `<span class="price-from">Custom quote</span>`;
+  const priceLine = `<span class="price-from">${esc(s.pricing.price)}</span>`;
   return `<a class="card" href="/services/${s.slug}/" data-reveal>
     <h3>${esc(s.title)}</h3>
     <p>${esc(s.summary)}</p>
@@ -243,8 +249,8 @@ export function industryCard(i) {
 }
 
 // ---- Full page assembly -----------------------------------------------------
-export function page({ title, description, path, jsonLd, main, noindex }) {
-  return `${head({ title, description, path, jsonLd, noindex })}
+export function page({ title, description, path, jsonLd, main, noindex, ogType }) {
+  return `${head({ title, description, path, jsonLd, noindex, ogType })}
 <body>
   ${header()}
   <main id="main">

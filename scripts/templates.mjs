@@ -10,12 +10,12 @@ import {
 function waLink(text) { return 'https://wa.me/' + site.whatsappNumber + '?text=' + encodeURIComponent(text); }
 
 function priceBlock(pricing) {
-  const isPlaceholder = pricing.placeholder;
-  const priceHtml = isPlaceholder
-    ? `<!-- TODO(founder): confirm pricing / replace "From GHS [TBD]" with a real starting figure -->
-       <div class="placeholder"><p><strong>${esc(pricing.price)}</strong><br>${esc(pricing.note)}</p></div>`
-    : `<div class="price">${esc(pricing.price)}</div><p style="color:var(--text-muted);font-size:14px;margin:0">${esc(pricing.note)}</p>`;
-  return priceHtml;
+  return `<div class="price-panel">
+              <div class="price">${esc(pricing.price)}</div>
+              ${pricing.usd ? `<p class="price-usd">${esc(pricing.usd)} for diaspora clients</p>` : ''}
+              <p style="color:var(--text-muted);font-size:15px;margin:12px 0 0;max-width:60ch">${esc(pricing.note)}</p>
+              <p style="color:var(--text-muted);font-size:14px;margin:12px 0 0">Projects: 50% deposit, 50% on launch, after you approve a working preview. Monthly plans are billed in advance. <a href="/pricing/" style="color:var(--mint)">Full pricing &amp; terms →</a></p>
+            </div>`;
 }
 
 export function serviceDetail(s) {
@@ -85,8 +85,8 @@ export function serviceDetail(s) {
         <aside class="detail-side">
           <div class="side-card">
             <h3>Start here</h3>
-            ${s.pricing.placeholder ? '' : `<div class="price">${esc(s.pricing.price)}</div>`}
-            <p style="color:var(--text-muted);font-size:14px;margin:0 0 16px">${s.slug === 'growth-retainer' ? esc(s.pricing.note) : 'Book a free audit or request a custom quote — we reply ' + site.facts.responsePromise + '.'}</p>
+            <div class="price">${esc(s.pricing.price)}</div>
+            <p style="color:var(--text-muted);font-size:14px;margin:0 0 16px">${s.slug === 'growth-retainer' ? esc(s.pricing.note) : 'Fixed quote after a free call — we reply ' + site.facts.responsePromise + '.'}</p>
             <div class="btn-row" style="display:grid">
               <a class="btn" href="/free-audit/"><span>Get a free audit →</span></a>
               <a class="btn whatsapp" href="${waLink('Hi ShowMe, I\'m interested in ' + s.title + '.')}" target="_blank" rel="noopener"><span>Ask on WhatsApp</span></a>
@@ -123,8 +123,8 @@ export function industryDetail(i) {
     ? `<div class="grid grid-2">${related.map(r => `<a class="card" href="/services/${r.slug}/" data-reveal><h3>${esc(r.title)}</h3><p>${esc(r.summary)}</p><span class="card-cta">Learn more →</span></a>`).join('')}</div>`
     : '';
 
-  const todo = i.todo
-    ? `<!-- TODO(founder): ${esc(i.todo)} -->\n          <div class="placeholder" data-reveal><p>${esc(i.todo)}</p></div>`
+  const note = i.note
+    ? `<p style="color:var(--text-muted);max-width:60ch;margin-top:14px">${esc(i.note)}</p>`
     : '';
 
   const main = `    <section class="page-hero">
@@ -154,7 +154,7 @@ export function industryDetail(i) {
           <div class="detail-block" data-reveal>
             <h2>Where we start</h2>
             <p style="color:var(--text-muted);max-width:60ch">${esc(i.starter)}</p>
-            ${todo}
+            ${note}
           </div>
           <div class="detail-block" data-reveal>
             <h2>Relevant services</h2>
