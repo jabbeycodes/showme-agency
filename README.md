@@ -123,11 +123,12 @@ The Worker runs custom code **only** for `/api/lead` and `/api/event`
 
 All former `PLACEHOLDER` boxes and `TODO(founder)` comments have been replaced
 with finished copy (prices, bundles, payment terms, process durations, founder
-bio with a branded monogram, WhatsApp "Book a free call" with email fallback,
+bio with the founder's photo (`static/assets/joshua-abbey*.webp|jpg`), WhatsApp "Book a free call" with email fallback,
 six full Insights articles, Terms and Privacy). No testimonials, client names,
-logos, results or stats are shown anywhere: `/work/` uses clearly labelled
-**sample project** concepts, the founding-client programme and written
-guarantees instead. Add real case studies only with client permission and real
+logos, results or stats are shown anywhere: `/work/` presents four
+**solutions we deliver** (what each system does, its features and the outcomes
+it is designed for, with no client names or results), the founding-client
+programme and written guarantees. Add real case studies only with client permission and real
 numbers.
 
 ### ⚠️ Legal review recommended

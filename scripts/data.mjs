@@ -18,6 +18,7 @@ export const site = {
   whatsappNumber: '13364572361',
   whatsappDisplay: '+1 336 457 2361',
   founder: 'Joshua Abbey',
+  founderImage: 'https://agency.showmeworld.app/assets/joshua-abbey.jpg',
   location: 'Accra, Ghana',
   ogImage: 'https://agency.showmeworld.app/og-image.png',
   // Real, existing facts — do not change without founder input.

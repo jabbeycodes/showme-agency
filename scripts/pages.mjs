@@ -9,7 +9,7 @@ import {
 import { BUNDLES, PAYMENT, USD_NOTE } from './prices.mjs';
 import {
   esc, url, page, breadcrumb, ctaBand, faqAccordion, serviceCard, industryCard,
-  orgLd, breadcrumbLd, faqLd
+  orgLd, breadcrumbLd, faqLd, founderPhoto
 } from './render.mjs';
 
 const WA = 'https://wa.me/' + site.whatsappNumber;
@@ -155,7 +155,7 @@ export function home() {
     image: site.ogImage,
     areaServed: { '@type': 'Country', name: 'Ghana' },
     address: { '@type': 'PostalAddress', addressLocality: 'Accra', addressCountry: 'GH' },
-    founder: { '@type': 'Person', name: site.founder },
+    founder: { '@type': 'Person', name: site.founder, image: site.founderImage, url: site.origin + '/about/' },
     slogan: site.tagline
   };
 
@@ -259,16 +259,24 @@ export function home() {
       <div class="wrap">
         <p class="kicker" data-reveal>Proof, not promises</p>
         <h2 data-reveal>Guarantees, not testimonials.</h2>
-        <p class="section-lead" data-reveal>We're a young agency, so we won't fill this space with borrowed quotes or invented numbers. Here's what we put in writing instead, in every proposal.</p>
+        <p class="section-lead" data-reveal>Instead of borrowed quotes or inflated numbers, here's what we put in writing in every proposal.</p>
         ${guaranteeGrid()}
         <div class="proof-strip" data-reveal>
           <div>
             <strong>See what we build.</strong>
-            <p>Four clearly labelled sample projects: restaurant ordering, real estate listings, a clinic WhatsApp assistant and invoice automation.</p>
+            <p>Solutions we deliver: a restaurant ordering system, a real-estate listing platform, a clinic WhatsApp assistant and invoice automation.</p>
           </div>
           <div class="btn-row" style="margin:0">
-            <a class="btn secondary" href="/work/"><span>View sample projects →</span></a>
+            <a class="btn secondary" href="/work/"><span>See what we build →</span></a>
             <a class="btn secondary" href="/work/#founding-clients"><span>Founding client places</span></a>
+          </div>
+        </div>
+        <div class="founder-note" data-reveal>
+          ${founderPhoto({ size: 96, cls: 'founder-photo sm' })}
+          <div>
+            <strong>Founder-led, start to finish.</strong>
+            <p>Joshua (Josh) Abbey scopes every project himself, writes a fixed plan in plain English and stays your direct point of contact through launch and beyond.</p>
+            <a href="/about/">Meet Josh →</a>
           </div>
         </div>
       </div>
@@ -679,33 +687,40 @@ export function process() {
   });
 }
 
-// ---- Work / results ---------------------------------------------------------
-const SAMPLE_PROJECTS = [
+// ---- Work / what we build --------------------------------------------------
+// Solutions we deliver. These describe what we build and what each system is
+// designed to achieve. They are not client case studies: no client names,
+// no results or statistics.
+const SOLUTIONS = [
   {
-    id: 'restaurant-ordering', sector: 'Restaurants & caterers', title: 'Menu, WhatsApp ordering and MoMo payment',
-    scenario: 'A busy Accra lunch spot takes most orders by WhatsApp. One staff member spends the rush copying orders onto paper and checking MoMo screenshots.',
+    id: 'restaurant-ordering', sector: 'Restaurants & caterers', title: 'Restaurant ordering system',
+    problem: 'Restaurants that take most orders on WhatsApp often lose time at rush hour copying orders onto paper and checking MoMo screenshots by hand.',
     build: ['Mobile-first menu site that loads fast on 3G/4G', 'Guided WhatsApp ordering: dishes, pick-up or delivery, time', 'MoMo payment link in chat, confirmed automatically', 'Clean, paid orders sent to a kitchen dashboard', 'Repeat-order shortcut for regular office customers'],
+    outcomes: 'Fewer missed or mistyped orders, payments confirmed without screenshot checks, and staff freed up during the lunch rush.',
     services: ['whatsapp-ordering-booking', 'business-websites'], from: 'From GHS 14,000 (site + ordering flow)', timeline: '4–5 weeks',
     mock: 'menu'
   },
   {
-    id: 'real-estate-listings', sector: 'Real estate & diaspora buyers', title: 'Listings site with diaspora-ready enquiries',
-    scenario: 'A developer with three projects gets plenty of social media interest but few serious enquiries, and buyers abroad wait hours for a reply.',
+    id: 'real-estate-listings', sector: 'Real estate & diaspora buyers', title: 'Real-estate listing platform',
+    problem: 'Developers and agents often get plenty of social media interest but few serious enquiries, while buyers abroad wait hours for a reply.',
     build: ['Listings with photos, floor plans and price in GHS or USD', 'Filters by location, bedrooms and budget', '"Enquire on WhatsApp" with the listing details pre-filled', 'Instant first response and lead qualification across time zones', 'Weekly report: enquiries, viewings booked, cost per lead'],
+    outcomes: 'Better-qualified enquiries, faster first replies to buyers in any time zone, and a clear weekly view of where leads come from.',
     services: ['business-websites', 'growth-retainer'], from: 'From GHS 7,500 + Growth retainer', timeline: 'Leads live in 7 days; full site 4–5 weeks',
     mock: 'listings'
   },
   {
-    id: 'clinic-assistant', sector: 'Private healthcare', title: 'WhatsApp AI assistant for a clinic front desk',
-    scenario: 'A private clinic\u2019s front desk is flooded with the same questions (hours, prices, insurance, directions), and evening messages wait until morning.',
+    id: 'clinic-assistant', sector: 'Private healthcare', title: 'Clinic WhatsApp assistant',
+    problem: 'Clinic front desks are flooded with the same questions (hours, prices, insurance, directions), and evening messages wait until morning.',
     build: ['AI assistant trained on the clinic\u2019s own FAQs and price list', 'Answers at any hour in plain, friendly language', 'Offers available appointment slots and takes the booking', 'Hands sensitive or medical questions straight to staff', 'Day-before reminders to reduce no-shows'],
+    outcomes: 'Routine questions answered around the clock, bookings taken out of hours, fewer no-shows and a front desk with more time for patients.',
     services: ['whatsapp-ai-assistant', 'booking-online-ordering'], from: 'From GHS 6,000', timeline: '2–3 weeks',
     mock: 'chat'
   },
   {
-    id: 'invoice-automation', sector: 'Professional services & B2B', title: 'Invoice reminders and a weekly owner report',
-    scenario: 'A growing services firm chases late invoices by hand and the owner has no quick view of cash, sales and overdue accounts.',
+    id: 'invoice-automation', sector: 'Professional services & B2B', title: 'Invoice automation',
+    problem: 'Growing service businesses often chase late invoices by hand, and owners have no quick view of cash, sales and overdue accounts.',
     build: ['Polite WhatsApp and email reminders before and after due dates', 'MoMo and card payment links included in every reminder', 'Invoices marked paid automatically, receipts sent', 'Monday 8am summary to the owner\u2019s WhatsApp', 'Documented workflows the team can see and adjust'],
+    outcomes: 'Faster payment with less awkward chasing, no manual reconciliation of paid invoices, and a weekly cash snapshot in the owner\u2019s pocket.',
     services: ['business-process-automation', 'automation-audit'], from: 'From GHS 4,500 (Quick-Win, up to 3 workflows)', timeline: '2–3 weeks',
     mock: 'flow'
   }
@@ -754,14 +769,15 @@ export function work() {
   const crumbs = [{ name: 'Home', path: '/' }, { name: 'Work', path }];
   const foundingWa = wa("Hi Josh, I'd like to apply for one of the five ShowMe founding-client places. My business: ");
 
-  const projects = SAMPLE_PROJECTS.map(p => `<article class="sample" id="${p.id}" data-reveal>
+  const projects = SOLUTIONS.map(p => `<article class="sample" id="${p.id}" data-reveal>
           <div class="sample-visual">${sampleMock(p.mock)}</div>
           <div class="sample-copy">
-            <p class="sample-label"><span>Sample project</span> Concept · not a client</p>
-            <p class="card-division">${esc(p.sector)}</p>
+            <p class="sample-label"><span>Solution</span> ${esc(p.sector)}</p>
             <h3>${esc(p.title)}</h3>
-            <p class="sample-scenario"><strong>The scenario:</strong> ${esc(p.scenario)}</p>
+            <p class="sample-scenario"><strong>The problem it solves:</strong> ${esc(p.problem)}</p>
+            <p class="sample-sub">Key features</p>
             <ul class="ticklist">${p.build.map(b => `<li>${esc(b)}</li>`).join('')}</ul>
+            <p class="sample-scenario sample-outcome"><strong>Designed to deliver:</strong> ${esc(p.outcomes)}</p>
             <p class="sample-meta"><span><strong>Typical price:</strong> ${esc(p.from)}</span><span><strong>Timeline:</strong> ${esc(p.timeline)}</span></p>
             <p class="sample-links">${p.services.map(slug => serviceBySlug[slug]).filter(Boolean).map(s => `<a href="/services/${s.slug}/">${esc(s.title)} →</a>`).join('')}</p>
           </div>
@@ -770,21 +786,21 @@ export function work() {
   const main = `    <section class="page-hero">
       <div class="wrap">
         ${breadcrumb(crumbs)}
-        <p class="kicker">Work &amp; results</p>
+        <p class="kicker">What we build</p>
         <h1>Proof, not promises.</h1>
-        <p class="lead">We're a young agency, and we won't invent clients, logos or numbers to look bigger. Instead, here's exactly what we build, the guarantees we put in writing, and how our first five clients get founder-level attention.</p>
+        <p class="lead">Here's exactly what we build, the guarantees we put in writing, and how our first five clients get founder-level attention.</p>
         <div class="btn-row">
-          <a class="btn" href="#samples"><span>See sample projects ↓</span></a>
+          <a class="btn" href="#solutions"><span>See the solutions we deliver ↓</span></a>
           <a class="btn secondary" href="#founding-clients"><span>Founding client programme</span></a>
         </div>
       </div>
     </section>
 
-    <section id="samples">
+    <section id="solutions">
       <div class="wrap">
-        <p class="kicker" data-reveal>Sample projects</p>
-        <h2 data-reveal>What we'd build for businesses like yours.</h2>
-        <p class="section-lead" data-reveal>These are concept showcases, not client work. Each shows a realistic scenario, the system we would build, a typical price and timeline. Real case studies will be published here, with permission and real numbers, as client projects complete.</p>
+        <p class="kicker" data-reveal>Solutions we deliver</p>
+        <h2 data-reveal>What we build for businesses like yours.</h2>
+        <p class="section-lead" data-reveal>Four systems we build and tailor to each business: the problem each one solves, its key features, the outcomes it is designed to deliver, and a typical price and timeline.</p>
         <div class="sample-list">
           ${projects}
         </div>
@@ -849,11 +865,11 @@ export function work() {
       </div>
     </section>
 
-    ${ctaBand({ heading: 'Want to be one of our first case studies?', text: 'Start with a free audit or a free call. If we work together, we\u2019ll measure the results and, with your permission, publish them here.' })}`;
+    ${ctaBand({ heading: 'Want a system like these for your business?', text: 'Start with a free audit or a free call. We\u2019ll recommend the right solution, with a fixed price and timeline, before you commit.' })}`;
 
   return page({
-    title: 'Work, Sample Projects & Guarantees | ' + site.name,
-    description: 'Sample project concepts from ShowMe Digital Agency (restaurant ordering, real estate listings, a WhatsApp AI assistant, invoice automation), our written guarantees and the founding client programme.',
+    title: 'What We Build: Solutions & Guarantees | ' + site.name,
+    description: 'Solutions ShowMe Digital Agency builds for Ghanaian businesses (restaurant ordering systems, real-estate listing platforms, clinic WhatsApp assistants, invoice automation), our written guarantees and the founding client programme.',
     path,
     jsonLd: [orgLd(), breadcrumbLd(crumbs)],
     main
@@ -928,6 +944,7 @@ export function about() {
   const personLd = {
     '@context': 'https://schema.org', '@type': 'Person', name: 'Joshua Abbey', alternateName: 'Josh Abbey',
     jobTitle: 'Founder', worksFor: { '@type': 'Organization', name: 'ShowMe World' },
+    image: site.founderImage, url: site.origin + '/about/',
     address: { '@type': 'PostalAddress', addressLocality: 'Accra', addressCountry: 'GH' }, email: site.email
   };
   const partnerMail = 'mailto:' + site.email + '?subject=' + encodeURIComponent('Partner / careers enquiry');
@@ -944,7 +961,7 @@ export function about() {
       <div class="wrap detail-grid">
         <div class="detail-main">
           <div class="detail-block founder" data-reveal>
-            <div class="monogram" role="img" aria-label="Joshua Abbey monogram"><span>JA</span><small>Founder</small></div>
+            ${founderPhoto({ size: 150, lazy: false })}
             <div>
               <h2>Joshua (Josh) Abbey</h2>
               <p class="founder-role">Founder, ShowMe World · Accra, Ghana</p>
@@ -1160,7 +1177,7 @@ export function insightArticle(a) {
     '@context': 'https://schema.org', '@type': 'BlogPosting', headline: a.title,
     description: a.excerpt, datePublished: a.published, dateModified: a.published, wordCount: a.wordCount,
     image: site.ogImage,
-    author: { '@type': 'Organization', name: site.name, url: site.origin + '/' },
+    author: { '@type': 'Person', name: site.founder, jobTitle: 'Founder', image: site.founderImage, url: site.origin + '/about/' },
     publisher: { '@type': 'Organization', name: site.name, url: site.origin + '/' }, mainEntityOfPage: url(path)
   };
   const more = insights.filter(x => x.slug !== a.slug).slice(0, 3);
@@ -1170,7 +1187,7 @@ export function insightArticle(a) {
         <p class="kicker">Insights · ${esc(a.topic)}</p>
         <h1>${esc(a.title)}</h1>
         <p class="lead">${esc(a.excerpt)}</p>
-        <p class="article-meta">By ${esc(site.name)} · <time datetime="${a.published}">${esc(a.publishedLabel)}</time> · ${a.readMins} min read</p>
+        <p class="article-meta byline">${founderPhoto({ size: 40, cls: 'byline-photo', lazy: false, small: true })}<span>By <a href="/about/">${esc(site.founder)}</a>, Founder · <time datetime="${a.published}">${esc(a.publishedLabel)}</time> · ${a.readMins} min read</span></p>
       </div>
     </section>
 

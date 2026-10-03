@@ -52,6 +52,19 @@ export function head({ title, description, path, jsonLd = [], noindex = false, o
 </head>`;
 }
 
+// ---- Founder photo ----------------------------------------------------------
+// Responsive <picture> of the founder (WebP with JPG fallback). `size` is the
+// rendered CSS size in px; `lazy` defers loading for below-the-fold uses.
+export const FOUNDER_ALT = 'Joshua Abbey, founder of ShowMe Agency';
+export function founderPhoto({ size = 150, cls = 'founder-photo', lazy = true, small = false } = {}) {
+  const load = lazy ? ' loading="lazy" decoding="async"' : ' decoding="async"';
+  if (small) {
+    return `<picture class="${cls}"><source type="image/webp" srcset="/assets/joshua-abbey-192.webp"><img src="/assets/joshua-abbey-192.jpg" width="${size}" height="${size}" alt="${FOUNDER_ALT}"${load}></picture>`;
+  }
+  const sizes = `${size}px`;
+  return `<picture class="${cls}"><source type="image/webp" srcset="/assets/joshua-abbey-400.webp 400w, /assets/joshua-abbey.webp 800w" sizes="${sizes}"><img src="/assets/joshua-abbey-400.jpg" srcset="/assets/joshua-abbey-400.jpg 400w, /assets/joshua-abbey.jpg 800w" sizes="${sizes}" width="${size}" height="${size}" alt="${FOUNDER_ALT}"${load}></picture>`;
+}
+
 // ---- Structured data helpers ------------------------------------------------
 export function orgLd() {
   return {
@@ -60,7 +73,7 @@ export function orgLd() {
     name: site.name,
     url: site.origin + '/',
     email: site.email,
-    founder: { '@type': 'Person', name: site.founder },
+    founder: { '@type': 'Person', name: site.founder, image: site.founderImage, url: site.origin + '/about/' },
     address: { '@type': 'PostalAddress', addressLocality: 'Accra', addressCountry: 'GH' },
     sameAs: []
   };
