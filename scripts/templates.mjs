@@ -2,6 +2,7 @@
 // Detail-page templates: service pages and industry pages (shared layout)
 // ============================================================================
 import { site, divisionBySlug, serviceBySlug } from './data.mjs';
+import { illo, illoUrl, ILLO_ALT } from './images.mjs';
 import {
   esc, page, breadcrumb, ctaBand, faqAccordion,
   breadcrumbLd, serviceLd, faqLd, orgLd
@@ -128,15 +129,18 @@ export function industryDetail(i) {
     : '';
 
   const main = `    <section class="page-hero">
-      <div class="wrap">
-        ${breadcrumb(crumbs)}
-        <p class="kicker">Industries</p>
-        <h1>${esc(i.title)}</h1>
-        <p class="lead">${esc(i.summary)}</p>
-        <div class="btn-row">
-          <a class="btn" href="/free-audit/"><span>Get a free audit →</span></a>
-          <a class="btn secondary" href="/contact/"><span>Talk to us</span></a>
+      <div class="wrap page-hero-split">
+        <div>
+          ${breadcrumb(crumbs)}
+          <p class="kicker">Industries</p>
+          <h1>${esc(i.title)}</h1>
+          <p class="lead">${esc(i.summary)}</p>
+          <div class="btn-row">
+            <a class="btn" href="/free-audit/"><span>Get a free audit →</span></a>
+            <a class="btn secondary" href="/contact/"><span>Talk to us</span></a>
+          </div>
         </div>
+        ${illo('industry-' + i.slug, { lazy: false, cls: 'illo hero-illo', sizes: '(max-width: 820px) 100vw, 520px' })}
       </div>
     </section>
 
@@ -185,6 +189,7 @@ export function industryDetail(i) {
     title: i.title + ' — Digital Solutions in Ghana | ' + site.name,
     description: i.metaDescription,
     path,
+    ogImage: { url: illoUrl('industry-' + i.slug), w: 1200, h: 750, alt: ILLO_ALT['industry-' + i.slug] },
     jsonLd: [orgLd(), breadcrumbLd(crumbs)],
     main
   });

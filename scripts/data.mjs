@@ -19,15 +19,23 @@ export const site = {
   whatsappDisplay: '+1 336 457 2361',
   founder: 'Joshua Abbey',
   founderImage: 'https://agency.showmeworld.app/assets/joshua-abbey.jpg',
-  location: 'Accra, Ghana',
+  // US-led (founder based in the United States, country level only; no city or
+  // street address is published), with the delivery team on the ground in
+  // Accra, Ghana. Ghana remains the core market.
+  location: 'United States',
+  founderLocation: 'United States',
+  teamLocation: 'Accra, Ghana',
+  locationLine: 'US-led, with our team on the ground in Accra, Ghana',
+  serviceArea: 'Serving businesses in Ghana and diaspora and international clients in the US, UK and Canada',
   ogImage: 'https://agency.showmeworld.app/og-image.png',
   // Real, existing facts — do not change without founder input.
   facts: {
+    experience: '7+ years',
+    businessesHelped: '50+',
     retainerPrice: 'GHS 3,200',
     retainerMinimum: '3-month minimum',
     adSpendMin: 'GHS 1,500',
     guarantee: 'Live within 7 days of onboarding — or month 1 is free.',
-    pilotPrice: 'GHS 1,600',
     responsePromise: 'within one business day'
   }
 };
@@ -254,7 +262,7 @@ export const services = [
       { q: 'What does the retainer cost?', a: site.facts.retainerPrice + ' per month with a ' + site.facts.retainerMinimum + ', billed monthly in advance by MoMo, bank transfer or card. Ad spend is separate and prepaid in cedis; we recommend at least ' + site.facts.adSpendMin + '/month.' },
       { q: 'Is ad spend included?', a: 'No. The retainer covers our management, landing page and lead system. Ad spend is paid separately and goes directly to the ad platforms.' },
       { q: 'What is the guarantee?', a: site.facts.guarantee + ' We guarantee our speed and execution, not inflated lead promises.' },
-      { q: 'Is there an introductory offer?', a: 'For our first five clients, month 1 is ' + site.facts.pilotPrice + ' (50% off) with full delivery. The standard plan begins in month 2 unless you cancel.' }
+      { q: 'How quickly will we see work happening?', a: 'Fast. Our team follows a proven onboarding process: once we have your first payment and access, your landing page, lead system and reporting go live within 7 days, or month 1 is free.' }
     ],
     related: ['paid-ads', 'landing-pages-funnels', 'analytics-reporting']
   },
@@ -1102,9 +1110,9 @@ export const industryBySlug = Object.fromEntries(industries.map(i => [i.slug, i]
 // ---- Grouped FAQ (for /faq/) ------------------------------------------------
 export const faqGroups = [
   { title: 'General', items: [
-    { q: 'Where is ShowMe based and who do you work with?', a: 'ShowMe Digital Agency is based in ' + site.location + ', founded by ' + site.founder + '. We work with ambitious businesses across Ghana — from small teams getting online to established companies modernising how they operate.' },
-    { q: 'What makes ShowMe different?', a: 'We are one accountable partner across six divisions — web, growth, brand, business technology, AI and software — so you are not juggling freelancers. And we lead with proof, not promises: we guarantee our speed and execution, not inflated lead numbers.' },
-    { q: 'Do you work with businesses outside Accra?', a: 'Yes. We work with businesses across Ghana, mostly remotely, and with diaspora clients in the US, UK and Canada, who can be quoted in USD.' }
+    { q: 'Where is ShowMe based and who do you work with?', a: 'ShowMe is US-led, with our team on the ground in Accra, Ghana. Our founder, ' + site.founder + ', is based in the United States, and our delivery team works from Accra. Ghana is our core market: we help ambitious businesses across the country, from small teams getting online to established companies modernising how they operate. We also work with diaspora and international clients in the US, UK and Canada.' },
+    { q: 'What makes ShowMe different?', a: 'We are one accountable partner across six divisions — web, growth, brand, business technology, AI and software — so you are not juggling freelancers. Our team brings ' + site.facts.experience + ' of experience and has helped ' + site.facts.businessesHelped + ' businesses across Ghana and abroad with their digital needs, and we lead with proof, not promises: we guarantee our speed and execution, not inflated lead numbers.' },
+    { q: 'Do we need to meet in person?', a: 'No. Everything is delivered remotely over WhatsApp, video calls and shared workspaces, for businesses anywhere in Ghana and for diaspora and international clients in the US, UK and Canada, who can be quoted in USD. When you would like to meet, or a project needs on-site work such as a photo or video shoot, our team in Accra can meet you in person; travel outside Greater Accra is quoted separately.' }
   ]},
   { title: 'Pricing & payment', items: [
     { q: 'How much is the ShowMe Growth retainer?', a: site.facts.retainerPrice + ' per month with a ' + site.facts.retainerMinimum + ', billed monthly in advance by MoMo, bank transfer or card. Ad spend is separate and prepaid in cedis; we recommend at least ' + site.facts.adSpendMin + '/month.' },

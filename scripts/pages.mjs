@@ -9,8 +9,9 @@ import {
 import { BUNDLES, PAYMENT, USD_NOTE } from './prices.mjs';
 import {
   esc, url, page, breadcrumb, ctaBand, faqAccordion, serviceCard, industryCard,
-  orgLd, breadcrumbLd, faqLd, founderPhoto
+  orgLd, breadcrumbLd, faqLd, founderPhoto, AREA_SERVED
 } from './render.mjs';
+import { illo, illoUrl, ILLO_ALT, ARTICLE_IMAGE } from './images.mjs';
 
 const WA = 'https://wa.me/' + site.whatsappNumber;
 
@@ -149,13 +150,13 @@ export function home() {
     '@context': 'https://schema.org',
     '@type': 'ProfessionalService',
     name: site.name,
-    description: 'Digital agency in Accra, Ghana offering web, growth, brand, business technology, AI and software services.',
+    description: 'US-led digital agency with its delivery team on the ground in Accra, Ghana, with ' + site.facts.experience + ' of experience and ' + site.facts.businessesHelped + ' businesses helped, offering web, growth, brand, business technology, AI and software services to businesses in Ghana and to diaspora and international clients in the US, UK and Canada.',
     url: site.origin + '/',
     email: site.email,
     image: site.ogImage,
-    areaServed: { '@type': 'Country', name: 'Ghana' },
+    areaServed: AREA_SERVED,
     address: { '@type': 'PostalAddress', addressLocality: 'Accra', addressCountry: 'GH' },
-    founder: { '@type': 'Person', name: site.founder, image: site.founderImage, url: site.origin + '/about/' },
+    founder: { '@type': 'Person', name: site.founder, image: site.founderImage, url: site.origin + '/about/', address: { '@type': 'PostalAddress', addressCountry: 'US' } },
     slogan: site.tagline
   };
 
@@ -166,12 +167,15 @@ export function home() {
         <div class="hero-copy">
           <p class="eyebrow">${esc(site.strapline)}</p>
           <h1><span>Build.</span> <span>Grow.</span> <em>Automate.</em></h1>
-          <p class="lead">We help Ghanaian businesses use technology to work smarter, reach more customers and grow — from brand and website to software, AI and everyday operations.</p>
+          <p class="lead">For ${esc(site.facts.experience)}, our team has helped ${esc(site.facts.businessesHelped)} businesses across Ghana and abroad use technology to work smarter, reach more customers and grow — from brand and website to software, AI and everyday operations.</p>
           <div class="btn-row">
             <a class="btn" href="/free-audit/"><span>Get your free digital audit →</span></a>
             <a class="btn secondary" href="${esc(bookCallUrl)}" target="_blank" rel="noopener"><span>Book a free call</span></a>
           </div>
           <div class="pill-row">
+            <span class="pill"><span class="dot" aria-hidden="true"></span>${esc(site.facts.experience)} of experience</span>
+            <span class="pill"><span class="dot" aria-hidden="true"></span>${esc(site.facts.businessesHelped)} businesses helped</span>
+            <span class="pill"><span class="dot" aria-hidden="true"></span>US-led · team in Accra</span>
             <span class="pill"><span class="dot" aria-hidden="true"></span>Live in 7 days or month 1 is free</span>
             <span class="pill"><span class="dot" aria-hidden="true"></span>Preview before final payment</span>
             <span class="pill"><span class="dot" aria-hidden="true"></span>One partner, six divisions</span>
@@ -248,7 +252,7 @@ export function home() {
             <div style="margin-top:24px"><a class="btn" href="/pricing/"><span>See pricing &amp; packages →</span></a></div>
           </div>
           <div style="display:grid;gap:18px">
-            <div class="promise-block pilot" data-reveal><span class="label">Founding clients: first 5 only</span><strong>Month 1 for ${esc(site.facts.pilotPrice)}.</strong><p>50% off with full delivery. The standard plan begins in month 2 unless you cancel.</p></div>
+            <div class="promise-block highlight" data-reveal><span class="label">Start small</span><strong>Automation Audit: GHS 1,500.</strong><p>A fixed-fee roadmap of what to automate first, from our team. The full fee is credited toward your build if you go ahead within 60 days.</p></div>
             <div class="promise-block" data-reveal><span class="label">Published prices</span><strong>Websites from GHS 7,500. Bundles from GHS 11,500.</strong><p>Every service has a "from" price in GHS (with a USD guide). Projects are 50% to start and 50% on launch, after you approve a working preview.</p></div>
           </div>
         </div>
@@ -258,8 +262,8 @@ export function home() {
     <section>
       <div class="wrap">
         <p class="kicker" data-reveal>Proof, not promises</p>
-        <h2 data-reveal>Guarantees, not testimonials.</h2>
-        <p class="section-lead" data-reveal>Instead of borrowed quotes or inflated numbers, here's what we put in writing in every proposal.</p>
+        <h2 data-reveal>Our guarantees, in writing.</h2>
+        <p class="section-lead" data-reveal>Our team stands behind its work. Here's what we put in writing in every proposal.</p>
         ${guaranteeGrid()}
         <div class="proof-strip" data-reveal>
           <div>
@@ -268,14 +272,14 @@ export function home() {
           </div>
           <div class="btn-row" style="margin:0">
             <a class="btn secondary" href="/work/"><span>See what we build →</span></a>
-            <a class="btn secondary" href="/work/#founding-clients"><span>Founding client places</span></a>
+            <a class="btn secondary" href="/process/"><span>Our proven process →</span></a>
           </div>
         </div>
         <div class="founder-note" data-reveal>
           ${founderPhoto({ size: 96, cls: 'founder-photo sm' })}
           <div>
-            <strong>Founder-led, start to finish.</strong>
-            <p>Joshua (Josh) Abbey scopes every project himself, writes a fixed plan in plain English and stays your direct point of contact through launch and beyond.</p>
+            <strong>${esc(site.facts.experience)} of experience, ${esc(site.facts.businessesHelped)} businesses helped. US-led, with our team on the ground in Accra.</strong>
+            <p>Joshua (Josh) Abbey leads every engagement and stays your direct point of contact, while our delivery team in Accra builds, launches and supports your systems through launch and beyond.</p>
             <a href="/about/">Meet Josh →</a>
           </div>
         </div>
@@ -295,7 +299,7 @@ export function home() {
 
   return page({
     title: site.name + ' — ' + site.tagline,
-    description: 'ShowMe Digital Agency is your digital business partner in Accra, Ghana. We build websites, grow demand and automate the systems behind your customer journey. Start with a free digital audit.',
+    description: 'ShowMe Digital Agency is your digital business partner, with ' + site.facts.experience + ' of experience and ' + site.facts.businessesHelped + ' businesses helped: US-led, with our team on the ground in Accra, serving businesses in Ghana and clients in the US, UK and Canada. We build websites, grow demand and automate the systems behind your customer journey. Start with a free digital audit.',
     path,
     jsonLd: [orgLd(), localBusinessLd],
     main
@@ -310,7 +314,10 @@ export function servicesHub() {
     const cards = servicesByDivision(d.slug).map(serviceCard).join('');
     return `<section id="${d.slug}"${d.num === '01' ? '' : ' class="section-alt"'}>
       <div class="wrap">
-        <div class="division-head" data-reveal><span class="num">${d.num}</span><h3>ShowMe ${esc(d.title)}</h3><p>${esc(d.blurb)}</p></div>
+        <div class="division-intro" data-reveal>
+          <div class="division-head"><span class="num">${d.num}</span><h3>ShowMe ${esc(d.title)}</h3><p>${esc(d.blurb)}</p></div>
+          ${illo('division-' + d.slug, { lazy: d.num !== '01', cls: 'illo division-illo', sizes: '(max-width: 820px) 100vw, 440px' })}
+        </div>
         <div class="grid grid-3">${cards}</div>
       </div>
     </section>`;
@@ -462,8 +469,7 @@ export function pricing() {
             <div style="margin-top:24px"><a class="btn" href="/services/growth-retainer/"><span>See what's included →</span></a></div>
           </div>
           <div style="display:grid;gap:18px">
-            <div class="promise-block pilot" data-reveal><span class="label">Founding clients: first 5 only</span><strong>Month 1 for ${esc(site.facts.pilotPrice)}.</strong><p>That's 50% off the Growth retainer with full delivery. The standard plan begins in month 2 unless you cancel. <a href="/work/#founding-clients" style="color:#fff">How the programme works →</a></p></div>
-            <div class="promise-block" data-reveal><span class="label">Start small</span><strong>Automation Audit: GHS 1,500.</strong><p>A fixed-fee roadmap of what to automate first. The full fee is credited toward your build if you go ahead within 60 days.</p></div>
+            <div class="promise-block highlight" data-reveal><span class="label">Start small</span><strong>Automation Audit: GHS 1,500.</strong><p>A fixed-fee roadmap of what to automate first. The full fee is credited toward your build if you go ahead within 60 days.</p></div>
             <div class="promise-block" data-reveal><span class="label">Everything else</span><strong>A published "from" price for every service.</strong><p>Websites from GHS 7,500, stores from GHS 13,500, WhatsApp AI assistants from GHS 6,000. <a href="#price-list" style="color:var(--mint)">Full price list ↓</a></p></div>
           </div>
         </div>
@@ -698,7 +704,7 @@ const SOLUTIONS = [
     build: ['Mobile-first menu site that loads fast on 3G/4G', 'Guided WhatsApp ordering: dishes, pick-up or delivery, time', 'MoMo payment link in chat, confirmed automatically', 'Clean, paid orders sent to a kitchen dashboard', 'Repeat-order shortcut for regular office customers'],
     outcomes: 'Fewer missed or mistyped orders, payments confirmed without screenshot checks, and staff freed up during the lunch rush.',
     services: ['whatsapp-ordering-booking', 'business-websites'], from: 'From GHS 14,000 (site + ordering flow)', timeline: '4–5 weeks',
-    mock: 'menu'
+    image: 'solution-restaurant-ordering'
   },
   {
     id: 'real-estate-listings', sector: 'Real estate & diaspora buyers', title: 'Real-estate listing platform',
@@ -706,7 +712,7 @@ const SOLUTIONS = [
     build: ['Listings with photos, floor plans and price in GHS or USD', 'Filters by location, bedrooms and budget', '"Enquire on WhatsApp" with the listing details pre-filled', 'Instant first response and lead qualification across time zones', 'Weekly report: enquiries, viewings booked, cost per lead'],
     outcomes: 'Better-qualified enquiries, faster first replies to buyers in any time zone, and a clear weekly view of where leads come from.',
     services: ['business-websites', 'growth-retainer'], from: 'From GHS 7,500 + Growth retainer', timeline: 'Leads live in 7 days; full site 4–5 weeks',
-    mock: 'listings'
+    image: 'solution-real-estate-listings'
   },
   {
     id: 'clinic-assistant', sector: 'Private healthcare', title: 'Clinic WhatsApp assistant',
@@ -714,7 +720,7 @@ const SOLUTIONS = [
     build: ['AI assistant trained on the clinic\u2019s own FAQs and price list', 'Answers at any hour in plain, friendly language', 'Offers available appointment slots and takes the booking', 'Hands sensitive or medical questions straight to staff', 'Day-before reminders to reduce no-shows'],
     outcomes: 'Routine questions answered around the clock, bookings taken out of hours, fewer no-shows and a front desk with more time for patients.',
     services: ['whatsapp-ai-assistant', 'booking-online-ordering'], from: 'From GHS 6,000', timeline: '2–3 weeks',
-    mock: 'chat'
+    image: 'solution-clinic-assistant'
   },
   {
     id: 'invoice-automation', sector: 'Professional services & B2B', title: 'Invoice automation',
@@ -722,55 +728,17 @@ const SOLUTIONS = [
     build: ['Polite WhatsApp and email reminders before and after due dates', 'MoMo and card payment links included in every reminder', 'Invoices marked paid automatically, receipts sent', 'Monday 8am summary to the owner\u2019s WhatsApp', 'Documented workflows the team can see and adjust'],
     outcomes: 'Faster payment with less awkward chasing, no manual reconciliation of paid invoices, and a weekly cash snapshot in the owner\u2019s pocket.',
     services: ['business-process-automation', 'automation-audit'], from: 'From GHS 4,500 (Quick-Win, up to 3 workflows)', timeline: '2–3 weeks',
-    mock: 'flow'
+    image: 'solution-invoice-automation'
   }
 ];
-
-function sampleMock(type) {
-  if (type === 'menu') return `<div class="mock mock-browser" aria-hidden="true">
-      <div class="mock-bar"><i></i><i></i><i></i><span>menu · order · pay</span></div>
-      <div class="mock-body">
-        <p class="mock-title">Today's menu</p>
-        <div class="mock-row"><span>Jollof &amp; grilled chicken</span><b>Add +</b></div>
-        <div class="mock-row"><span>Banku &amp; tilapia</span><b>Add +</b></div>
-        <div class="mock-row"><span>Waakye special</span><b>Add +</b></div>
-        <div class="mock-cta">Order on WhatsApp · Pay with MoMo</div>
-      </div>
-    </div>`;
-  if (type === 'listings') return `<div class="mock mock-browser" aria-hidden="true">
-      <div class="mock-bar"><i></i><i></i><i></i><span>listings</span></div>
-      <div class="mock-body">
-        <div class="mock-chips"><span>East Legon</span><span>3 bed</span><span class="on">GHS | USD</span></div>
-        <div class="mock-listings">
-          <div class="mock-home"><div class="mock-img"></div><p>3-bed townhouse</p><b>Enquire on WhatsApp</b></div>
-          <div class="mock-home"><div class="mock-img alt"></div><p>2-bed apartment</p><b>Enquire on WhatsApp</b></div>
-        </div>
-      </div>
-    </div>`;
-  if (type === 'chat') return `<div class="mock mock-chat" aria-hidden="true">
-      <div class="mock-chat-head">Clinic assistant · WhatsApp</div>
-      <p class="bubble in">Hi, are you open on Saturday? I need a check-up for my son.</p>
-      <p class="bubble out">Hello! Yes, we're open Saturday 9am–2pm. I have 10:00 or 11:30 free with our paediatric team. Which suits you?</p>
-      <p class="bubble in">11:30 please</p>
-      <p class="bubble out">Booked for Saturday 11:30. I'll send a reminder on Friday. Need anything else? Type STAFF to talk to our team.</p>
-    </div>`;
-  return `<div class="mock mock-flow" aria-hidden="true">
-      <div class="flow-node">Invoice due in 3 days</div>
-      <div class="flow-arrow">↓</div>
-      <div class="flow-node">WhatsApp + email reminder with MoMo link</div>
-      <div class="flow-arrow">↓</div>
-      <div class="flow-node ok">Paid → marked paid, receipt sent</div>
-      <div class="flow-node report">Every Monday 8:00 → owner report on WhatsApp</div>
-    </div>`;
-}
 
 export function work() {
   const path = '/work/';
   const crumbs = [{ name: 'Home', path: '/' }, { name: 'Work', path }];
-  const foundingWa = wa("Hi Josh, I'd like to apply for one of the five ShowMe founding-client places. My business: ");
+  const workWa = wa("Hi ShowMe, I'd like to talk about a system like the ones on your Work page. My business: ");
 
   const projects = SOLUTIONS.map(p => `<article class="sample" id="${p.id}" data-reveal>
-          <div class="sample-visual">${sampleMock(p.mock)}</div>
+          <div class="sample-visual">${illo(p.image, { sizes: '(max-width: 1000px) 100vw, 480px' })}</div>
           <div class="sample-copy">
             <p class="sample-label"><span>Solution</span> ${esc(p.sector)}</p>
             <h3>${esc(p.title)}</h3>
@@ -787,11 +755,11 @@ export function work() {
       <div class="wrap">
         ${breadcrumb(crumbs)}
         <p class="kicker">What we build</p>
-        <h1>Proof, not promises.</h1>
-        <p class="lead">Here's exactly what we build, the guarantees we put in writing, and how our first five clients get founder-level attention.</p>
+        <h1>Proven systems, built by our team.</h1>
+        <p class="lead">${esc(site.facts.experience)} and ${esc(site.facts.businessesHelped)} businesses helped with their digital needs, distilled into the systems our team builds for businesses in Ghana and beyond, how we work with you, and the guarantees we put in writing.</p>
         <div class="btn-row">
           <a class="btn" href="#solutions"><span>See the solutions we deliver ↓</span></a>
-          <a class="btn secondary" href="#founding-clients"><span>Founding client programme</span></a>
+          <a class="btn secondary" href="#how-we-work"><span>How we work with you</span></a>
         </div>
       </div>
     </section>
@@ -807,35 +775,35 @@ export function work() {
       </div>
     </section>
 
-    <section class="section-alt" id="founding-clients">
+    <section class="section-alt" id="how-we-work">
       <div class="wrap">
-        <div class="founding" data-reveal>
+        <div class="how-block" data-reveal>
           <div>
-            <p class="kicker">Founding client programme</p>
-            <h2>Five places. Founder-led. Half-price first month.</h2>
-            <p class="section-lead">Our first five Growth retainer clients get month 1 for ${esc(site.facts.pilotPrice)} instead of ${esc(site.facts.retainerPrice)}, with full delivery. The standard plan begins in month 2 unless you cancel.</p>
+            <p class="kicker">How we work with you</p>
+            <h2>One accountable team. A proven process.</h2>
+            <p class="section-lead">ShowMe is US-led, with our team on the ground in Accra. Josh leads your engagement and stays your direct point of contact; our delivery team builds, launches and supports your system with a fixed scope, a fixed price and weekly updates.</p>
             <div class="btn-row">
-              <a class="btn" href="${esc(foundingWa)}" target="_blank" rel="noopener"><span>Apply on WhatsApp →</span></a>
-              <a class="btn secondary" href="/services/growth-retainer/"><span>What the retainer includes</span></a>
+              <a class="btn" href="${esc(workWa)}" target="_blank" rel="noopener"><span>Talk to us on WhatsApp →</span></a>
+              <a class="btn secondary" href="/process/"><span>See our process</span></a>
             </div>
           </div>
-          <div class="grid grid-2 founding-cols">
+          <div class="grid grid-2 how-cols">
             <div class="side-card">
               <h3>What you get</h3>
               <ul>
-                <li>Month 1 for ${esc(site.facts.pilotPrice)} (50% off)</li>
                 <li>Josh as your direct point of contact</li>
-                <li>Priority build slots</li>
+                <li>A delivery team on the ground in Accra</li>
+                <li>A fixed plan in plain English</li>
                 <li>Every guarantee on this page, in writing</li>
               </ul>
             </div>
             <div class="side-card">
-              <h3>What we ask</h3>
+              <h3>How we deliver</h3>
               <ul>
-                <li>Honest feedback on how we work</li>
-                <li>A short monthly review call</li>
-                <li>Timely content and approvals</li>
-                <li>Optional: a case study with your real results, only if you're happy and agree</li>
+                <li>Audit, plan, build, launch and grow</li>
+                <li>A working preview before final payment</li>
+                <li>Weekly progress updates</li>
+                <li>30 days of launch support on every project</li>
               </ul>
             </div>
           </div>
@@ -854,8 +822,8 @@ export function work() {
 
     <section class="section-alt">
       <div class="wrap">
-        <p class="kicker" data-reveal>What you can verify today</p>
-        <h2 data-reveal>Don't take our word for it. Check our work.</h2>
+        <p class="kicker" data-reveal>See our standards for yourself</p>
+        <h2 data-reveal>The same care goes into everything we build.</h2>
         <div class="grid grid-4" style="margin-top:36px">
           <div class="card" data-reveal><h3>This website</h3><p>Fast, mobile-first and accessible, with published prices and every enquiry answered quickly.</p></div>
           <div class="card" data-reveal><h3>Our own lead system</h3><p>Our forms capture every enquiry and fall back to WhatsApp, the same pattern we build for clients.</p></div>
@@ -869,7 +837,7 @@ export function work() {
 
   return page({
     title: 'What We Build: Solutions & Guarantees | ' + site.name,
-    description: 'Solutions ShowMe Digital Agency builds for Ghanaian businesses (restaurant ordering systems, real-estate listing platforms, clinic WhatsApp assistants, invoice automation), our written guarantees and the founding client programme.',
+    description: 'Solutions ShowMe Digital Agency builds for Ghanaian businesses (restaurant ordering systems, real-estate listing platforms, clinic WhatsApp assistants, invoice automation), how our team works with you and our written guarantees.',
     path,
     jsonLd: [orgLd(), breadcrumbLd(crumbs)],
     main
@@ -945,7 +913,7 @@ export function about() {
     '@context': 'https://schema.org', '@type': 'Person', name: 'Joshua Abbey', alternateName: 'Josh Abbey',
     jobTitle: 'Founder', worksFor: { '@type': 'Organization', name: 'ShowMe World' },
     image: site.founderImage, url: site.origin + '/about/',
-    address: { '@type': 'PostalAddress', addressLocality: 'Accra', addressCountry: 'GH' }, email: site.email
+    address: { '@type': 'PostalAddress', addressCountry: 'US' }, email: site.email
   };
   const partnerMail = 'mailto:' + site.email + '?subject=' + encodeURIComponent('Partner / careers enquiry');
   const main = `    <section class="page-hero">
@@ -953,7 +921,7 @@ export function about() {
         ${breadcrumb(crumbs)}
         <p class="kicker">About</p>
         <h1>Your digital business partner.</h1>
-        <p class="lead">ShowMe Digital Agency helps Ghanaian businesses use technology to work smarter, reach more customers and grow, with one accountable partner instead of a pile of freelancers.</p>
+        <p class="lead">For ${esc(site.facts.experience)}, our team has helped ${esc(site.facts.businessesHelped)} businesses across Ghana and abroad use technology to work smarter, reach more customers and grow, with one accountable partner instead of a pile of freelancers.</p>
       </div>
     </section>
 
@@ -964,19 +932,19 @@ export function about() {
             ${founderPhoto({ size: 150, lazy: false })}
             <div>
               <h2>Joshua (Josh) Abbey</h2>
-              <p class="founder-role">Founder, ShowMe World · Accra, Ghana</p>
-              <p>Josh Abbey is the Accra-based founder of the ShowMe ecosystem and of its parent company, ShowMe World. He leads ShowMe Digital Agency personally and is the first person you speak to when you get in touch.</p>
-              <p>He started the agency around a simple observation: many good Ghanaian businesses don't lose customers because of their product. They lose them to slow websites, scattered enquiries and follow-up that depends on someone remembering. The fix is rarely one more tool. It's a joined-up system (website, demand, follow-up and back office) run by someone accountable for the whole thing.</p>
-              <p>That's how Josh works with clients: he scopes the work himself, writes a fixed plan in plain English and stays responsible for delivery from the first audit to launch and beyond. Where a project needs specialist skills, such as photography or complex software, he brings in vetted specialists and remains your single point of contact.</p>
-              <p>His standards are the ones you'll see across this site: publish prices, show working previews before asking for final payment, report honestly and let the results speak. Proof, not promises.</p>
+              <p class="founder-role">Founder, ShowMe World · US-led, with our team in Accra</p>
+              <p>Josh Abbey is the founder of the ShowMe ecosystem and of its parent company, ShowMe World. He is based in the United States and leads ShowMe Digital Agency, which works with its own delivery team on the ground in Accra, Ghana. Together they bring ${esc(site.facts.experience)} of experience and have helped ${esc(site.facts.businessesHelped)} businesses across Ghana and abroad, including diaspora and international clients in the US, UK and Canada, with their digital needs. Josh is the first person you speak to when you get in touch.</p>
+              <p>He started the agency around a simple observation: many good Ghanaian businesses don't lose customers because of their product. They lose them to slow websites, scattered enquiries and follow-up that depends on someone remembering. The fix is rarely one more tool. It's a joined-up system (website, demand, follow-up and back office) run by a team accountable for the whole thing.</p>
+              <p>That's how ShowMe works with clients: Josh scopes the work and writes a fixed plan in plain English, and our team in Accra delivers it, from the first audit to launch and beyond. Where a project needs extra specialist skills, we bring in trusted specialists and Josh remains your single point of contact.</p>
+              <p>Our standards are the ones you'll see across this site: publish prices, show working previews before asking for final payment, report honestly and let the results speak. Proof, not promises.</p>
               <p class="founder-links"><a href="${esc(bookCallUrl)}" target="_blank" rel="noopener">Book a free call with Josh →</a><a href="mailto:${site.email}">${esc(site.email)}</a></p>
             </div>
           </div>
           <div class="detail-block" data-reveal>
             <h2>The ShowMe ecosystem</h2>
-            <p style="color:var(--text-muted);max-width:62ch">ShowMe World is the parent company and home of the ShowMe brand. ShowMe Digital Agency is its client-services arm: the team that builds, grows and automates for other businesses. The agency runs on the same tools and standards it recommends to clients.</p>
+            <p style="color:var(--text-muted);max-width:62ch">ShowMe World is the parent company and home of the ShowMe brand. ShowMe Digital Agency is its client-services arm: the team that builds, grows and automates for businesses in Ghana and abroad. The agency runs on the same tools and standards it recommends to clients.</p>
             <div class="grid grid-2" style="margin-top:20px">
-              <div class="card"><div class="card-division">Parent company</div><h3>ShowMe World</h3><p>The umbrella for every ShowMe venture, founded by Joshua Abbey in Accra. <a href="https://showmeworld.app" target="_blank" rel="noopener" style="color:var(--mint)">showmeworld.app</a></p></div>
+              <div class="card"><div class="card-division">Parent company</div><h3>ShowMe World</h3><p>The umbrella for every ShowMe venture, founded by Joshua Abbey. <a href="https://showmeworld.app" target="_blank" rel="noopener" style="color:var(--mint)">showmeworld.app</a></p></div>
               <div class="card"><div class="card-division">You are here</div><h3>ShowMe Digital Agency</h3><p>Websites, growth, brand, business technology, AI and software for ambitious businesses. Build. Grow. Automate.</p></div>
             </div>
           </div>
@@ -992,14 +960,15 @@ export function about() {
           <div class="detail-block" data-reveal>
             <h2>Where we work</h2>
             <ul class="ticklist">
-              <li><span><strong>Accra and Greater Accra:</strong> our home base, with in-person meetings and shoots where a project needs them.</span></li>
-              <li><span><strong>Across Ghana:</strong> from Kumasi to Takoradi and Tamale, delivered remotely over WhatsApp, video calls and shared workspaces.</span></li>
-              <li><span><strong>The diaspora:</strong> clients in the US, UK and Canada, with USD quotes and card or international bank payments. Our WhatsApp line (${esc(site.whatsappDisplay)}) works wherever you are.</span></li>
+              <li><span><strong>Accra, Ghana:</strong> our team on the ground, for in-person meetings, shoots and on-site work where a project needs them.</span></li>
+              <li><span><strong>Across Ghana, our core market:</strong> from Kumasi to Takoradi and Tamale, delivered over WhatsApp, video calls and shared workspaces, with GHS pricing and MoMo payments.</span></li>
+              <li><span><strong>US-led:</strong> Josh leads the agency from the United States, so projects get senior attention across time zones.</span></li>
+              <li><span><strong>Diaspora and international clients:</strong> businesses in the US, UK and Canada, with USD quotes and card or international bank payments. Our WhatsApp line (${esc(site.whatsappDisplay)}) works wherever you are.</span></li>
             </ul>
           </div>
           <div class="detail-block" id="partners" data-reveal>
             <h2>Partners &amp; careers</h2>
-            <p style="color:var(--text-muted);max-width:62ch">We're building a small, dependable network of freelance specialists in Ghana and the diaspora: designers, developers, photographers and videographers, copywriters and ads specialists. If you do excellent work and care about deadlines, we'd like to hear from you. Email a short introduction and two or three examples of your work with "Partner" in the subject line.</p>
+            <p style="color:var(--text-muted);max-width:62ch">Alongside our core team, we work with a dependable network of specialists in Ghana and the diaspora: designers, developers, photographers and videographers, copywriters and ads specialists. If you do excellent work and care about deadlines, we'd like to hear from you. Email a short introduction and two or three examples of your work with "Partner" in the subject line.</p>
             <p style="color:var(--text-muted);max-width:62ch">We're also open to referral partnerships with accountants, consultants and other agencies whose clients need what we build. When full-time roles open, they'll be listed here first.</p>
             <p style="margin-top:14px"><a class="btn secondary" href="${esc(partnerMail)}"><span>Email us about partnering</span></a></p>
           </div>
@@ -1021,7 +990,7 @@ export function about() {
 
   return page({
     title: 'About ShowMe Digital Agency & Founder Joshua Abbey',
-    description: 'ShowMe Digital Agency is the client-services arm of ShowMe World, founded by Joshua (Josh) Abbey in Accra, Ghana: build, grow and automate, with one accountable partner.',
+    description: 'ShowMe Digital Agency is the client-services arm of ShowMe World, US-led by founder Joshua (Josh) Abbey, with our team on the ground in Accra, ' + site.facts.experience + ' of experience and ' + site.facts.businessesHelped + ' businesses helped, serving businesses in Ghana and clients in the US, UK and Canada: build, grow and automate, with one accountable partner.',
     path,
     jsonLd: [orgLd(), breadcrumbLd(crumbs), personLd],
     main
@@ -1090,7 +1059,8 @@ export function contact() {
             <ul style="list-style:none;margin:0 0 16px;padding:0;display:grid;gap:10px;color:var(--text-muted);font-size:14px">
               <li><a href="mailto:${site.email}" style="color:var(--text);font-weight:700">${esc(site.email)}</a></li>
               <li><a href="${WA}" target="_blank" rel="noopener" style="color:var(--text);font-weight:700">WhatsApp ${esc(site.whatsappDisplay)}</a></li>
-              <li>${esc(site.location)}</li>
+              <li>${esc(site.locationLine)}</li>
+              <li>${esc(site.serviceArea)}</li>
             </ul>
             <a class="btn whatsapp" href="${WA}" target="_blank" rel="noopener" style="width:100%"><span>Chat on WhatsApp</span></a>
           </div>
@@ -1121,7 +1091,7 @@ export function contact() {
 
   return page({
     title: 'Contact & Booking | ' + site.name,
-    description: 'Contact ShowMe Digital Agency in Accra, Ghana. Send a qualifying enquiry, chat on WhatsApp or email ' + site.email + '. We reply ' + site.facts.responsePromise + '.',
+    description: 'Contact ShowMe Digital Agency: US-led, with our team on the ground in Accra, serving businesses in Ghana and clients in the US, UK and Canada. Send a qualifying enquiry, chat on WhatsApp or email ' + site.email + '. We reply ' + site.facts.responsePromise + '.',
     path,
     jsonLd: [orgLd(), breadcrumbLd(crumbs)],
     main
@@ -1132,7 +1102,8 @@ export function contact() {
 export function insightsIndex() {
   const path = '/insights/';
   const crumbs = [{ name: 'Home', path: '/' }, { name: 'Insights', path }];
-  const cards = insights.map(a => `<a class="card article-card" href="/insights/${a.slug}/" data-reveal>
+  const cards = insights.map(a => `<a class="card article-card card-media" href="/insights/${a.slug}/" data-reveal>
+      ${illo(ARTICLE_IMAGE[a.slug], { sizes: '(max-width: 620px) 100vw, (max-width: 1000px) 50vw, 360px', cls: 'card-img' })}
       <div class="card-division">${esc(a.topic)} · ${a.readMins} min read</div>
       <h3>${esc(a.title)}</h3>
       <p>${esc(a.excerpt)}</p>
@@ -1176,7 +1147,7 @@ export function insightArticle(a) {
   const articleLd = {
     '@context': 'https://schema.org', '@type': 'BlogPosting', headline: a.title,
     description: a.excerpt, datePublished: a.published, dateModified: a.published, wordCount: a.wordCount,
-    image: site.ogImage,
+    image: illoUrl(ARTICLE_IMAGE[a.slug]),
     author: { '@type': 'Person', name: site.founder, jobTitle: 'Founder', image: site.founderImage, url: site.origin + '/about/' },
     publisher: { '@type': 'Organization', name: site.name, url: site.origin + '/' }, mainEntityOfPage: url(path)
   };
@@ -1188,6 +1159,7 @@ export function insightArticle(a) {
         <h1>${esc(a.title)}</h1>
         <p class="lead">${esc(a.excerpt)}</p>
         <p class="article-meta byline">${founderPhoto({ size: 40, cls: 'byline-photo', lazy: false, small: true })}<span>By <a href="/about/">${esc(site.founder)}</a>, Founder · <time datetime="${a.published}">${esc(a.publishedLabel)}</time> · ${a.readMins} min read</span></p>
+        ${illo(ARTICLE_IMAGE[a.slug], { lazy: false, cls: 'illo article-illo', sizes: '(max-width: 860px) 100vw, 820px' })}
       </div>
     </section>
 
@@ -1225,7 +1197,8 @@ ${a.body}
     path,
     jsonLd: [orgLd(), breadcrumbLd(crumbs), articleLd],
     main,
-    ogType: 'article'
+    ogType: 'article',
+    ogImage: { url: illoUrl(ARTICLE_IMAGE[a.slug]), w: 1200, h: 750, alt: ILLO_ALT[ARTICLE_IMAGE[a.slug]] }
   });
 }
 
@@ -1249,7 +1222,7 @@ export function privacy() {
     <section>
       <div class="wrap-narrow prose legal">
         <h2>1. Who we are</h2>
-        <p>This policy applies to ShowMe Digital Agency ("ShowMe", "we", "us"), the digital agency of ShowMe World, based in Accra, Ghana, and to this website at agency.showmeworld.app. For the personal data described below, we are the data controller under the Data Protection Act, 2012 (Act 843). You can contact us about privacy at any time at ${mail} or on WhatsApp at ${esc(site.whatsappDisplay)}.</p>
+        <p>This policy applies to ShowMe Digital Agency ("ShowMe", "we", "us"), the digital agency of ShowMe World (US-led, with our team on the ground in Accra, Ghana), and to this website at agency.showmeworld.app. For the personal data described below, we are the data controller under the Data Protection Act, 2012 (Act 843). You can contact us about privacy at any time at ${mail} or on WhatsApp at ${esc(site.whatsappDisplay)}.</p>
 
         <h2>2. The data we collect</h2>
         <h3>Information you give us</h3>
@@ -1321,7 +1294,7 @@ export function privacy() {
         <p>We may update this policy as our services or the law change. The "last updated" date at the top shows when it was last revised. Significant changes will be highlighted on this page.</p>
 
         <h2>12. Contact</h2>
-        <p>ShowMe Digital Agency, Accra, Ghana. Email ${mail} or WhatsApp ${esc(site.whatsappDisplay)}. See also our <a href="/terms/">Terms of Service</a>.</p>
+        <p>ShowMe Digital Agency: US-led, with our team on the ground in Accra, Ghana. Email ${mail} or WhatsApp ${esc(site.whatsappDisplay)}. See also our <a href="/terms/">Terms of Service</a>.</p>
       </div>
     </section>`;
 
@@ -1352,7 +1325,7 @@ export function terms() {
     <section>
       <div class="wrap-narrow prose legal">
         <h2>1. About these terms</h2>
-        <p>These terms apply between ShowMe Digital Agency ("ShowMe", "we", "us"), the digital agency of ShowMe World based in Accra, Ghana, and you, the client ("you"). They apply to every engagement together with your written proposal. If the proposal and these terms conflict, the proposal wins for that engagement. You accept these terms when you approve a proposal or pay a deposit or first monthly fee.</p>
+        <p>These terms apply between ShowMe Digital Agency ("ShowMe", "we", "us"), the digital agency of ShowMe World (US-led, with our team on the ground in Accra, Ghana), and you, the client ("you"). They apply to every engagement together with your written proposal. If the proposal and these terms conflict, the proposal wins for that engagement. You accept these terms when you approve a proposal or pay a deposit or first monthly fee.</p>
 
         <h2>2. Proposals and scope</h2>
         <ul>
@@ -1383,7 +1356,6 @@ export function terms() {
         <ul>
           <li>The Growth retainer costs ${esc(site.facts.retainerPrice)} per month, billed monthly in advance, with a 3-month minimum term.</li>
           <li>Ad spend is separate, prepaid in cedis and paid to the ad platforms. We recommend at least ${esc(site.facts.adSpendMin)} per month.</li>
-          <li><span><strong>Founding client offer:</strong> for our first five Growth retainer clients, month 1 is ${esc(site.facts.pilotPrice)} with full delivery. The standard plan begins in month 2 unless you cancel before month 2 starts.</span></li>
           <li>After the minimum term, the retainer continues month to month. To cancel, give written notice (email or WhatsApp) at least 14 days before your next billing date.</li>
         </ul>
 
@@ -1436,7 +1408,7 @@ export function terms() {
         <p>Content on this website is for general information and may change without notice. Our guides are practical advice, not legal, financial or tax advice. Please don't misuse the site, for example by attempting to disrupt it or by submitting spam through our forms.</p>
 
         <h2>18. Governing law and disputes</h2>
-        <p>These terms are governed by the laws of the Republic of Ghana. If a dispute arises, we will first try to resolve it in good faith by discussion. If that fails, either of us may refer it to mediation under the Alternative Dispute Resolution Act, 2010 (Act 798) before going to court. The courts of Ghana sitting in Accra have jurisdiction.</p>
+        <p>The governing law and the courts that have jurisdiction over an engagement are stated in your written proposal. If a dispute arises, we will first try to resolve it in good faith by discussion. If that fails, either of us may refer it to mediation before going to court.</p>
 
         <h2>19. Changes to these terms</h2>
         <p>We may update these terms from time to time. The version in force when you approve a proposal applies to that engagement. The "last updated" date shows the latest revision.</p>
@@ -1448,7 +1420,7 @@ export function terms() {
 
   return page({
     title: 'Terms of Service | ' + site.name,
-    description: 'Terms of service for ShowMe Digital Agency: proposals and scope, prices, 50/50 payment terms, preview before final payment, the 7-day guarantee, ownership and Ghanaian governing law.',
+    description: 'Terms of service for ShowMe Digital Agency: proposals and scope, prices, 50/50 payment terms, preview before final payment, the 7-day guarantee, ownership and how disputes are resolved.',
     path,
     jsonLd: [orgLd(), breadcrumbLd(crumbs)],
     main

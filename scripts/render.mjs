@@ -2,6 +2,7 @@
 // ShowMe Digital Agency — rendering helpers and shared partials
 // Pure string templates. No framework, output is plain static HTML.
 // ============================================================================
+import { illo } from './images.mjs';
 import { site, divisions, services, servicesByDivision, industries, serviceBySlug, bookCallUrl, bookCallMailto } from './data.mjs';
 
 export function esc(s) {
@@ -15,7 +16,8 @@ export function url(path) {
 }
 
 // ---- Head / SEO -------------------------------------------------------------
-export function head({ title, description, path, jsonLd = [], noindex = false, ogType = 'website' }) {
+export function head({ title, description, path, jsonLd = [], noindex = false, ogType = 'website', ogImage = null }) {
+  const og = ogImage || { url: site.ogImage, w: 1200, h: 630, alt: 'ShowMe Digital Agency: Build. Grow. Automate. Websites, growth and automation for businesses in Ghana and the diaspora.' };
   const canonical = url(path);
   const ld = jsonLd.map(obj => `\n  <script type="application/ld+json">${JSON.stringify(obj)}</script>`).join('');
   return `<!doctype html>
@@ -37,14 +39,14 @@ export function head({ title, description, path, jsonLd = [], noindex = false, o
   <meta property="og:title" content="${esc(title)}" />
   <meta property="og:description" content="${esc(description)}" />
   <meta property="og:url" content="${esc(canonical)}" />
-  <meta property="og:image" content="${esc(site.ogImage)}" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="ShowMe Digital Agency: Build. Grow. Automate. Websites, growth and automation for Ghanaian businesses." />
+  <meta property="og:image" content="${esc(og.url)}" />
+  <meta property="og:image:width" content="${og.w}" />
+  <meta property="og:image:height" content="${og.h}" />
+  <meta property="og:image:alt" content="${esc(og.alt)}" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="${esc(title)}" />
   <meta name="twitter:description" content="${esc(description)}" />
-  <meta name="twitter:image" content="${esc(site.ogImage)}" />
+  <meta name="twitter:image" content="${esc(og.url)}" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -66,6 +68,9 @@ export function founderPhoto({ size = 150, cls = 'founder-photo', lazy = true, s
 }
 
 // ---- Structured data helpers ------------------------------------------------
+// Ghana is the core market; diaspora and international clients are served remotely.
+export const AREA_SERVED = ['Ghana', 'United States', 'United Kingdom', 'Canada'].map(name => ({ '@type': 'Country', name }));
+
 export function orgLd() {
   return {
     '@context': 'https://schema.org',
@@ -73,8 +78,14 @@ export function orgLd() {
     name: site.name,
     url: site.origin + '/',
     email: site.email,
-    founder: { '@type': 'Person', name: site.founder, image: site.founderImage, url: site.origin + '/about/' },
-    address: { '@type': 'PostalAddress', addressLocality: 'Accra', addressCountry: 'GH' },
+    description: 'US-led digital agency with its own delivery team on the ground in Accra, Ghana, bringing ' + site.facts.experience + ' of experience and ' + site.facts.businessesHelped + ' businesses helped across Ghana and abroad with websites, growth, brand, business technology, AI and software.',
+    founder: { '@type': 'Person', name: site.founder, image: site.founderImage, url: site.origin + '/about/', address: { '@type': 'PostalAddress', addressCountry: 'US' } },
+    // US-led; delivery team in Accra. Country/city level only.
+    location: [
+      { '@type': 'Place', name: 'Delivery team', address: { '@type': 'PostalAddress', addressLocality: 'Accra', addressCountry: 'GH' } },
+      { '@type': 'Place', name: 'Founder', address: { '@type': 'PostalAddress', addressCountry: 'US' } }
+    ],
+    areaServed: AREA_SERVED,
     sameAs: []
   };
 }
@@ -108,7 +119,7 @@ export function serviceLd(service) {
     description: service.metaDescription,
     serviceType: service.title,
     provider: { '@type': 'Organization', name: site.name, url: site.origin + '/' },
-    areaServed: { '@type': 'Country', name: 'Ghana' },
+    areaServed: AREA_SERVED,
     url: url('/services/' + service.slug + '/')
   };
 }
@@ -163,7 +174,7 @@ export function footer() {
     <div class="footer-grid">
       <div class="footer-brand">
         <a class="brand" href="/"><span>ShowMe<span class="dot">.</span></span></a>
-        <p>${esc(site.strapline)}. We build websites, grow demand and automate the systems behind your customer journey — from ${esc(site.location)}.</p>
+        <p>${esc(site.strapline)}. ${esc(site.facts.experience)} of experience and ${esc(site.facts.businessesHelped)} businesses helped with websites, growth and automation. ${esc(site.locationLine)}, serving businesses in Ghana and clients in the US, UK and Canada.</p>
         <p style="margin-top:14px"><a href="mailto:${site.email}">${esc(site.email)}</a><br><a href="${'https://wa.me/' + site.whatsappNumber}" target="_blank" rel="noopener">WhatsApp ${esc(site.whatsappDisplay)}</a></p>
       </div>
       ${col('Services', [{ href: '/services/', label: 'All services' }, ...featuredServices])}
@@ -187,7 +198,7 @@ export function footer() {
       ])}
     </div>
     <div class="footer-bottom">
-      <span>&copy; <span data-year>2026</span> ${esc(site.name)} · ${esc(site.location)} · Founded by ${esc(site.founder)}</span>
+      <span>&copy; <span data-year>2026</span> ${esc(site.name)} · ${esc(site.locationLine)} · Founded by ${esc(site.founder)}</span>
       <span class="footer-legal"><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/sitemap.xml">Sitemap</a></span>
     </div>
   </div>
@@ -214,7 +225,7 @@ export function breadcrumb(items) {
 // ---- CTA band ---------------------------------------------------------------
 export function ctaBand(opts = {}) {
   const heading = opts.heading || 'Start with a free digital audit';
-  const text = opts.text || `Tell us about your business — we'll reply ${site.facts.responsePromise} with a clear score and three priorities to keep.`;
+  const text = opts.text || `Tell us about your business. Our team brings ${site.facts.experience} of experience and ${site.facts.businessesHelped} businesses helped, and we'll reply ${site.facts.responsePromise} with a clear score and three priorities to keep.`;
   return `<section class="cta-band">
     <div class="wrap inner">
       <div>
@@ -254,7 +265,8 @@ export function serviceCard(s) {
 }
 
 export function industryCard(i) {
-  return `<a class="card" href="/industries/${i.slug}/" data-reveal>
+  return `<a class="card card-media" href="/industries/${i.slug}/" data-reveal>
+    ${illo('industry-' + i.slug, { sizes: '(max-width: 620px) 100vw, (max-width: 1000px) 50vw, 360px', cls: 'card-img' })}
     <h3>${esc(i.title)}</h3>
     <p>${esc(i.summary)}</p>
     <span class="card-cta">See what we build →</span>
@@ -262,8 +274,8 @@ export function industryCard(i) {
 }
 
 // ---- Full page assembly -----------------------------------------------------
-export function page({ title, description, path, jsonLd, main, noindex, ogType }) {
-  return `${head({ title, description, path, jsonLd, noindex, ogType })}
+export function page({ title, description, path, jsonLd, main, noindex, ogType, ogImage }) {
+  return `${head({ title, description, path, jsonLd, noindex, ogType, ogImage })}
 <body>
   ${header()}
   <main id="main">

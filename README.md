@@ -29,7 +29,10 @@ scripts/          build tooling & content (source of truth)
 static/           hand-authored assets copied into /public as-is
   styles.css      shared design system (dark-first, brand palette)
   site.js         nav, mega-menu, forms, FAQ, reveal, analytics beacons
-  assets/         images (hero-owner.webp)
+  assets/         images (hero-owner.webp, founder photo)
+  assets/img/     illustrations <name>-{640,1200}.{webp,jpg} (see scripts/images.mjs)
+design/illustrations/  source for the illustrations (HTML/CSS scenes rendered with
+                  Playwright, then exported to WebP + JPG at 640 and 1200 px)
   og-image.png    1200x630 social share image
   favicon.*, icon-*.png, apple-touch-icon.png, site.webmanifest   icon set
 public/           GENERATED site (committed) — do not edit by hand
@@ -65,9 +68,20 @@ missing its single `<h1>`, title, meta description, canonical, skip link or
   monthly in advance (MoMo, bank transfer or card).
 - Ad spend is **separate** and prepaid in cedis (recommended from **GHS 1,500/mo**).
 - Guarantee: **live within 7 days of onboarding, or month 1 is free.**
-- First-5-clients offer: **month 1 for GHS 1,600.**
+- The former first-5-clients / founding-client offer (month 1 for GHS 1,600)
+  was **removed** in Oct 2026 at the founder's request, along with all
+  "founding client" / "first case studies" framing.
+- Experience: the team has **7+ years** helping businesses with their digital
+  needs (`site.facts.experience`) and has helped **50+ businesses**
+  (`site.facts.businessesHelped`). Founder-confirmed; no other numbers,
+  client names, testimonials or awards are claimed.
 - Contacts: **josh@showmeworld.app**, WhatsApp **+1 336 457 2361**.
-- Founder: **Joshua Abbey**, **Accra, Ghana**.
+- Location framing: **US-led, with our team on the ground in Accra, Ghana.**
+  Founder **Joshua (Josh) Abbey** is based in the **United States** (country
+  level only; no US city or street address is published); the delivery team
+  works from Accra. The agency serves businesses in
+  **Ghana** (core market: GHS pricing, MoMo, Ghana Data Protection Act) and
+  diaspora/international clients in the **US, UK and Canada**, remotely.
 
 ## Pricing (set Oct 2026, in `scripts/prices.mjs`)
 
@@ -125,10 +139,11 @@ All former `PLACEHOLDER` boxes and `TODO(founder)` comments have been replaced
 with finished copy (prices, bundles, payment terms, process durations, founder
 bio with the founder's photo (`static/assets/joshua-abbey*.webp|jpg`), WhatsApp "Book a free call" with email fallback,
 six full Insights articles, Terms and Privacy). No testimonials, client names,
-logos, results or stats are shown anywhere: `/work/` presents four
+logos or project results are shown anywhere (the only figures are the
+founder-confirmed **7+ years** and **50+ businesses helped**): `/work/` presents four
 **solutions we deliver** (what each system does, its features and the outcomes
-it is designed for, with no client names or results), the founding-client
-programme and written guarantees. Add real case studies only with client permission and real
+it is designed for, with no client names or results), how the team works
+with clients and written guarantees. Add real case studies only with client permission and real
 numbers.
 
 ### ⚠️ Legal review recommended
@@ -139,6 +154,20 @@ Transactions Act, 2008 (Act 772) and the Alternative Dispute Resolution Act,
 2010 (Act 798). They are **not** a substitute for advice from a Ghanaian lawyer.
 Before relying on them, have them reviewed, and confirm whether ShowMe needs to
 register with the Data Protection Commission as a data controller.
+
+**Flagged (Oct 2026): founder location and governing law.** The founder is
+based in the United States and the delivery team is in Accra, with Ghana as
+the core client market. Clause
+18 of `/terms/` previously applied Ghanaian law with the courts in Accra. It
+has been made **neutral**: the governing law and jurisdiction are now stated in
+each written proposal, and disputes go to good-faith discussion, then
+mediation. Decide with a lawyer which law should apply by default (Ghana, or a
+US state, possibly differing for Ghanaian vs US/UK/Canadian clients) and then
+restore a specific clause in `scripts/pages.mjs` (`terms()`). Also confirm
+which entity is the data controller in `/privacy/` (it still references Ghana's
+Act 843 and the Ghana Data Protection Commission, which stay relevant for
+Ghanaian clients) and whether US state privacy laws or UK/Canadian rules
+apply to diaspora clients.
 
 ### Things worth double-checking
 
