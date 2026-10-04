@@ -2,6 +2,8 @@
 // ShowMe Digital Agency — rendering helpers and shared partials
 // Pure string templates. No framework, output is plain static HTML.
 // ============================================================================
+import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { illo } from './images.mjs';
 import { site, divisions, services, servicesByDivision, industries, serviceBySlug, bookCallUrl, bookCallMailto } from './data.mjs';
 
@@ -11,12 +13,33 @@ export function esc(s) {
     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
+// Cache-busting version for CSS/JS: a short content hash appended as ?v=...
+// so the worker can serve them with a long immutable cache lifetime.
+function assetVersion(file) {
+  const buf = readFileSync(new URL('../static/' + file, import.meta.url));
+  return createHash('sha256').update(buf).digest('hex').slice(0, 10);
+}
+export const ASSET_V = { css: assetVersion('styles.css'), js: assetVersion('site.js') };
+
+// Keep <title> within ~65 characters where possible by shortening the brand
+// suffix (search results truncate longer titles).
+const SHORT_BRAND = 'ShowMe Agency';
+export function seoTitle(title) {
+  if (title.length <= 65) return title;
+  for (const sep of [' | ', ' — ']) {
+    const suffix = sep + site.name;
+    if (title.endsWith(suffix)) return title.slice(0, -suffix.length) + ' | ' + SHORT_BRAND;
+  }
+  return title;
+}
+
 export function url(path) {
   return site.origin + path;
 }
 
 // ---- Head / SEO -------------------------------------------------------------
 export function head({ title, description, path, jsonLd = [], noindex = false, ogType = 'website', ogImage = null }) {
+  title = seoTitle(title);
   const og = ogImage || { url: site.ogImage, w: 1200, h: 630, alt: 'ShowMe Digital Agency: Build. Grow. Automate. Websites, growth and automation for businesses in Ghana and the diaspora.' };
   const canonical = url(path);
   const ld = jsonLd.map(obj => `\n  <script type="application/ld+json">${JSON.stringify(obj)}</script>`).join('');
@@ -50,7 +73,7 @@ export function head({ title, description, path, jsonLd = [], noindex = false, o
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css" />${ld}
+  <link rel="stylesheet" href="/styles.css?v=${ASSET_V.css}" />${ld}
 </head>`;
 }
 
@@ -283,7 +306,7 @@ ${main}
   </main>
   ${footer()}
   ${mobileCta()}
-  <script src="/site.js" defer></script>
+  <script src="/site.js?v=${ASSET_V.js}" defer></script>
 </body>
 </html>`;
 }

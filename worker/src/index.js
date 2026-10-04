@@ -104,7 +104,94 @@ export default {
     // Any other /api/* path is unknown.
     if (pathname.startsWith('/api/')) return json({ ok: false, error: 'not_found' }, 404);
 
-    // Everything else: serve the generated static site.
-    return env.ASSETS.fetch(request);
+    // Everything else: serve the generated static site, with SEO-safe tweaks.
+    return serveAsset(request, env, url);
   }
 };
+
+// ---- Static assets ----------------------------------------------------------
+// The Worker runs first for every request (run_worker_first = true) so it can:
+//  - turn the asset layer's 307 "clean URL" redirects (/services -> /services/,
+//    /about/index.html -> /about/) into permanent 301s for search engines;
+//  - return a real 404 status for /404 and /404.html (no soft-404 duplicate);
+//  - set explicit charsets and cache lifetimes per file type.
+const ONE_YEAR = 31536000;
+const ONE_WEEK = 604800;
+
+function cacheControlFor(pathname, search) {
+  // Versioned CSS/JS (?v=<content hash>) never change at a given URL.
+  if (/\.(css|js)$/.test(pathname) && /(^|[?&])v=[0-9a-f]{6,}/.test(search)) {
+    return `public, max-age=${ONE_YEAR}, immutable`;
+  }
+  if (/\.(css|js)$/.test(pathname)) return 'public, max-age=3600, stale-while-revalidate=86400';
+  if (pathname.startsWith('/assets/') || /\.(png|jpe?g|webp|avif|gif|svg|ico|woff2?)$/.test(pathname)) {
+    return `public, max-age=${ONE_WEEK}, stale-while-revalidate=86400`;
+  }
+  if (pathname === '/robots.txt' || pathname === '/sitemap.xml' || pathname === '/site.webmanifest') {
+    return 'public, max-age=3600';
+  }
+  // HTML: always revalidate so content updates show immediately.
+  return 'public, max-age=0, must-revalidate';
+}
+
+function contentTypeFix(pathname, current) {
+  if (pathname === '/robots.txt') return 'text/plain; charset=utf-8';
+  if (pathname === '/sitemap.xml') return 'application/xml; charset=utf-8';
+  if (current && /^text\/(html|plain|css|javascript)$/.test(current.trim())) return current.trim() + '; charset=utf-8';
+  return null;
+}
+
+async function notFoundResponse(request, env, url) {
+  const res = await env.ASSETS.fetch(new Request(new URL('/404.html', url), { method: 'GET', headers: request.headers }));
+  // Follow the asset layer's own /404.html -> /404 clean-URL redirect, if any.
+  let page = res;
+  if (res.status >= 300 && res.status < 400 && res.headers.get('location')) {
+    page = await env.ASSETS.fetch(new Request(new URL(res.headers.get('location'), url), { method: 'GET', headers: request.headers }));
+  }
+  const headers = new Headers(page.headers);
+  headers.set('Content-Type', 'text/html; charset=utf-8');
+  headers.set('Cache-Control', 'public, max-age=0, must-revalidate');
+  headers.set('X-Robots-Tag', 'noindex');
+  headers.delete('ETag');
+  return new Response(request.method === 'HEAD' ? null : page.body, { status: 404, headers });
+}
+
+async function serveAsset(request, env, url) {
+  const { pathname, search } = url;
+
+  if (pathname === '/404' || pathname === '/404.html' || pathname === '/404/') {
+    return notFoundResponse(request, env, url);
+  }
+
+  const res = await env.ASSETS.fetch(request);
+
+  // Clean-URL redirects from the asset layer are 307; make them permanent.
+  if (res.status === 307 || res.status === 308) {
+    const location = res.headers.get('location');
+    if (location) {
+      const target = new URL(location, url);
+      if (target.origin === url.origin) target.search = search; // keep query string
+      return new Response(null, {
+        status: 301,
+        headers: { Location: target.origin === url.origin ? target.pathname + target.search : target.href, 'Cache-Control': 'public, max-age=3600' }
+      });
+    }
+  }
+
+  if (res.status === 404) {
+    const headers = new Headers(res.headers);
+    headers.set('Content-Type', 'text/html; charset=utf-8');
+    headers.set('Cache-Control', 'public, max-age=0, must-revalidate');
+    headers.set('X-Robots-Tag', 'noindex');
+    return new Response(res.body, { status: 404, headers });
+  }
+
+  if (res.status !== 200 && res.status !== 304) return res;
+
+  const headers = new Headers(res.headers);
+  headers.set('Cache-Control', cacheControlFor(pathname, search));
+  const ct = contentTypeFix(pathname, headers.get('content-type'));
+  if (ct) headers.set('Content-Type', ct);
+  headers.set('X-Content-Type-Options', 'nosniff');
+  return new Response(res.body, { status: res.status, headers });
+}

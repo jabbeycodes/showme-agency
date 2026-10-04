@@ -5,6 +5,7 @@
 // ============================================================================
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
+import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 
 import { site, services, industries, insights } from './data.mjs';
@@ -65,10 +66,28 @@ async function writeFile(rel, content) {
 }
 
 // ---- Sitemap + robots -------------------------------------------------------
-function sitemap() {
+// lastmod is per page and only moves when that page's rendered HTML actually
+// changes. Hashes + dates are tracked in scripts/lastmod.json (committed), so
+// rebuilding unchanged content does not bump every URL's lastmod.
+const LASTMOD_FILE = path.join(__dirname, 'lastmod.json');
+async function computeLastmod() {
+  let prev = {};
+  try { prev = JSON.parse(await fs.readFile(LASTMOD_FILE, 'utf8')); } catch {}
   const today = new Date().toISOString().slice(0, 10);
+  const next = {};
+  for (const r of routes) {
+    // Ignore cache-busting asset versions so CSS/JS tweaks don't touch lastmod.
+    const normalized = r.html.replace(/\?v=[0-9a-f]{10}/g, '');
+    const hash = createHash('sha256').update(normalized).digest('hex').slice(0, 16);
+    const old = prev[r.path];
+    next[r.path] = old && old.hash === hash ? old : { hash, date: today };
+    r.lastmod = next[r.path].date;
+  }
+  await fs.writeFile(LASTMOD_FILE, JSON.stringify(next, null, 2) + '\n', 'utf8');
+}
+function sitemap() {
   const urls = routes.map(r =>
-    `  <url>\n    <loc>${site.origin}${r.path}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>${r.changefreq}</changefreq>\n    <priority>${r.priority.toFixed(1)}</priority>\n  </url>`
+    `  <url>\n    <loc>${site.origin}${r.path}</loc>\n    <lastmod>${r.lastmod}</lastmod>\n    <changefreq>${r.changefreq}</changefreq>\n    <priority>${r.priority.toFixed(1)}</priority>\n  </url>`
   ).join('\n');
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
 }
@@ -91,6 +110,7 @@ async function build() {
   await writeFile('404.html', pages.notFound());
 
   // sitemap + robots
+  await computeLastmod();
   await writeFile('sitemap.xml', sitemap());
   await writeFile('robots.txt', robots());
 

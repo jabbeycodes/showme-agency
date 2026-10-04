@@ -4,6 +4,9 @@
 //  - one <h1> per page, a <title>, meta description and canonical
 //  - a skip link and main landmark
 //  - sitemap.xml references only existing pages
+//  - SEO: unique titles/descriptions, absolute canonical matching the URL,
+//    lang attribute, Open Graph tags, no stray noindex, valid JSON-LD with no
+//    ratings/reviews, BreadcrumbList on every non-home page
 // Exits non-zero on any error so it can gate CI / npm run build.
 // ============================================================================
 import { promises as fs } from 'node:fs';
@@ -49,6 +52,9 @@ async function main() {
   const files = (await walk(OUT)).filter(f => f.endsWith('.html'));
   const htmlByRoute = new Set(files.map(f => '/' + path.relative(OUT, f).replace(/\\/g, '/')));
 
+  const ORIGIN = 'https://agency.showmeworld.app';
+  const seenTitles = new Map();
+  const seenDescs = new Map();
   for (const file of files) {
     const rel = '/' + path.relative(OUT, file).replace(/\\/g, '/');
     const html = await fs.readFile(file, 'utf8');
@@ -62,6 +68,32 @@ async function main() {
     if (!is404 && !/<link rel="canonical"/.test(html)) errors.push(`${rel}: missing canonical`);
     if (!/id="main"/.test(html)) errors.push(`${rel}: missing <main id="main">`);
     if (!/class="skip-link"/.test(html)) errors.push(`${rel}: missing skip link`);
+
+    // SEO checks
+    if (!/<html lang="[a-z-]+"/.test(html)) errors.push(`${rel}: missing <html lang>`);
+    const title = (html.match(/<title>([^<]+)<\/title>/) || [])[1];
+    const desc = (html.match(/<meta name="description" content="([^"]+)"/) || [])[1];
+    if (!is404) {
+      if (title) { if (seenTitles.has(title)) errors.push(`${rel}: duplicate <title> (also ${seenTitles.get(title)})`); else seenTitles.set(title, rel); }
+      if (desc) { if (seenDescs.has(desc)) errors.push(`${rel}: duplicate meta description (also ${seenDescs.get(desc)})`); else seenDescs.set(desc, rel); }
+      const expected = ORIGIN + (rel === '/index.html' ? '/' : rel.replace(/index\.html$/, ''));
+      const canon = (html.match(/<link rel="canonical" href="([^"]+)"/) || [])[1];
+      if (canon && canon !== expected) errors.push(`${rel}: canonical ${canon} != ${expected}`);
+      if (/<meta name="robots" content="[^"]*noindex/i.test(html)) errors.push(`${rel}: unexpected noindex`);
+      for (const og of ['og:title', 'og:description', 'og:url', 'og:image', 'og:type']) {
+        if (!html.includes(`property="${og}"`)) errors.push(`${rel}: missing ${og}`);
+      }
+      if (desc && desc.length > 200) warnings.push(`${rel}: meta description is ${desc.length} chars`);
+    } else if (!/<meta name="robots" content="noindex/.test(html)) {
+      errors.push(`${rel}: 404 page should be noindex`);
+    }
+    const ldTypes = [];
+    for (const [, raw] of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
+      try { ldTypes.push(JSON.parse(raw)['@type']); }
+      catch (e) { errors.push(`${rel}: invalid JSON-LD (${e.message})`); }
+      if (/aggregateRating|"@type":"Review"/.test(raw)) errors.push(`${rel}: JSON-LD must not contain ratings/reviews`);
+    }
+    if (!is404 && rel !== '/index.html' && !ldTypes.includes('BreadcrumbList')) errors.push(`${rel}: missing BreadcrumbList JSON-LD`);
 
     // Internal link checks (href="/..." and src="/...")
     const linkRe = /(?:href|src)="(\/[^"]*)"/g;

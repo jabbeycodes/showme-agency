@@ -182,7 +182,7 @@ export function home() {
           </div>
         </div>
         <div class="hero-art">
-          <img src="/assets/hero-owner.webp" width="1200" height="900" alt="A Ghanaian business owner managing advertising and customer conversations on her phone" fetchpriority="high">
+          <img src="/assets/hero-owner-1200.webp" srcset="/assets/hero-owner-640.webp 640w, /assets/hero-owner-1200.webp 1200w, /assets/hero-owner.webp 1920w" sizes="(max-width: 1000px) 100vw, 600px" width="1200" height="900" alt="A Ghanaian business owner managing advertising and customer conversations on her phone" decoding="async" fetchpriority="high">
           <div class="hero-note">Build → grow → automate</div>
         </div>
       </div>
@@ -301,7 +301,7 @@ export function home() {
 
   return page({
     title: site.name + ' — ' + site.tagline,
-    description: 'ShowMe Digital Agency is your digital business partner, with ' + site.facts.experience + ' of experience and ' + site.facts.businessesHelped + ' businesses helped: US-led, with our team on the ground in Accra, serving businesses in Ghana and clients in the US, UK and Canada. We build websites, grow demand and automate the systems behind your customer journey. Start with a free digital audit.',
+    description: 'US-led digital agency with a team in Accra: ' + site.facts.experience + ' of experience, ' + site.facts.businessesHelped + ' businesses helped. Websites, growth and automation. Start with a free audit.',
     path,
     jsonLd: [orgLd(), localBusinessLd],
     main
@@ -710,7 +710,7 @@ export function process() {
 
   return page({
     title: 'Our Process & Timelines | ' + site.name,
-    description: 'How ShowMe Digital Agency works: a four-step growth journey, seven delivery phases with realistic durations, and typical timelines for websites, stores, automation and apps.',
+    description: 'How ShowMe Digital Agency works: a four-step growth journey, seven delivery phases and typical timelines for websites, stores, automation and apps.',
     path,
     jsonLd: [orgLd(), breadcrumbLd(crumbs)],
     main
@@ -861,7 +861,7 @@ export function work() {
 
   return page({
     title: 'What We Build: Solutions & Guarantees | ' + site.name,
-    description: 'Solutions ShowMe Digital Agency builds for Ghanaian businesses (restaurant ordering systems, real-estate listing platforms, clinic WhatsApp assistants, invoice automation), how our team works with you and our written guarantees.',
+    description: 'What ShowMe builds for Ghanaian businesses: restaurant ordering, real-estate listings, clinic WhatsApp assistants, invoice automation, plus our written guarantees.',
     path,
     jsonLd: [orgLd(), breadcrumbLd(crumbs)],
     main
@@ -922,7 +922,7 @@ export function freeAudit() {
 
   return page({
     title: 'Free Digital Business Audit | ' + site.name,
-    description: 'Get a free 6-point digital audit from ShowMe Digital Agency: website, search & AI visibility, social, brand, systems and automation — with a score and three priorities.',
+    description: 'Free 6-point digital audit from ShowMe Digital Agency: website, search & AI visibility, social, brand, systems and automation, with a score and three priorities.',
     path,
     jsonLd: [orgLd(), breadcrumbLd(crumbs)],
     main
@@ -1014,7 +1014,7 @@ export function about() {
 
   return page({
     title: 'About ShowMe Digital Agency & Founder Joshua Abbey',
-    description: 'ShowMe Digital Agency is the client-services arm of ShowMe World, US-led by founder Joshua (Josh) Abbey, with our team on the ground in Accra, ' + site.facts.experience + ' of experience and ' + site.facts.businessesHelped + ' businesses helped, serving businesses in Ghana and clients in the US, UK and Canada: build, grow and automate, with one accountable partner.',
+    description: 'Meet ShowMe Digital Agency and founder Joshua (Josh) Abbey: US-led, team in Accra, ' + site.facts.experience + ' of experience and ' + site.facts.businessesHelped + ' businesses helped.',
     path,
     jsonLd: [orgLd(), breadcrumbLd(crumbs), personLd],
     main
@@ -1115,7 +1115,7 @@ export function contact() {
 
   return page({
     title: 'Contact & Booking | ' + site.name,
-    description: 'Contact ShowMe Digital Agency: US-led, with our team on the ground in Accra, serving businesses in Ghana and clients in the US, UK and Canada. Send a qualifying enquiry, chat on WhatsApp or email ' + site.email + '. We reply ' + site.facts.responsePromise + '.',
+    description: 'Contact ShowMe Digital Agency: send an enquiry, chat on WhatsApp or email ' + site.email + '. We reply ' + site.facts.responsePromise + '.',
     path,
     jsonLd: [orgLd(), breadcrumbLd(crumbs)],
     main
@@ -1444,7 +1444,7 @@ export function terms() {
 
   return page({
     title: 'Terms of Service | ' + site.name,
-    description: 'Terms of service for ShowMe Digital Agency: proposals and scope, prices, 50/50 payment terms, preview before final payment, the 7-day guarantee, ownership and how disputes are resolved.',
+    description: 'ShowMe Digital Agency terms: scope, prices, 50/50 payments, preview before final payment, the 7-day guarantee, ownership and dispute resolution.',
     path,
     jsonLd: [orgLd(), breadcrumbLd(crumbs)],
     main
