@@ -33,6 +33,7 @@ export const site = {
     experience: '7+ years',
     businessesHelped: '50+',
     retainerPrice: 'GHS 3,200',
+    enterpriseRetainerPrice: 'GHS 7,500',
     retainerMinimum: '3-month minimum',
     adSpendMin: 'GHS 1,500',
     guarantee: 'Live within 7 days of onboarding — or month 1 is free.',
@@ -261,6 +262,7 @@ export const services = [
     faqs: [
       { q: 'What does the retainer cost?', a: site.facts.retainerPrice + ' per month with a ' + site.facts.retainerMinimum + ', billed monthly in advance by MoMo, bank transfer or card. Ad spend is separate and prepaid in cedis; we recommend at least ' + site.facts.adSpendMin + '/month.' },
       { q: 'Is ad spend included?', a: 'No. The retainer covers our management, landing page and lead system. Ad spend is paid separately and goes directly to the ad platforms.' },
+      { q: 'Is there a plan for larger companies or in-house teams?', a: 'Yes — the ShowMe Enterprise retainer (' + site.facts.enterpriseRetainerPrice + '/month, ' + site.facts.retainerMinimum + ') adds a named senior strategist led by our founder, multi-outlet and multi-brand reporting, quarterly business reviews and priority response within 4 business hours. You own the ad accounts, data and creative outright on both tiers.' },
       { q: 'What is the guarantee?', a: site.facts.guarantee + ' We guarantee our speed and execution, not inflated lead promises.' },
       { q: 'How quickly will we see work happening?', a: 'Fast. Our team follows a proven onboarding process: once we have your first payment and access, your landing page, lead system and reporting go live within 7 days, or month 1 is free.' }
     ],

@@ -214,7 +214,7 @@ export function home() {
       <div class="wrap">
         <p class="kicker" data-reveal>Who we work with</p>
         <h2 data-reveal>Built for ambitious businesses across Ghana.</h2>
-        <p class="section-lead" data-reveal>From getting online to modernising operations — with starter packages for the sectors we know best.</p>
+        <p class="section-lead" data-reveal>We partner with ambitious mid-size and large businesses &mdash; multi-outlet retailers, developers, school groups, clinic chains, and in-house marketing teams that need senior paid-media firepower.</p>
         <div class="pill-row" style="margin-top:28px">${industryStrip}</div>
         <div style="margin-top:26px" data-reveal><a class="btn secondary" href="/industries/"><span>See all industries →</span></a></div>
       </div>
@@ -237,22 +237,24 @@ export function home() {
     <section class="section-alt">
       <div class="wrap">
         <p class="kicker" data-reveal>A practical place to start</p>
-        <h2 data-reveal>Start with growth. Add what your business needs.</h2>
+        <h2 data-reveal>Start with growth. Scale when you&rsquo;re ready.</h2>
         <div class="grid grid-2" style="margin-top:40px;align-items:start">
           <div class="price-card featured" data-reveal>
             <span class="badge">Core offer</span>
             <div class="amount">${esc(site.facts.retainerPrice)} <small>/ month</small></div>
-            <p style="color:var(--text-muted);margin:0">ShowMe Growth retainer · ${esc(site.facts.retainerMinimum)}</p>
+            <p style="color:var(--text-muted);margin:0">ShowMe Growth retainer &middot; ${esc(site.facts.retainerMinimum)}</p>
             <ul>
               <li>Managed ads and a high-converting landing page</li>
               <li>WhatsApp lead system and weekly reporting</li>
               <li>Ad spend separate, prepaid in cedis (from ${esc(site.facts.adSpendMin)}/mo)</li>
+              <li>You own everything: ad accounts, data and creative</li>
               <li>${esc(site.facts.guarantee)}</li>
             </ul>
-            <div style="margin-top:24px"><a class="btn" href="/pricing/"><span>See pricing &amp; packages →</span></a></div>
+            <div style="margin-top:24px"><a class="btn" href="/pricing/"><span>See pricing &amp; packages &rarr;</span></a></div>
           </div>
           <div style="display:grid;gap:18px">
-            <div class="promise-block highlight" data-reveal><span class="label">Start small</span><strong>Automation Audit: GHS 1,500.</strong><p>A fixed-fee roadmap of what to automate first, from our team. The full fee is credited toward your build if you go ahead within 60 days.</p></div>
+            <div class="promise-block highlight" data-reveal><span class="label">For teams &amp; multi-outlet companies</span><strong>ShowMe Enterprise: ${esc(site.facts.enterpriseRetainerPrice)}/month.</strong><p>Named senior strategist, multi-outlet reporting, quarterly business reviews. <a href="/pricing/" style="color:#fff;text-decoration:underline">See the tiers &rarr;</a></p></div>
+            <div class="promise-block" data-reveal><span class="label">Start small</span><strong>Automation Audit: GHS 1,500.</strong><p>A fixed-fee roadmap of what to automate first, from our team. The full fee is credited toward your build if you go ahead within 60 days.</p></div>
             <div class="promise-block" data-reveal><span class="label">Published prices</span><strong>Websites from GHS 7,500. Bundles from GHS 11,500.</strong><p>Every service has a "from" price in GHS (with a USD guide). Projects are 50% to start and 50% on launch, after you approve a working preview.</p></div>
           </div>
         </div>
@@ -391,7 +393,8 @@ export function pricing() {
     { q: 'Is the Automation Audit fee credited toward a build?', a: 'Yes. The Automation Audit is a fixed GHS 1,500, and the full amount is credited toward any automation build you start with us within 60 days.' },
     { q: 'What does a "from" price mean?', a: 'It is the starting price for the scope described next to it. Your fixed quote follows a free call and depends on things like page count, number of products or workflows, and integrations. You will always see the full price before you commit.' },
     { q: 'What is not included in your prices?', a: 'Third-party costs are separate and paid at cost: ad spend, Microsoft or software licences, domain and payment-provider fees, WhatsApp and AI usage fees, printing and travel outside Greater Accra. We list any that apply in your proposal.' },
-    { q: 'What if I need to pause or cancel?', a: 'Monthly plans run month to month after any minimum term; give us notice at least 14 days before your next billing date. For projects, you pay for the work completed to date. Full details are in our Terms of Service.' }
+    { q: 'What if I need to pause or cancel?', a: 'Monthly plans run month to month after any minimum term; give us notice at least 14 days before your next billing date. For projects, you pay for the work completed to date. Full details are in our Terms of Service.' },
+    { q: 'Is there a plan for larger companies or in-house teams?', a: 'Yes — the ShowMe Enterprise retainer (GHS 7,500/month, 3-month minimum) adds a named senior strategist led by our founder, multi-outlet and multi-brand reporting, quarterly business reviews and priority response within 4 business hours. On both retainers you own the ad accounts, data and creative outright.' }
   ]);
 
   const waAbout = (what) => wa("Hi Josh, I'm interested in the " + what + '. Could we have a quick chat about it?');
@@ -454,20 +457,41 @@ export function pricing() {
 
     <section>
       <div class="wrap">
-        <div class="grid grid-2" style="align-items:start">
+        <p class="kicker" data-reveal>Retainers</p>
+        <h2 data-reveal>Start with growth. Scale when you&rsquo;re ready.</h2>
+        <p class="section-lead" data-reveal>Two retainers, billed monthly in advance by MoMo, bank transfer or card, with a ${esc(site.facts.retainerMinimum)}. Have an in-house marketing team? We plug in as your paid-media strike team &mdash; creative testing, dollar ad accounts, and reporting your team doesn&rsquo;t have time for.</p>
+        <div class="grid grid-2" style="align-items:start;margin-top:36px">
           <div class="price-card featured" data-reveal>
             <span class="badge">Core offer</span>
             <div class="amount">${esc(site.facts.retainerPrice)} <small>/ month</small></div>
-            <p style="color:var(--text-muted);margin:0">ShowMe Growth retainer · ${esc(site.facts.retainerMinimum)} · about USD 280/month</p>
+            <p style="color:var(--text-muted);margin:0">ShowMe Growth retainer &middot; ${esc(site.facts.retainerMinimum)} &middot; about USD 280/month</p>
             <ul>
               <li>Managed advertising and a high-converting landing page</li>
               <li>WhatsApp lead system that captures every enquiry</li>
               <li>Weekly reporting on what the spend returns</li>
               <li>Ad spend separate, prepaid in cedis (recommended from ${esc(site.facts.adSpendMin)}/month)</li>
+              <li>We handle the dollar ad-account side &mdash; you never touch a dollar card</li>
+              <li>You own everything: ad accounts, data and creative</li>
               <li>${esc(site.facts.guarantee)}</li>
             </ul>
-            <div style="margin-top:24px"><a class="btn" href="/services/growth-retainer/"><span>See what's included →</span></a></div>
+            <div style="margin-top:24px"><a class="btn" href="/services/growth-retainer/"><span>See what&rsquo;s included &rarr;</span></a></div>
           </div>
+          <div class="price-card" data-reveal>
+            <span class="badge badge-quiet">For teams &amp; multi-outlet companies</span>
+            <div class="amount">${esc(site.facts.enterpriseRetainerPrice)} <small>/ month</small></div>
+            <p style="color:var(--text-muted);margin:0">ShowMe Enterprise retainer &middot; ${esc(site.facts.retainerMinimum)} &middot; about USD 650/month</p>
+            <ul>
+              <li>Everything in the Growth retainer</li>
+              <li>Named senior strategist, led by our founder</li>
+              <li>Multi-outlet and multi-brand reporting</li>
+              <li>Quarterly business reviews with your team</li>
+              <li>Priority response &mdash; within 4 business hours</li>
+              <li>You own everything: ad accounts, data and creative</li>
+            </ul>
+            <div style="margin-top:24px"><a class="btn secondary" href="${esc(waAbout('Enterprise retainer'))}" target="_blank" rel="noopener"><span>Ask about Enterprise &rarr;</span></a></div>
+          </div>
+        </div>
+        <div class="grid grid-2" style="margin-top:28px">
           <div style="display:grid;gap:18px">
             <div class="promise-block highlight" data-reveal><span class="label">Start small</span><strong>Automation Audit: GHS 1,500.</strong><p>A fixed-fee roadmap of what to automate first. The full fee is credited toward your build if you go ahead within 60 days.</p></div>
             <div class="promise-block" data-reveal><span class="label">Everything else</span><strong>A published "from" price for every service.</strong><p>Websites from GHS 7,500, stores from GHS 13,500, WhatsApp AI assistants from GHS 6,000. <a href="#price-list" style="color:var(--mint)">Full price list ↓</a></p></div>
