@@ -5,11 +5,18 @@
 # Assets, and runs custom code ONLY for /api/* (lead capture + analytics),
 # falling back to the static assets for every other path.
 #
-# NOTE: This is NOT deployed automatically. See ../README.md for redeploy steps.
+# Deploy manually from this directory: npx wrangler deploy (see ../README.md).
 # =============================================================================
 name = "showme-agency"
 main = "src/index.js"
 compatibility_date = "2024-11-01"
+
+# Serve production on the agency subdomain as a Workers Custom Domain.
+# (Cloudflare creates/manages the DNS record; there must be no other CNAME.)
+routes = [{ pattern = "agency.showmeworld.app", custom_domain = true }]
+
+# Keep the workers.dev URL for smoke-testing deploys.
+workers_dev = true
 
 # Serve the built static site. Run the Worker first only for API routes so the
 # multi-page site (clean directory URLs) is served directly from assets.
@@ -21,9 +28,8 @@ not_found_handling = "404-page"
 run_worker_first = ["/api/*"]
 
 # KV namespace that stores leads and daily event counters.
-# TODO(founder/deploy): replace `id` with the real KV namespace id from your
-# Cloudflare account (the existing `showme-agency` worker already has one bound
-# as LEADS — reuse that id so historic leads/stats stay intact).
+# This is the SAME namespace the previous inline worker used, so historic
+# leads and stats stay intact. Never point this at a new/empty namespace.
 [[kv_namespaces]]
 binding = "LEADS"
-id = "REPLACE_WITH_EXISTING_LEADS_KV_NAMESPACE_ID"
+id = "70f566bafd0c49928b97fdb2b56c0574" # showme-agency-leads (existing namespace; keeps historic leads/stats)

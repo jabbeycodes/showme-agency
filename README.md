@@ -120,9 +120,10 @@ Production is the `showme-agency` Worker. This repo adds `worker/` with Workers
 Static Assets so the multi-page site is served correctly.
 
 1. `npm run build` (regenerates `public/` and validates it).
-2. In `worker/wrangler.toml`, set the `LEADS` KV namespace `id` to the **existing**
-   namespace already bound to the live `showme-agency` worker, so historic leads
-   and stats are preserved.
+2. `worker/wrangler.toml` binds `LEADS` to the **existing** KV namespace
+   `showme-agency-leads` (`70f566bafd0c49928b97fdb2b56c0574`), so historic leads
+   and stats are preserved, and attaches `agency.showmeworld.app` as a Workers
+   Custom Domain.
 3. From `worker/`, deploy with Wrangler:
    ```bash
    cd worker
@@ -182,4 +183,5 @@ apply to diaspora clients.
 
 ### Deployment
 
-- [ ] Real `LEADS` KV namespace id in `worker/wrangler.toml`.
+- [x] Real `LEADS` KV namespace id in `worker/wrangler.toml`.
+- [x] `agency.showmeworld.app` served by the Worker (Custom Domain), moved off Vercel.
