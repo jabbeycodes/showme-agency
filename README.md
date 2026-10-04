@@ -30,9 +30,11 @@ static/           hand-authored assets copied into /public as-is
   styles.css      shared design system (dark-first, brand palette)
   site.js         nav, mega-menu, forms, FAQ, reveal, analytics beacons
   assets/         images (hero-owner.webp, founder photo)
-  assets/img/     illustrations <name>-{640,1200}.{webp,jpg} (see scripts/images.mjs)
-design/illustrations/  source for the illustrations (HTML/CSS scenes rendered with
-                  Playwright, then exported to WebP + JPG at 640 and 1200 px)
+  assets/img/     AI-generated photos <name>-{640,1200}.{webp,jpg}, approved by the
+                  founder (solution-*, industry-*, article-*, division-*). Sources are
+                  16:9, center-cropped to 16:10 and exported at 1200x750 and 640x400
+                  (WebP q80 + JPG q82). Alt text lives in scripts/images.mjs. They are
+                  illustrative, not client work or real customers.
   og-image.png    1200x630 social share image
   favicon.*, icon-*.png, apple-touch-icon.png, site.webmanifest   icon set
 public/           GENERATED site (committed) — do not edit by hand

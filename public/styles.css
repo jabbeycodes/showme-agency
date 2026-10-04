@@ -609,7 +609,7 @@ table.price-list td:last-child.nowrap { color: var(--gold); font-weight: 600; }
 .sample-meta strong { color: var(--text); }
 .sample-links { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 12px 0 0; }
 .sample-links a { color: var(--coral); font-weight: 700; font-size: 14px; text-decoration: none; }
-/* Illustrations (static/assets/img, rendered device-mockup scenes) */
+/* Photos (static/assets/img, AI-generated, 16:10) */
 .illo { display: block; border-radius: 16px; overflow: hidden; border: 1px solid var(--night-line); background: var(--surface-2); box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35); }
 .illo img { width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; }
 .page-hero-split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 520px); gap: 44px; align-items: center; }

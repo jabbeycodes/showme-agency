@@ -1,38 +1,39 @@
 // ============================================================================
-// Illustrations: on-brand device-mockup scenes (abstract UI, no real people,
-// brands or client names), rendered from /workspace/showme-agency-tools/
-// illustrations (source copy in design/illustrations/) and exported to static/assets/img/<name>-{640,1200}.{webp,jpg}
-// (16:10). `illo()` emits a responsive <picture> with WebP + JPG fallback.
+// Photos: AI-generated images approved by the founder (no real clients,
+// brands or identifiable people). Sources are 16:9; each is center-cropped to
+// 16:10 and exported to static/assets/img/<name>-{640,1200}.{webp,jpg}
+// (Lanczos resize + light sharpen; WebP q80, JPG q82). `illo()` emits a
+// responsive <picture> with WebP + JPG fallback.
 // ============================================================================
 import { site } from './data.mjs';
 
 export const ILLO_ALT = {
-  'solution-restaurant-ordering': 'Laptop showing a restaurant menu website with dishes and prices in cedis, next to a phone where a WhatsApp-style chat takes the order and requests a Mobile Money payment',
-  'solution-real-estate-listings': 'Laptop showing a property listings site with filters and prices in GHS or USD, beside a phone with a listing page and an Enquire on WhatsApp button',
-  'solution-clinic-assistant': 'Phone showing a clinic chat assistant offering appointment times and confirming a booking, surrounded by an appointment calendar and reminder cards',
-  'solution-invoice-automation': 'Laptop showing an invoice dashboard with paid, reminded and overdue invoices, next to an automated flow from due-date reminder to payment and receipt',
-  'industry-real-estate': 'Property developer website on a laptop with a building illustration and listing cards, plus cards for a new WhatsApp enquiry, a lead chart and a booked viewing',
-  'industry-diaspora-property': 'Phone showing a property video tour with USD pricing and a book-a-video-viewing button, with cards for buyers in other time zones, a map and shared documents',
-  'industry-private-healthcare': 'Clinic booking page on a laptop with a calendar and available appointment times, next to a phone showing appointment reminders',
-  'industry-private-schools': 'School admissions dashboard on a laptop with an enquiry-to-enrolment pipeline, plus cards for a booked open day and enquiry growth',
-  'industry-restaurants-caterers': 'Phone showing a restaurant menu with an Order on WhatsApp button, with cards for a catering quote with MoMo deposit, a paid order and weekly orders',
-  'industry-hospitality-tourism': 'Hotel booking website on a laptop with a beach header, date search and room cards, plus guest review, availability calendar and direct booking cards',
-  'industry-churches-ministries': 'Church website on a laptop with a live-stream player and event cards, next to a phone showing an online giving page with Mobile Money',
-  'industry-fashion-retail': 'Online boutique on a laptop with a product grid of dresses, tops and bags, next to a phone checkout with Mobile Money and card options',
-  'industry-events-weddings': 'Event planner portfolio site on a laptop with a gallery grid, next to a phone for checking a date and paying a deposit',
-  'industry-professional-services': 'Client pipeline dashboard on a laptop for a professional services firm, with cards for a booked consultation, documents and an automatic follow-up',
-  'article-ai-assistants': 'AI assistant chat on a laptop answering a question with a short list of recommended businesses, one highlighted as recommended',
-  'article-ai-search-visibility': 'Search results page with an AI overview citing sources, next to cards for an AI visibility score and a rising citation chart',
-  'article-local-seo-gbp': 'Map with location pins and a business profile card showing a star rating and Directions, Call and Website buttons, plus review and map-view cards',
-  'article-mobile-money': 'Phone checkout screen with Mobile Money selected as the payment method, alongside cards for PIN approval, payment received and receipt sent',
-  'article-follow-up': 'Lead follow-up timeline from new enquiry to booked call, next to a phone listing leads by follow-up status',
-  'article-whatsapp-automation': 'WhatsApp automation flow from customer message to menu, order, Mobile Money payment link and confirmation, next to a phone showing the chat',
-  'division-web-commerce': 'Business website on a laptop and an online shop on a phone, illustrating websites, stores and booking systems',
-  'division-growth': 'Growth dashboard with a rising enquiries chart, an ad preview, ad spend split and a top search result',
-  'division-brand': 'Brand identity board with a colour palette, typography, logo mark, app icon and business cards',
-  'division-business-technology': 'Diagram connecting a team to business email, shared files, calendars, CRM, security and IT support',
-  'division-ai-automation': 'AI hub connected to a WhatsApp assistant, invoices and reminders, bookings, lead follow-up and reports',
-  'division-software': 'Code editor on a laptop showing a passing build, next to a phone running a custom client portal app'
+  'solution-restaurant-ordering': 'Phone showing a food ordering app with jollof rice and other dishes, next to a plate of jollof rice on a table in a busy restaurant',
+  'solution-real-estate-listings': 'Laptop showing property listings with a map view on a marble table, overlooking a modern house with a swimming pool',
+  'solution-clinic-assistant': 'Hand holding a phone with a clinic chat assistant and an appointment calendar, in front of a bright clinic reception desk',
+  'solution-invoice-automation': 'Laptop showing an invoice dashboard with payment statuses and a revenue chart, next to a phone confirming a payment and a cup of coffee',
+  'industry-real-estate': 'Modern two-storey house with large glass windows, palm trees and a pool at golden hour',
+  'industry-diaspora-property': 'Laptop showing a video tour of a large white villa, on a living-room table beside a passport and a set of house keys',
+  'industry-private-healthcare': 'Bright, modern private clinic reception with a white front desk, a check-in tablet, plants and a seating area',
+  'industry-private-schools': 'Bright classroom with wooden desks and laptops, colourful bookshelves and large windows looking out onto greenery',
+  'industry-restaurants-caterers': 'Plates of jollof rice, grilled chicken, fried plantain and fresh salad on a restaurant table',
+  'industry-hospitality-tourism': 'Beachfront resort infinity pool with sun loungers and palm trees at sunset over the ocean',
+  'industry-churches-ministries': 'Church auditorium with a lit stage and instruments, and a video camera set up to live-stream the service',
+  'industry-fashion-retail': 'Fashion boutique with racks of colourful African-print clothing and folded kente cloth, with a phone on the counter showing the online shop',
+  'industry-events-weddings': 'Outdoor wedding reception at dusk with round tables, floral centrepieces, candles and draped fabric with string lights',
+  'industry-professional-services': 'Professional services office with a laptop, documents and coffee on a wooden desk, overlooking a city skyline',
+  'article-ai-assistants': 'Phone showing an AI assistant chat with glowing streams of data flowing out of the screen',
+  'article-ai-search-visibility': 'Laptop showing an AI search answer highlighting a business result with a star rating',
+  'article-local-seo-gbp': 'Hand holding a phone with a map pin and a five-star business profile, on a sunny street lined with shops',
+  'article-mobile-money': 'Hand holding a phone showing a payment confirmation tick, in front of a market stall with baskets of fruit and colourful fabrics',
+  'article-follow-up': 'Laptop showing a lead pipeline board and a phone listing contacts, on a desk with plants and a notebook',
+  'article-whatsapp-automation': 'Phone chat connected by glowing lines to icons for bookings, receipts and orders',
+  'division-web-commerce': 'The same online shop shown on a laptop, a tablet and a phone, on a bright desk',
+  'division-growth': 'Laptop showing a marketing dashboard with growth charts, next to a phone with a social media feed',
+  'division-brand': 'Brand identity flat lay with coral, mint, navy and gold colour swatches, business cards and a sketchbook of logo ideas',
+  'division-business-technology': 'Laptop showing a cloud security icon on a desk with a Wi-Fi router, a headset and a secure device',
+  'division-ai-automation': 'Laptop with glowing icons for chat, documents, calendar and payments connected in an automated workflow',
+  'division-software': 'Desk at dusk with a monitor full of code, a laptop showing an app dashboard and a phone running a client app'
 };
 
 export const ARTICLE_IMAGE = {
@@ -52,7 +53,7 @@ export function illoUrl(name, w = 1200, ext = 'jpg') {
 // above-the-fold heroes get fetchpriority="high" instead.
 export function illo(name, { sizes = '(max-width: 820px) 100vw, 560px', lazy = true, cls = 'illo', alt } = {}) {
   const a = alt || ILLO_ALT[name];
-  if (!a) throw new Error('No alt text for illustration: ' + name);
+  if (!a) throw new Error('No alt text for image: ' + name);
   const base = `/assets/img/${name}`;
   const load = lazy ? ' loading="lazy" decoding="async"' : ' decoding="async" fetchpriority="high"';
   return `<picture class="${cls}"><source type="image/webp" srcset="${base}-640.webp 640w, ${base}-1200.webp 1200w" sizes="${sizes}"><img src="${base}-640.jpg" srcset="${base}-640.jpg 640w, ${base}-1200.jpg 1200w" sizes="${sizes}" width="1200" height="750" alt="${a.replace(/"/g, '&quot;')}"${load}></picture>`;
