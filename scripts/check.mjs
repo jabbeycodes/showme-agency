@@ -49,8 +49,20 @@ async function main() {
     console.error('No /public directory. Run `npm run build:site` first.');
     process.exit(1);
   }
-  const files = (await walk(OUT)).filter(f => f.endsWith('.html'));
+  const allHtml = (await walk(OUT)).filter(f => f.endsWith('.html'));
+  // Google Search Console HTML verification files are plain-text tokens, not pages.
+  const isGscVerify = (rel) => /^\/google[a-f0-9]+\.html$/i.test(rel);
+  const files = allHtml.filter(f => !isGscVerify('/' + path.relative(OUT, f).replace(/\\/g, '/')));
   const htmlByRoute = new Set(files.map(f => '/' + path.relative(OUT, f).replace(/\\/g, '/')));
+
+  // Confirm GSC verification files exist and contain the expected token.
+  for (const file of allHtml) {
+    const rel = '/' + path.relative(OUT, file).replace(/\\/g, '/');
+    if (!isGscVerify(rel)) continue;
+    const body = (await fs.readFile(file, 'utf8')).trim();
+    const expected = `google-site-verification: ${path.basename(file)}`;
+    if (body !== expected) errors.push(`${rel}: expected exact content "${expected}"`);
+  }
 
   const ORIGIN = 'https://agency.showmeworld.app';
   const seenTitles = new Map();
@@ -134,7 +146,8 @@ async function main() {
   if (!await exists(path.join(OUT, 'styles.css'))) errors.push('styles.css missing');
   if (!await exists(path.join(OUT, 'site.js'))) errors.push('site.js missing');
 
-  console.log(`Checked ${files.length} HTML pages.`);
+  const gscCount = allHtml.length - files.length;
+  console.log(`Checked ${files.length} HTML pages` + (gscCount ? ` (+ ${gscCount} GSC verify file${gscCount === 1 ? '' : 's'})` : '') + '.');
   if (warnings.length) { console.log(`\nWarnings (${warnings.length}):`); warnings.forEach(w => console.log('  ! ' + w)); }
   if (errors.length) {
     console.error(`\nErrors (${errors.length}):`);

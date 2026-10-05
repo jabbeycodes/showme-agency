@@ -56,6 +56,7 @@ export function head({ title, description, path, jsonLd = [], noindex = false, o
   <link rel="manifest" href="/site.webmanifest" />
   <title>${esc(title)}</title>
   <meta name="description" content="${esc(description)}" />${noindex ? '\n  <meta name="robots" content="noindex,follow" />' : ''}
+  <meta name="google-site-verification" content="o66F5PoD6Zr5UhiTewAyqd8GuqF-CE_62HYBbjvLxN8" />
   <link rel="canonical" href="${esc(canonical)}" />
   <meta property="og:type" content="${esc(ogType)}" />
   <meta property="og:site_name" content="${esc(site.name)}" />
