@@ -130,12 +130,16 @@ function cacheControlFor(pathname, search) {
   if (pathname === '/robots.txt' || pathname === '/sitemap.xml' || pathname === '/site.webmanifest') {
     return 'public, max-age=3600';
   }
+  if (/^\/google[a-f0-9]+\.html$/i.test(pathname)) {
+    return 'public, max-age=0, must-revalidate';
+  }
   // HTML: always revalidate so content updates show immediately.
   return 'public, max-age=0, must-revalidate';
 }
 
 function contentTypeFix(pathname, current) {
   if (pathname === '/robots.txt') return 'text/plain; charset=utf-8';
+  if (/^\/google[a-f0-9]+\.html$/i.test(pathname)) return 'text/plain; charset=utf-8';
   if (pathname === '/sitemap.xml') return 'application/xml; charset=utf-8';
   if (current && /^text\/(html|plain|css|javascript)$/.test(current.trim())) return current.trim() + '; charset=utf-8';
   return null;
@@ -163,14 +167,29 @@ async function serveAsset(request, env, url) {
     return notFoundResponse(request, env, url);
   }
 
+  // Google Search Console HTML verification must return 200 at the exact
+  // /google*.html path (no clean-URL redirect to the extensionless form).
+  const isGscVerify = /^\/google[a-f0-9]+\.html$/i.test(pathname);
+
   const res = await env.ASSETS.fetch(request);
 
   // Clean-URL redirects from the asset layer are 307; make them permanent.
+  // Exception: GSC verify files — follow internally and serve 200 at .html.
   if (res.status === 307 || res.status === 308) {
     const location = res.headers.get('location');
     if (location) {
       const target = new URL(location, url);
       if (target.origin === url.origin) target.search = search; // keep query string
+      if (isGscVerify) {
+        const page = await env.ASSETS.fetch(new Request(target, { method: 'GET', headers: request.headers }));
+        const headers = new Headers(page.headers);
+        headers.set('Content-Type', 'text/plain; charset=utf-8');
+        headers.set('Cache-Control', 'public, max-age=0, must-revalidate');
+        headers.set('X-Content-Type-Options', 'nosniff');
+        headers.delete('ETag');
+        const ok = page.status === 200 || page.status === 304;
+        return new Response(request.method === 'HEAD' ? null : page.body, { status: ok ? page.status : 200, headers });
+      }
       return new Response(null, {
         status: 301,
         headers: { Location: target.origin === url.origin ? target.pathname + target.search : target.href, 'Cache-Control': 'public, max-age=3600' }
