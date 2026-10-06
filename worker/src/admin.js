@@ -10,6 +10,47 @@ import { slugToLeadId, leadSlug, normaliseUrl } from './audit/util.js';
 import { AREAS } from './audit/score.js';
 
 const COOKIE = 'sm_admin';
+// Founder-chosen password; 16+ characters recommended, 10 is the floor.
+const MIN_KEY_LEN = 10;
+
+// ---- Sign-in brute-force protection ----------------------------------------
+// Failed sign-ins are counted per client IP (adminfail:<ip>, 15-minute TTL) and
+// globally per UTC hour (adminfail:global:<YYYY-MM-DDTHH>). 5 failures lock that
+// IP for 15 minutes; more than 50 failures in an hour lock all sign-ins for the
+// rest of that hour. Cookie sessions are not affected.
+const FAIL_IP_LIMIT = 5;
+const FAIL_IP_TTL = 15 * 60;
+const FAIL_GLOBAL_LIMIT = 50;
+
+function clientIp(request) {
+  return (request.headers.get('cf-connecting-ip') || 'unknown').slice(0, 64);
+}
+function globalFailKey() {
+  return 'adminfail:global:' + new Date().toISOString().slice(0, 13);
+}
+async function readCount(env, key) {
+  try { return parseInt((await env.LEADS.get(key)) || '0', 10) || 0; } catch { return 0; }
+}
+async function signInLocked(env, ip) {
+  const [mine, all] = await Promise.all([readCount(env, 'adminfail:' + ip), readCount(env, globalFailKey())]);
+  if (all > FAIL_GLOBAL_LIMIT) return 'Too many failed sign-in attempts. Admin sign-in is locked for the rest of this hour.';
+  if (mine >= FAIL_IP_LIMIT) return 'Too many failed sign-in attempts from your network. Try again in 15 minutes.';
+  return null;
+}
+async function recordFailure(env, ip) {
+  const gk = globalFailKey();
+  const [mine, all] = await Promise.all([readCount(env, 'adminfail:' + ip), readCount(env, gk)]);
+  await Promise.all([
+    env.LEADS.put('adminfail:' + ip, String(mine + 1), { expirationTtl: FAIL_IP_TTL }),
+    env.LEADS.put(gk, String(all + 1), { expirationTtl: 2 * 3600 })
+  ]);
+}
+async function clearFailures(env, ip) {
+  try { await env.LEADS.delete('adminfail:' + ip); } catch { /* ignore */ }
+}
+function lockedResponse(message) {
+  return new Response(message + '\n', { status: 429, headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex', 'Retry-After': '900' } });
+}
 const PRIVATE_HEADERS = {
   'Content-Type': 'text/html; charset=utf-8',
   'Cache-Control': 'private, no-store',
@@ -43,7 +84,7 @@ function readCookie(request, name) {
   return m ? m[1] : '';
 }
 export async function isAdmin(request, env) {
-  if (!env.ADMIN_KEY || env.ADMIN_KEY.length < 24) return false;
+  if (!env.ADMIN_KEY || env.ADMIN_KEY.length < MIN_KEY_LEN) return false;
   return safeEqual(readCookie(request, COOKIE), await cookieValue(env));
 }
 async function setCookieHeader(env) {
@@ -106,15 +147,27 @@ export async function handleAdmin(request, env, url, ctx) {
 
   // Sign in via ?key= (link from the alert email) or the login form.
   const qKey = url.searchParams.get('key');
-  if (qKey) {
-    if (!safeEqual(qKey, env.ADMIN_KEY)) return html(adminLogin(true), 401);
-    url.searchParams.delete('key');
-    return redirect(url.pathname + (url.search || ''), { 'Set-Cookie': await setCookieHeader(env) });
-  }
-  if (pathname === '/admin/login' && request.method === 'POST') {
-    const form = await request.formData().catch(() => null);
-    if (!form || !safeEqual(String(form.get('key') || ''), env.ADMIN_KEY)) return html(adminLogin(true), 401);
-    return redirect('/admin/audits/', { 'Set-Cookie': await setCookieHeader(env) });
+  const isFormLogin = pathname === '/admin/login' && request.method === 'POST';
+  if (qKey || isFormLogin) {
+    const ip = clientIp(request);
+    const locked = await signInLocked(env, ip);
+    if (locked) return lockedResponse(locked);
+    let candidate = qKey;
+    if (!candidate) {
+      const form = await request.formData().catch(() => null);
+      candidate = form ? String(form.get('key') || '') : '';
+    }
+    if (env.ADMIN_KEY.length < MIN_KEY_LEN || !safeEqual(candidate, env.ADMIN_KEY)) {
+      await recordFailure(env, ip);
+      return html(adminLogin(true), 401);
+    }
+    await clearFailures(env, ip);
+    const cookie = { 'Set-Cookie': await setCookieHeader(env) };
+    if (qKey) {
+      url.searchParams.delete('key');
+      return redirect(url.pathname + (url.search || ''), cookie);
+    }
+    return redirect('/admin/audits/', cookie);
   }
   if (!(await isAdmin(request, env))) return html(adminLogin(false), 401);
   if (pathname === '/admin' || pathname === '/admin/' || pathname === '/admin/audits') return redirect('/admin/audits/');
