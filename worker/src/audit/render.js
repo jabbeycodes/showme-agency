@@ -352,7 +352,7 @@ export function adminReview(lead, audit, { flash, error, config = {} } = {}) {
           <button class="b-send" type="submit" formaction="/admin/audits/${esc(slug)}/approve" onclick="return confirm('Email this report to ${esc(lead.email).replace(/'/g, '')} now?')">Approve &amp; send to ${esc(lead.email)}</button>
           <button class="b-discard" type="submit" formaction="/admin/audits/${esc(slug)}/discard" onclick="return confirm('Discard this audit? Nothing will be sent.')">Discard</button></div>`}
       </form>
-      <div class="adm-card" style="margin-top:16px"><h2>Needs a human look</h2><ul class="audit-checks" style="display:block">${manualList}</ul></div>
+      <div class="adm-card" style="margin-top:16px"><h2>Needs a human look</h2><ul style="margin:0;padding-left:18px;color:var(--text-muted);font-size:14px;display:grid;gap:6px">${manualList}</ul></div>
       <div class="adm-card"><h2>Scoring detail</h2>${ruleDetail}</div>`;
   } else if (audit && audit.status === 'error') {
     main = `<div class="adm-card"><h2>Scan failed</h2><p class="muted">${esc(audit.error || 'Unknown error')}</p></div>`;

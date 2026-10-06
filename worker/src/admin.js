@@ -173,7 +173,7 @@ export async function handleAdmin(request, env, url, ctx) {
     const base = audit && audit.status !== 'discarded' ? audit : null;
     const built = await buildAudit(env, lead, target, { mode: 'cron', existing: base });
     if (built.status === 'draft') ctx.waitUntil(applyAi(env, built, lead, 20000));
-    return redirect(back + (built.status === 'draft' ? '?msg=' + encodeURIComponent('Scan complete (' + built.result.total + '/60). AI wording is being applied; refresh in a few seconds.') : '?err=' + encodeURIComponent(built.error || 'Scan failed')));
+    return redirect(back + (built.status === 'draft' ? '?msg=' + encodeURIComponent('Scan complete (' + built.result.total + '/60). AI wording is being applied; refresh in up to a minute.') : '?err=' + encodeURIComponent(built.error || 'Scan failed')));
   }
   return html('<h1>Not found</h1>', 404);
 }
