@@ -13,9 +13,11 @@ Rules (strict):
 - Only use numbers that appear in the findings.
 - Be specific to their findings, warm and direct. No jargon without a short explanation. No hype, no exclamation marks.
 - Do not mention the agency, do not promise outcomes, do not say "guarantee".
+- Keep the finding's certainty: if it says "we could not find/detect", keep that wording; never state as fact something we only failed to detect.
+- Titles in sentence case. Address the owner as "you".
 - Return ONLY valid JSON, no markdown, in exactly this shape:
 {"summary":"2 sentences max","priorities":[{"title":"max 8 words","why":"1-2 sentences: what we found and why it matters to customers","action":"1-2 sentences: the concrete next step"}]}
-- Exactly 3 priorities, in the same order as given.`;
+- Return exactly as many priorities as given (same count), in the same order.`;
 
 const BANNED = /first client|testimonial|guarantee|award|trusted by|clients like|case study|\bROI\b|revenue increase|double your|triple your|\d+\s?%/i;
 
@@ -62,7 +64,7 @@ export async function phraseWithAi(env, result, lead, timeoutMs = 20000) {
   const input = buildAiInput(result, lead);
   const run = (async () => {
     const res = await env.AI.run(AI_MODEL, {
-      messages: [{ role: 'system', content: SYSTEM }, { role: 'user', content: 'Findings JSON:\n' + JSON.stringify(input) }],
+      messages: [{ role: 'system', content: SYSTEM }, { role: 'user', content: `Rewrite these ${input.priorities.length} priorit${input.priorities.length === 1 ? 'y' : 'ies'} (return exactly ${input.priorities.length}). Findings JSON:\n` + JSON.stringify(input) }],
       max_tokens: 900,
       temperature: 0.3
     });
@@ -70,7 +72,8 @@ export async function phraseWithAi(env, result, lead, timeoutMs = 20000) {
   })().catch(err => ({ __error: String((err && err.message) || err).slice(0, 200) }));
   const raw = await withTimeout(run, timeoutMs, { __error: 'timeout' });
   if (raw && raw.__error) return { error: raw.__error };
-  const valid = validateAi(parseJson(raw), input);
-  if (!valid) return { error: 'validation_failed' };
+  const parsed = parseJson(raw);
+  const valid = validateAi(parsed, input);
+  if (!valid) return { error: parsed ? 'validation_failed' : 'unparseable_output', raw: String(typeof raw === 'string' ? raw : JSON.stringify(raw)).slice(0, 600) };
   return { ...valid, model: AI_MODEL };
 }

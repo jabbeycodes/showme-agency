@@ -15,6 +15,12 @@
 // =============================================================================
 
 import { enqueueLead, processLead, runScheduled } from './audit/pipeline.js';
+import { setSelfRoute } from './audit/util.js';
+
+const SELF_HOSTS = ['agency.showmeworld.app', 'showme-agency.codeproject1111.workers.dev'];
+function registerSelfRoute(env) {
+  if (env.ASSETS) setSelfRoute(SELF_HOSTS, req => env.ASSETS.fetch(req));
+}
 import { handleAdmin, handleReport } from './admin.js';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -115,6 +121,7 @@ async function handleEvent(request, env) {
 
 export default {
   async fetch(request, env, ctx) {
+    registerSelfRoute(env);
     const url = new URL(request.url);
     const { pathname } = url;
 
@@ -139,6 +146,7 @@ export default {
   },
 
   async scheduled(event, env, ctx) {
+    registerSelfRoute(env);
     ctx.waitUntil(runScheduled(env).then(r => console.log('audit-cron', JSON.stringify(r).slice(0, 2000))));
   }
 };

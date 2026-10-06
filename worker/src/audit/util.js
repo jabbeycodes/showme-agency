@@ -6,13 +6,24 @@ export function esc(s) {
     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
+// A Worker cannot fetch its own custom domain over the network (Cloudflare
+// returns 522 for same-zone loops), so the worker registers a local fetcher
+// (its static-assets binding) for its own hostnames.
+let selfRoute = null;
+export function setSelfRoute(hosts, fetcher) { selfRoute = hosts && fetcher ? { hosts: new Set(hosts), fetcher } : null; }
+export function isSelfHost(host) { return !!(selfRoute && selfRoute.hosts.has(String(host).toLowerCase())); }
+
 /** fetch() with a hard timeout. Never throws: returns { ok:false, error } on failure. */
 export async function timedFetch(url, opts = {}, ms = 8000) {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort('timeout'), ms);
   const started = Date.now();
   try {
-    const res = await fetch(url, { ...opts, signal: ctrl.signal });
+    let self = false;
+    try { self = isSelfHost(new URL(url).hostname); } catch { /* ignore */ }
+    const res = self
+      ? await selfRoute.fetcher(new Request(String(url).replace(/^http:/, 'https:'), { method: opts.method || 'GET', headers: opts.headers }))
+      : await fetch(url, { ...opts, signal: ctrl.signal });
     return { ok: true, res, ms: Date.now() - started };
   } catch (err) {
     const timedOut = ctrl.signal.aborted;

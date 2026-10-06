@@ -118,7 +118,7 @@ export async function applyAi(env, audit, lead, timeoutMs) {
   const ai = await phraseWithAi(env, audit.result, lead, timeoutMs);
   audit.needs_ai = false;
   if (ai.error) {
-    audit.ai = { error: ai.error, at: new Date().toISOString() };
+    audit.ai = { error: ai.error, raw: ai.raw || null, at: new Date().toISOString() };
   } else {
     audit.copy.summary = ai.summary || audit.copy.summary;
     audit.copy.priorities = ai.priorities;

@@ -4,7 +4,7 @@
 // Every network call is time-boxed and every check is wrapped so a bad or slow
 // site can never crash the scan: failures become { status: 'error' } entries.
 // =============================================================================
-import { timedFetch, readCapped, withTimeout, normaliseUrl, baseDomain, FREE_MAIL, emailDomain } from './util.js';
+import { timedFetch, readCapped, withTimeout, normaliseUrl, baseDomain, FREE_MAIL, emailDomain, isSelfHost } from './util.js';
 
 const UA = 'Mozilla/5.0 (compatible; ShowMeAuditBot/1.0; +https://agency.showmeworld.app/free-audit/)';
 const HTML_HEADERS = { 'User-Agent': UA, Accept: 'text/html,application/xhtml+xml;q=0.9,*/*;q=0.8', 'Accept-Language': 'en' };
@@ -107,6 +107,7 @@ async function fetchHomepage(url) {
 }
 
 async function checkHttpRedirect(host) {
+  if (isSelfHost(host)) return { checked: false, error: 'not testable from our own server (same site)' };
   const r = await timedFetch('http://' + host + '/', { headers: HTML_HEADERS, redirect: 'manual' }, 7000);
   if (!r.ok) return { checked: false, error: r.error };
   const loc = r.res.headers.get('location') || '';
