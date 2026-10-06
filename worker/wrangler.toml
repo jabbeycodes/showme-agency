@@ -34,3 +34,25 @@ run_worker_first = true
 [[kv_namespaces]]
 binding = "LEADS"
 id = "70f566bafd0c49928b97fdb2b56c0574" # showme-agency-leads (existing namespace; keeps historic leads/stats)
+
+# ---- Free Digital Audit pipeline -------------------------------------------
+# Workers AI phrases the audit priorities from structured findings only; the
+# worker falls back to templated copy if the binding is unavailable.
+[ai]
+binding = "AI"
+
+# Every 10 minutes: finish any lead alert / audit scan that the request-time
+# ctx.waitUntil budget cut short, and send due follow-ups (if FOLLOWUP = "on").
+[triggers]
+crons = ["*/10 * * * *"]
+
+# Non-secret settings. Secrets (set with `wrangler secret put`, never in git):
+#   RESEND_API_KEY (required for email), ADMIN_KEY (required for /admin/),
+#   PSI_API_KEY (optional, Google PageSpeed), GOOGLE_PLACES_API_KEY (optional).
+[vars]
+ALERT_TO = "info@showmeworld.app"
+MAIL_FROM = "ShowMe Agency <info@showmeworld.app>"
+REPLY_TO = "info@showmeworld.app"
+AUTO_ACK = "off"   # "on" = email each lead an acknowledgement right away
+FOLLOWUP = "off"   # "on" = send one follow-up 3 days after an APPROVED report
+MAX_AUDITS_PER_DAY = "40"

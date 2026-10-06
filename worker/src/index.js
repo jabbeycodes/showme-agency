@@ -2,13 +2,20 @@
 // ShowMe Digital Agency — Cloudflare Worker
 //
 // Responsibilities:
-//   POST /api/lead   -> validate + store a lead in KV (binding: LEADS)
+//   POST /api/lead   -> validate + store a lead in KV (binding: LEADS), then (in
+//                       ctx.waitUntil) alert the founder and run the free audit
 //   POST /api/event  -> increment a daily counter for an allowed event in KV
+//   GET  /audit/<token>/  -> approved audit report (noindex; drafts admin-only)
+//   /admin/audits/   -> founder review/approval (ADMIN_KEY secret)
+//   scheduled        -> cron: finish pending alerts/scans, due follow-ups
 //   everything else  -> serve the generated static site (binding: ASSETS)
 //
 // This reproduces the behaviour of the previous inline worker while adding
 // multi-page static-asset serving. It is intentionally dependency-free.
 // =============================================================================
+
+import { enqueueLead, processLead, runScheduled } from './audit/pipeline.js';
+import { handleAdmin, handleReport } from './admin.js';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const ALLOWED_EVENTS = new Set(['pageview', 'lead_submitted', 'whatsapp_click']);
@@ -24,7 +31,7 @@ function clamp(value, max) {
   return String(value == null ? '' : value).slice(0, max);
 }
 
-async function handleLead(request, env) {
+async function handleLead(request, env, ctx) {
   let data;
   try {
     data = await request.json();
@@ -47,15 +54,35 @@ async function handleLead(request, env) {
     phone: clamp(data.phone, 40).trim(),
     need: clamp(data.need, 80).trim(),
     message: clamp(data.message, 2000).trim(),
+    // Free-audit fields (optional). Note: `website` in the form is a honeypot,
+    // so the real site URL arrives as `site_url`.
+    website: clamp(data.site_url, 300).trim(),
+    found_via: clamp(data.found_via, 80).trim(),
+    time_waster: clamp(data.time_waster, 500).trim(),
+    page: clamp(data.page, 80).trim(),
     created_at: new Date().toISOString(),
     ua: clamp(request.headers.get('user-agent') || '', 200),
     notified: false
   };
 
+  // Drop empty optional fields so legacy-shaped records stay the same.
+  for (const k of ['website', 'found_via', 'time_waster', 'page']) if (!lead[k]) delete lead[k];
+
   try {
-    await env.LEADS.put(id, JSON.stringify(lead));
+    await env.LEADS.put(id, JSON.stringify(lead), {
+      metadata: { n: name.slice(0, 80), b: lead.business.slice(0, 80), w: (lead.website || '').slice(0, 120) }
+    });
   } catch (err) {
     return json({ ok: false, error: 'storage_error' }, 500);
+  }
+
+  // Founder alert + automated audit run after the response is sent. The job
+  // marker lets the cron finish anything the waitUntil budget cuts short.
+  try {
+    await enqueueLead(env, lead);
+    if (ctx && ctx.waitUntil) ctx.waitUntil(processLead(env, id, 'inline'));
+  } catch {
+    // Never fail the form because of the follow-on pipeline.
   }
 
   return json({ ok: true, id });
@@ -87,14 +114,17 @@ async function handleEvent(request, env) {
 }
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const { pathname } = url;
 
     if (pathname === '/api/lead') {
       if (request.method !== 'POST') return json({ ok: false, error: 'method_not_allowed' }, 405);
-      return handleLead(request, env);
+      return handleLead(request, env, ctx);
     }
+
+    if (pathname === '/admin' || pathname.startsWith('/admin/')) return handleAdmin(request, env, url, ctx);
+    if (pathname.startsWith('/audit/')) return handleReport(request, env, url);
 
     if (pathname === '/api/event') {
       if (request.method !== 'POST') return json({ ok: false, error: 'method_not_allowed' }, 405);
@@ -106,6 +136,10 @@ export default {
 
     // Everything else: serve the generated static site, with SEO-safe tweaks.
     return serveAsset(request, env, url);
+  },
+
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(runScheduled(env).then(r => console.log('audit-cron', JSON.stringify(r).slice(0, 2000))));
   }
 };
 
