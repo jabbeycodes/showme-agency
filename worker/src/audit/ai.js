@@ -39,7 +39,9 @@ export function validateAi(out, input) {
   if (!pr || pr.length !== input.priorities.length) return null;
   const allowed = new Set(numbersIn(JSON.stringify(input)));
   const clean = s => String(s || '').replace(/\s+/g, ' ').trim();
-  const items = pr.map((p, i) => ({ area: input.priorities[i].area, title: clean(p.title).slice(0, 90), why: clean(p.why).slice(0, 420), action: clean(p.action).slice(0, 420) }));
+  const cap = t => t.charAt(0).toUpperCase() + t.slice(1);
+  const stop = t => (t && !/[.!?]$/.test(t) ? t + '.' : t);
+  const items = pr.map((p, i) => ({ area: input.priorities[i].area, title: cap(clean(p.title).replace(/[.]$/, '')).slice(0, 90), why: stop(cap(clean(p.why))).slice(0, 420), action: stop(cap(clean(p.action))).slice(0, 420) }));
   const summary = clean(out.summary).slice(0, 420);
   const text = summary + ' ' + items.map(i => i.title + ' ' + i.why + ' ' + i.action).join(' ');
   if (items.some(i => !i.title || !i.why || !i.action)) return null;

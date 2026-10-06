@@ -120,7 +120,7 @@ export async function applyAi(env, audit, lead, timeoutMs) {
   if (ai.error) {
     audit.ai = { error: ai.error, raw: ai.raw || null, at: new Date().toISOString() };
   } else {
-    audit.copy.summary = ai.summary || audit.copy.summary;
+    // The factual templated summary (with the score) is kept; AI phrases the priorities only.
     audit.copy.priorities = ai.priorities;
     audit.copy_source = 'ai';
     audit.ai = { model: ai.model, at: new Date().toISOString() };
