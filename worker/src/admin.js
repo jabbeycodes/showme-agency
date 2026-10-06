@@ -56,7 +56,7 @@ const PRIVATE_HEADERS = {
   'Cache-Control': 'private, no-store',
   'X-Robots-Tag': 'noindex, nofollow, noarchive',
   'X-Content-Type-Options': 'nosniff',
-  'Referrer-Policy': 'no-referrer',
+  'Referrer-Policy': 'same-origin',
   'X-Frame-Options': 'DENY'
 };
 
@@ -91,10 +91,15 @@ async function setCookieHeader(env) {
   return `${COOKIE}=${await cookieValue(env)}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=${60 * 60 * 24 * 30}`;
 }
 function sameOrigin(request, url) {
+  // Safari sends "Origin: null" on form posts from no-referrer pages, so fall back
+  // to Sec-Fetch-Site / Referer. The SameSite admin cookie is a second CSRF guard.
   const o = request.headers.get('origin');
-  if (o) return o === url.origin;
+  if (o && o !== 'null') return o === url.origin;
   const site = request.headers.get('sec-fetch-site');
-  return site === 'same-origin';
+  if (site) return site === 'same-origin';
+  const ref = request.headers.get('referer') || '';
+  if (ref) return ref === url.origin || ref.startsWith(url.origin + '/');
+  return o === 'null';
 }
 
 async function listRecent(env, cursorPage = 1) {
