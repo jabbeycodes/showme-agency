@@ -16,7 +16,7 @@ import { illo, illoUrl, ILLO_ALT, ARTICLE_IMAGE } from './images.mjs';
 const WA = 'https://wa.me/' + site.whatsappNumber;
 
 // ---- Reusable lead form -----------------------------------------------------
-function leadForm({ full = false, id = 'leadForm', submitLabel = 'Request my free audit' } = {}) {
+function leadForm({ full = false, audit = false, id = 'leadForm', submitLabel = 'Request my free audit' } = {}) {
   const needOptions = [
     'Website & online store', 'Marketing & growth', 'Branding',
     'Business systems & IT', 'AI & automation', 'Custom software'
@@ -95,7 +95,35 @@ function leadForm({ full = false, id = 'leadForm', submitLabel = 'Request my fre
         <input id="${id}Phone" name="phone" type="tel" autocomplete="tel">
         <p class="field-error" aria-hidden="true"></p>
       </div>
+      ${audit ? `
+      <div class="field full">
+        <label for="${id}SiteUrl">Your website (optional)</label>
+        <input id="${id}SiteUrl" name="site_url" type="text" inputmode="url" autocomplete="url" placeholder="yourbusiness.com" spellcheck="false" autocapitalize="off">
+        <p class="field-error" aria-hidden="true"></p>
+      </div>` : ''}
       ${extra}
+      ${audit ? `
+      <div class="field">
+        <label for="${id}FoundVia">Where do most customers find you? (optional)</label>
+        <select id="${id}FoundVia" name="found_via">
+          <option value="">Select…</option>
+          <option>Google search</option>
+          <option>Google Maps</option>
+          <option>Instagram</option>
+          <option>Facebook</option>
+          <option>TikTok</option>
+          <option>WhatsApp</option>
+          <option>Word of mouth / referrals</option>
+          <option>Walk-ins</option>
+          <option>Other</option>
+        </select>
+        <p class="field-error" aria-hidden="true"></p>
+      </div>
+      <div class="field">
+        <label for="${id}TimeWaster">Biggest time-waster in your week? (optional)</label>
+        <input id="${id}TimeWaster" name="time_waster" type="text" autocomplete="off" placeholder="e.g. replying to the same WhatsApp questions">
+        <p class="field-error" aria-hidden="true"></p>
+      </div>` : ''}
       <div class="field full">
         <label for="${id}Message">Message</label>
         <textarea id="${id}Message" name="message" placeholder="Tell us about your business and goals"></textarea>
@@ -912,7 +940,7 @@ export function freeAudit() {
           <div class="side-card">
             <h3>Request your free audit</h3>
             <p style="color:var(--text-muted);font-size:14px;margin:0 0 16px">Tell us about your business — we reply ${esc(site.facts.responsePromise)}.</p>
-            ${leadForm({ id: 'auditForm', submitLabel: 'Request my free audit' })}
+            ${leadForm({ id: 'auditForm', audit: true, submitLabel: 'Request my free audit' })}
           </div>
         </aside>
       </div>

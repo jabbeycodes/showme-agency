@@ -159,14 +159,21 @@
         email: val('email'),
         phone: val('phone'),
         need: val('need'),
-        message: buildMessage()
+        message: buildMessage(),
+        // Free-audit form only (the `website` input is a honeypot, so the real
+        // URL is `site_url`). Empty values are ignored by the worker.
+        site_url: val('site_url'),
+        found_via: val('found_via'),
+        time_waster: val('time_waster'),
+        page: window.location.pathname
       };
     }
 
     function enquiryText(v) {
       return 'New enquiry — ShowMe Digital Agency | Name: ' + v.name +
         ' | Business: ' + v.business + ' | Email: ' + v.email +
-        ' | Phone: ' + v.phone + ' | Needs: ' + v.need + ' | Message: ' + v.message;
+        ' | Phone: ' + v.phone + ' | Needs: ' + v.need +
+        (v.site_url ? ' | Website: ' + v.site_url : '') + ' | Message: ' + v.message;
     }
 
     function clearErrors() {
@@ -202,7 +209,7 @@
       var h = document.createElement('h3');
       h.textContent = 'Request received.';
       var p = document.createElement('p');
-      p.textContent = 'Thanks ' + (v.name || 'there') + " — we've noted the next steps and sent them to " + v.email + '. We reply within one business day.';
+      p.textContent = 'Thanks ' + (v.name || 'there') + ' — we\u2019ve got your details and will reply to ' + v.email + ' within one business day.';
       panel.appendChild(h); panel.appendChild(p);
       successTarget.replaceWith(panel);
       panel.focus({ preventScroll: true });

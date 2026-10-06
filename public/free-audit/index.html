@@ -119,6 +119,12 @@
         <p class="field-error" aria-hidden="true"></p>
       </div>
       
+      <div class="field full">
+        <label for="auditFormSiteUrl">Your website (optional)</label>
+        <input id="auditFormSiteUrl" name="site_url" type="text" inputmode="url" autocomplete="url" placeholder="yourbusiness.com" spellcheck="false" autocapitalize="off">
+        <p class="field-error" aria-hidden="true"></p>
+      </div>
+      
         <div class="field full">
           <label for="auditFormNeed">What do you need?</label>
           <select id="auditFormNeed" name="need">
@@ -127,6 +133,28 @@
           </select>
           <p class="field-error" aria-hidden="true"></p>
         </div>
+      
+      <div class="field">
+        <label for="auditFormFoundVia">Where do most customers find you? (optional)</label>
+        <select id="auditFormFoundVia" name="found_via">
+          <option value="">Select…</option>
+          <option>Google search</option>
+          <option>Google Maps</option>
+          <option>Instagram</option>
+          <option>Facebook</option>
+          <option>TikTok</option>
+          <option>WhatsApp</option>
+          <option>Word of mouth / referrals</option>
+          <option>Walk-ins</option>
+          <option>Other</option>
+        </select>
+        <p class="field-error" aria-hidden="true"></p>
+      </div>
+      <div class="field">
+        <label for="auditFormTimeWaster">Biggest time-waster in your week? (optional)</label>
+        <input id="auditFormTimeWaster" name="time_waster" type="text" autocomplete="off" placeholder="e.g. replying to the same WhatsApp questions">
+        <p class="field-error" aria-hidden="true"></p>
+      </div>
       <div class="field full">
         <label for="auditFormMessage">Message</label>
         <textarea id="auditFormMessage" name="message" placeholder="Tell us about your business and goals"></textarea>
@@ -185,6 +213,6 @@
     <a class="btn secondary" href="https://wa.me/13364572361" target="_blank" rel="noopener"><span>WhatsApp</span></a>
     <a class="btn" href="/free-audit/"><span>Free audit</span></a>
   </div>
-  <script src="/site.js?v=2e3d6bb8d2" defer></script>
+  <script src="/site.js?v=25412f7a5a" defer></script>
 </body>
 </html>
