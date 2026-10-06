@@ -116,7 +116,8 @@ async function checkHttpRedirect(host) {
   return { checked: true, status: r.res.status, location: loc.slice(0, 200), redirectsToHttps: redirects && /^https:\/\//i.test(loc) };
 }
 
-const PSI_FIELDS = 'lighthouseResult(finalUrl,runtimeError,categories(performance(score),accessibility(score),best-practices(score),seo(score)),audits(largest-contentful-paint(numericValue,displayValue),cumulative-layout-shift(numericValue,displayValue)))';
+// Google rejects hyphenated keys (best-practices, largest-contentful-paint) in the fields mask, so request whole objects.
+const PSI_FIELDS = 'lighthouseResult(finalUrl,runtimeError,categories,audits)';
 
 export async function runPsi(url, strategy, { apiKey, timeoutMs = 25000 } = {}) {
   const q = new URLSearchParams({ url, strategy });
