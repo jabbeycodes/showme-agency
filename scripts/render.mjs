@@ -37,6 +37,17 @@ export function url(path) {
   return site.origin + path;
 }
 
+// ---- Region (United States / USD default, Ghana / GHS alternate) -----------
+// Runs before CSS paints. ?region=us|gh (stored), else the sm_region cookie /
+// localStorage choice. If the choice differs from what the HTML was served
+// with, hide price text until site.js swaps in the chosen region's values.
+// (The edge worker normally serves the right region already, so no flash.)
+const REGION_HEAD_JS = "(function(){try{var d=document.documentElement,r=null,q=new URLSearchParams(location.search).get('region');if(q==='us'||q==='gh'){r=q;document.cookie='sm_region='+q+';path=/;max-age=31536000;samesite=lax';try{localStorage.setItem('sm_region',q)}catch(e){}}else{var m=document.cookie.match(/(?:^|; )sm_region=(us|gh)/);if(m)r=m[1];else{try{var l=localStorage.getItem('sm_region');if(l==='us'||l==='gh')r=l}catch(e){}}}if(r&&r!==d.getAttribute('data-region')){d.setAttribute('data-region',r);d.classList.add('region-pending')}}catch(e){}})();";
+
+export function regionSwitch() {
+  return `<div class="region-bar"><div class="wrap region-wrap"><span class="region-label" id="regionLabel">Prices for</span><div class="region-switch" role="group" aria-labelledby="regionLabel"><button type="button" data-set-region="us" aria-pressed="true">United States (USD)</button><button type="button" data-set-region="gh" aria-pressed="false">Ghana (GHS)</button></div></div></div>`;
+}
+
 // ---- Head / SEO -------------------------------------------------------------
 export function head({ title, description, path, jsonLd = [], noindex = false, ogType = 'website', ogImage = null }) {
   title = seoTitle(title);
@@ -44,9 +55,10 @@ export function head({ title, description, path, jsonLd = [], noindex = false, o
   const canonical = url(path);
   const ld = jsonLd.map(obj => `\n  <script type="application/ld+json">${JSON.stringify(obj)}</script>`).join('');
   return `<!doctype html>
-<html lang="en">
+<html lang="en" data-region="us">
 <head>
   <meta charset="utf-8" />
+  <script>${REGION_HEAD_JS}</script>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="dark light" />
   <meta name="theme-color" content="#07111f" />
@@ -159,6 +171,7 @@ export function header() {
 
   return `<a class="skip-link" href="#main">Skip to content</a>
 <div class="scroll-progress" aria-hidden="true"></div>
+${regionSwitch()}
 <header class="topbar">
   <nav class="wrap nav" aria-label="Primary">
     <a class="brand" href="/"><span>ShowMe<span class="dot">.</span></span><small>Digital Agency</small></a>

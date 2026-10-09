@@ -8,7 +8,14 @@
 //   GET  /audit/<token>/  -> approved audit report (noindex; drafts admin-only)
 //   /admin/audits/   -> founder review/approval (ADMIN_KEY secret)
 //   scheduled        -> cron: finish pending alerts/scans, due follow-ups
-//   everything else  -> serve the generated static site (binding: ASSETS)
+//   everything else  -> serve the generated static site (binding: ASSETS),
+//                       with region pricing: United States / USD by default,
+//                       Ghana / GHS for visitors in Ghana (request.cf.country)
+//                       or anyone who picks it (?region=gh / sm_region cookie)
+//
+// PREVIEW mode (env.PREVIEW === "1", see wrangler.preview.toml): no KV, no
+// email, no audits, no admin; /api/* return a harmless 200; pages carry a
+// "PREVIEW — proposed prices" banner and noindex.
 //
 // This reproduces the behaviour of the previous inline worker while adding
 // multi-page static-asset serving. It is intentionally dependency-free.
@@ -125,6 +132,22 @@ export default {
     const url = new URL(request.url);
     const { pathname } = url;
 
+    if (isPreview(env)) {
+      // Preview: never store, email, audit or expose admin. Forms "succeed".
+      if (pathname === '/api/lead' || pathname === '/api/event') {
+        if (request.method !== 'POST') return json({ ok: false, error: 'method_not_allowed' }, 405);
+        return json({ ok: true, preview: true });
+      }
+      if (pathname.startsWith('/api/')) return json({ ok: false, error: 'not_found' }, 404);
+      if (pathname === '/admin' || pathname.startsWith('/admin/') || pathname.startsWith('/audit/')) {
+        return notFoundResponse(request, env, url);
+      }
+      if (pathname === '/robots.txt') {
+        return new Response('User-agent: *\nDisallow: /\n', { headers: { 'Content-Type': 'text/plain; charset=utf-8', 'X-Robots-Tag': 'noindex' } });
+      }
+      return serveAsset(request, env, url);
+    }
+
     if (pathname === '/api/lead') {
       if (request.method !== 'POST') return json({ ok: false, error: 'method_not_allowed' }, 405);
       return handleLead(request, env, ctx);
@@ -146,6 +169,7 @@ export default {
   },
 
   async scheduled(event, env, ctx) {
+    if (isPreview(env)) return; // preview has no cron, but never run the pipeline there
     registerSelfRoute(env);
     ctx.waitUntil(runScheduled(env).then(r => console.log('audit-cron', JSON.stringify(r).slice(0, 2000))));
   }
@@ -199,11 +223,20 @@ async function notFoundResponse(request, env, url) {
   headers.set('Cache-Control', 'public, max-age=0, must-revalidate');
   headers.set('X-Robots-Tag', 'noindex');
   headers.delete('ETag');
-  return new Response(request.method === 'HEAD' ? null : page.body, { status: 404, headers });
+  return localize(request, env, url, new Response(request.method === 'HEAD' ? null : page.body, { status: 404, headers }));
 }
 
 async function serveAsset(request, env, url) {
   const { pathname, search } = url;
+
+  // HTML differs per region, but the asset layer's ETag does not, so never
+  // let a conditional request return a 304 for the other region's page.
+  if (looksLikeHtml(pathname)) {
+    const h = new Headers(request.headers);
+    h.delete('If-None-Match');
+    h.delete('If-Modified-Since');
+    request = new Request(request, { headers: h });
+  }
 
   if (pathname === '/404' || pathname === '/404.html' || pathname === '/404/') {
     return notFoundResponse(request, env, url);
@@ -244,7 +277,7 @@ async function serveAsset(request, env, url) {
     headers.set('Content-Type', 'text/html; charset=utf-8');
     headers.set('Cache-Control', 'public, max-age=0, must-revalidate');
     headers.set('X-Robots-Tag', 'noindex');
-    return new Response(res.body, { status: 404, headers });
+    return localize(request, env, url, new Response(res.body, { status: 404, headers }));
   }
 
   if (res.status !== 200 && res.status !== 304) return res;
@@ -254,5 +287,61 @@ async function serveAsset(request, env, url) {
   const ct = contentTypeFix(pathname, headers.get('content-type'));
   if (ct) headers.set('Content-Type', ct);
   headers.set('X-Content-Type-Options', 'nosniff');
-  return new Response(res.body, { status: res.status, headers });
+  return localize(request, env, url, new Response(res.body, { status: res.status, headers }));
+}
+
+// ---- Region pricing ---------------------------------------------------------
+// Pages are built with United States / USD prices as the visible default and
+// every regional value duplicated in data-us / data-gh attributes (one
+// canonical URL; crawlers, including Googlebot, see USD). Choice order:
+//   1. ?region=us|gh   (also stored in the sm_region cookie)
+//   2. sm_region cookie (set by the switcher)
+//   3. request.cf.country === 'GH' -> Ghana; every other country -> US/USD
+function isPreview(env) { return env && env.PREVIEW === '1'; }
+
+function looksLikeHtml(pathname) {
+  return pathname.endsWith('/') || pathname.endsWith('.html') || !/\.[a-z0-9]+$/i.test(pathname);
+}
+
+function pickRegion(request, url) {
+  const q = url.searchParams.get('region');
+  if (q === 'us' || q === 'gh') return { region: q, fromQuery: true };
+  const m = (request.headers.get('cookie') || '').match(/(?:^|;\s*)sm_region=(us|gh)\b/);
+  if (m) return { region: m[1] };
+  const country = request.cf && request.cf.country;
+  return { region: country === 'GH' ? 'gh' : 'us' };
+}
+
+const PREVIEW_BANNER = '<div class="preview-banner" role="note">PREVIEW &mdash; proposed prices (not live). US prices are proposals awaiting approval.</div>';
+
+function localize(request, env, url, res) {
+  const type = res.headers.get('content-type') || '';
+  if (!/^text\/html/i.test(type) || !res.body) return res;
+  const { region, fromQuery } = pickRegion(request, url);
+  const headers = new Headers(res.headers);
+  headers.delete('ETag');
+  headers.delete('Last-Modified');
+  const vary = headers.get('Vary');
+  headers.set('Vary', vary ? vary + ', Cookie' : 'Cookie');
+  if (fromQuery) {
+    headers.append('Set-Cookie', `sm_region=${region}; Path=/; Max-Age=31536000; SameSite=Lax; Secure`);
+  }
+  const preview = isPreview(env);
+  if (preview) headers.set('X-Robots-Tag', 'noindex, nofollow');
+  if (region === 'us' && !preview) return new Response(res.body, { status: res.status, headers });
+
+  let rw = new HTMLRewriter();
+  if (region === 'gh') {
+    rw = rw
+      .on('html', { element(el) { el.setAttribute('data-region', 'gh'); } })
+      // data-gh values are built from trusted, entity-encoded build output.
+      .on('[data-gh]', { element(el) { el.setInnerContent(el.getAttribute('data-gh'), { html: true }); } })
+      .on('[data-set-region]', { element(el) { el.setAttribute('aria-pressed', String(el.getAttribute('data-set-region') === 'gh')); } });
+  }
+  if (preview) {
+    rw = rw
+      .on('head', { element(el) { el.append('<meta name="robots" content="noindex,nofollow" />', { html: true }); } })
+      .on('body', { element(el) { el.prepend(PREVIEW_BANNER, { html: true }); } });
+  }
+  return rw.transform(new Response(res.body, { status: res.status, headers }));
 }

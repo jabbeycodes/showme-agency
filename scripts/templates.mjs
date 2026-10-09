@@ -13,7 +13,6 @@ function waLink(text) { return 'https://wa.me/' + site.whatsappNumber + '?text='
 function priceBlock(pricing) {
   return `<div class="price-panel">
               <div class="price">${esc(pricing.price)}</div>
-              ${pricing.usd ? `<p class="price-usd">${esc(pricing.usd)} for diaspora clients</p>` : ''}
               <p style="color:var(--text-muted);font-size:15px;margin:12px 0 0;max-width:60ch">${esc(pricing.note)}</p>
               <p style="color:var(--text-muted);font-size:14px;margin:12px 0 0">Projects: 50% deposit, 50% on launch, after you approve a working preview. Monthly plans are billed in advance. <a href="/pricing/" style="color:var(--mint)">Full pricing &amp; terms →</a></p>
             </div>`;

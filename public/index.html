@@ -1,7 +1,8 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-region="us">
 <head>
   <meta charset="utf-8" />
+  <script>(function(){try{var d=document.documentElement,r=null,q=new URLSearchParams(location.search).get('region');if(q==='us'||q==='gh'){r=q;document.cookie='sm_region='+q+';path=/;max-age=31536000;samesite=lax';try{localStorage.setItem('sm_region',q)}catch(e){}}else{var m=document.cookie.match(/(?:^|; )sm_region=(us|gh)/);if(m)r=m[1];else{try{var l=localStorage.getItem('sm_region');if(l==='us'||l==='gh')r=l}catch(e){}}}if(r&&r!==d.getAttribute('data-region')){d.setAttribute('data-region',r);d.classList.add('region-pending')}}catch(e){}})();</script>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="dark light" />
   <meta name="theme-color" content="#07111f" />
@@ -29,13 +30,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css?v=d8a5f802f3" />
+  <link rel="stylesheet" href="/styles.css?v=456a3c0f3b" />
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"ShowMe Digital Agency","url":"https://agency.showmeworld.app/","email":"josh@showmeworld.app","description":"US-led digital agency with its own delivery team on the ground in Accra, Ghana, bringing 7+ years of experience and 50+ businesses helped across Ghana and abroad with websites, growth, brand, business technology, AI and software.","founder":{"@type":"Person","name":"Joshua Abbey","image":"https://agency.showmeworld.app/assets/joshua-abbey.jpg","url":"https://agency.showmeworld.app/about/","address":{"@type":"PostalAddress","addressCountry":"US"}},"location":[{"@type":"Place","name":"Delivery team","address":{"@type":"PostalAddress","addressLocality":"Accra","addressCountry":"GH"}},{"@type":"Place","name":"Founder","address":{"@type":"PostalAddress","addressCountry":"US"}}],"areaServed":[{"@type":"Country","name":"Ghana"},{"@type":"Country","name":"United States"},{"@type":"Country","name":"United Kingdom"},{"@type":"Country","name":"Canada"}],"sameAs":[]}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"ShowMe Digital Agency","description":"US-led digital agency with its delivery team on the ground in Accra, Ghana, with 7+ years of experience and 50+ businesses helped, offering web, growth, brand, business technology, AI and software services to businesses in Ghana and to diaspora and international clients in the US, UK and Canada.","url":"https://agency.showmeworld.app/","email":"josh@showmeworld.app","image":"https://agency.showmeworld.app/og-image.png","areaServed":[{"@type":"Country","name":"Ghana"},{"@type":"Country","name":"United States"},{"@type":"Country","name":"United Kingdom"},{"@type":"Country","name":"Canada"}],"address":{"@type":"PostalAddress","addressLocality":"Accra","addressCountry":"GH"},"founder":{"@type":"Person","name":"Joshua Abbey","image":"https://agency.showmeworld.app/assets/joshua-abbey.jpg","url":"https://agency.showmeworld.app/about/","address":{"@type":"PostalAddress","addressCountry":"US"}},"slogan":"Build. Grow. Automate."}</script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 <div class="scroll-progress" aria-hidden="true"></div>
+<div class="region-bar"><div class="wrap region-wrap"><span class="region-label" id="regionLabel">Prices for</span><div class="region-switch" role="group" aria-labelledby="regionLabel"><button type="button" data-set-region="us" aria-pressed="true">United States (USD)</button><button type="button" data-set-region="gh" aria-pressed="false">Ghana (GHS)</button></div></div></div>
 <header class="topbar">
   <nav class="wrap nav" aria-label="Primary">
     <a class="brand" href="/"><span>ShowMe<span class="dot">.</span></span><small>Digital Agency</small></a>
@@ -157,21 +159,21 @@
         <div class="grid grid-2" style="margin-top:40px;align-items:start">
           <div class="price-card featured" data-reveal>
             <span class="badge">Core offer</span>
-            <div class="amount">GHS 3,200 <small>/ month</small></div>
+            <div class="amount"><span data-us="$1,800" data-gh="GHS 3,200">$1,800</span> <small>/ month</small></div>
             <p style="color:var(--text-muted);margin:0">ShowMe Growth retainer &middot; 3-month minimum</p>
             <ul>
               <li>Managed ads and a high-converting landing page</li>
               <li>WhatsApp lead system and weekly reporting</li>
-              <li>Ad spend separate, prepaid in cedis (from GHS 1,500/mo)</li>
+              <li><span data-us="Ad spend separate, paid directly to the ad platforms (from $1,000/mo)" data-gh="Ad spend separate, prepaid in cedis (from GHS 1,500/mo)">Ad spend separate, paid directly to the ad platforms (from $1,000/mo)</span></li>
               <li>You own everything: ad accounts, data and creative</li>
               <li>Live within 7 days of onboarding — or month 1 is free.</li>
             </ul>
             <div style="margin-top:24px"><a class="btn" href="/pricing/"><span>See pricing &amp; packages &rarr;</span></a></div>
           </div>
           <div style="display:grid;gap:18px">
-            <div class="promise-block highlight" data-reveal><span class="label">For teams &amp; multi-outlet companies</span><strong>ShowMe Enterprise: GHS 7,500/month.</strong><p>Named senior strategist, multi-outlet reporting, quarterly business reviews. <a href="/pricing/" style="color:#fff;text-decoration:underline">See the tiers &rarr;</a></p></div>
-            <div class="promise-block" data-reveal><span class="label">Start small</span><strong>Automation Audit: GHS 1,500.</strong><p>A fixed-fee roadmap of what to automate first, from our team. The full fee is credited toward your build if you go ahead within 60 days.</p></div>
-            <div class="promise-block" data-reveal><span class="label">Published prices</span><strong>Websites from GHS 7,500. Bundles from GHS 11,500.</strong><p>Every service has a "from" price in GHS (with a USD guide). Projects are 50% to start and 50% on launch, after you approve a working preview.</p></div>
+            <div class="promise-block highlight" data-reveal><span class="label">For teams &amp; multi-outlet companies</span><strong><span data-us="ShowMe Enterprise: $4,500/month." data-gh="ShowMe Enterprise: GHS 7,500/month.">ShowMe Enterprise: $4,500/month.</span></strong><p>Named senior strategist, multi-outlet reporting, quarterly business reviews. <a href="/pricing/" style="color:#fff;text-decoration:underline">See the tiers &rarr;</a></p></div>
+            <div class="promise-block" data-reveal><span class="label">Start small</span><strong><span data-us="Automation Audit: $500." data-gh="Automation Audit: GHS 1,500.">Automation Audit: $500.</span></strong><p>A fixed-fee roadmap of what to automate first, from our team. The full fee is credited toward your build if you go ahead within 60 days.</p></div>
+            <div class="promise-block" data-reveal><span class="label">Published prices</span><strong><span data-us="Websites from $3,500. Bundles from $5,000." data-gh="Websites from GHS 7,500. Bundles from GHS 11,500.">Websites from $3,500. Bundles from $5,000.</span></strong><p><span data-us="Every service has a &quot;from&quot; price in USD. Projects are 50% to start and 50% on launch, after you approve a working preview." data-gh="Every service has a &quot;from&quot; price in GHS. Projects are 50% to start and 50% on launch, after you approve a working preview.">Every service has a "from" price in USD. Projects are 50% to start and 50% on launch, after you approve a working preview.</span></p></div>
           </div>
         </div>
       </div>
@@ -219,7 +221,7 @@
       <div class="faq-a" id="home-faq-a2" role="region" aria-labelledby="home-faq-q2"><p>No. Everything is delivered remotely over WhatsApp, video calls and shared workspaces, for businesses anywhere in Ghana and for diaspora and international clients in the US, UK and Canada, who can be quoted in USD. When you would like to meet, or a project needs on-site work such as a photo or video shoot, our team in Accra can meet you in person; travel outside Greater Accra is quoted separately.</p></div>
     </div><div class="faq-item">
       <h3 style="margin:0"><button class="faq-q" id="home-faq-q3" type="button" aria-expanded="false" aria-controls="home-faq-a3">How much is the ShowMe Growth retainer?<span class="icon" aria-hidden="true"></span></button></h3>
-      <div class="faq-a" id="home-faq-a3" role="region" aria-labelledby="home-faq-q3"><p>GHS 3,200 per month with a 3-month minimum, billed monthly in advance by MoMo, bank transfer or card. Ad spend is separate and prepaid in cedis; we recommend at least GHS 1,500/month.</p></div>
+      <div class="faq-a" id="home-faq-a3" role="region" aria-labelledby="home-faq-q3"><p><span data-us="$1,800 per month with a 3-month minimum, billed monthly in advance by card or bank transfer. Ad spend is separate and paid directly to the ad platforms; we recommend at least $1,000/month." data-gh="GHS 3,200 per month with a 3-month minimum, billed monthly in advance by MoMo, bank transfer or card. Ad spend is separate and prepaid in cedis; we recommend at least GHS 1,500/month.">$1,800 per month with a 3-month minimum, billed monthly in advance by card or bank transfer. Ad spend is separate and paid directly to the ad platforms; we recommend at least $1,000/month.</span></p></div>
     </div></div></div>
         <div style="margin-top:26px" data-reveal><a class="btn secondary" href="/faq/"><span>Read all FAQs →</span></a></div>
       </div>
@@ -262,6 +264,6 @@
     <a class="btn secondary" href="https://wa.me/13364572361" target="_blank" rel="noopener"><span>WhatsApp</span></a>
     <a class="btn" href="/free-audit/"><span>Free audit</span></a>
   </div>
-  <script src="/site.js?v=25412f7a5a" defer></script>
+  <script src="/site.js?v=b9577f99e0" defer></script>
 </body>
 </html>

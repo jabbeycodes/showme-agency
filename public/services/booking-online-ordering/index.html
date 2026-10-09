@@ -1,7 +1,8 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-region="us">
 <head>
   <meta charset="utf-8" />
+  <script>(function(){try{var d=document.documentElement,r=null,q=new URLSearchParams(location.search).get('region');if(q==='us'||q==='gh'){r=q;document.cookie='sm_region='+q+';path=/;max-age=31536000;samesite=lax';try{localStorage.setItem('sm_region',q)}catch(e){}}else{var m=document.cookie.match(/(?:^|; )sm_region=(us|gh)/);if(m)r=m[1];else{try{var l=localStorage.getItem('sm_region');if(l==='us'||l==='gh')r=l}catch(e){}}}if(r&&r!==d.getAttribute('data-region')){d.setAttribute('data-region',r);d.classList.add('region-pending')}}catch(e){}})();</script>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="dark light" />
   <meta name="theme-color" content="#07111f" />
@@ -29,7 +30,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css?v=d8a5f802f3" />
+  <link rel="stylesheet" href="/styles.css?v=456a3c0f3b" />
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"ShowMe Digital Agency","url":"https://agency.showmeworld.app/","email":"josh@showmeworld.app","description":"US-led digital agency with its own delivery team on the ground in Accra, Ghana, bringing 7+ years of experience and 50+ businesses helped across Ghana and abroad with websites, growth, brand, business technology, AI and software.","founder":{"@type":"Person","name":"Joshua Abbey","image":"https://agency.showmeworld.app/assets/joshua-abbey.jpg","url":"https://agency.showmeworld.app/about/","address":{"@type":"PostalAddress","addressCountry":"US"}},"location":[{"@type":"Place","name":"Delivery team","address":{"@type":"PostalAddress","addressLocality":"Accra","addressCountry":"GH"}},{"@type":"Place","name":"Founder","address":{"@type":"PostalAddress","addressCountry":"US"}}],"areaServed":[{"@type":"Country","name":"Ghana"},{"@type":"Country","name":"United States"},{"@type":"Country","name":"United Kingdom"},{"@type":"Country","name":"Canada"}],"sameAs":[]}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Service","name":"Booking & Online Ordering Systems","description":"Online booking and ordering systems for clinics, salons, restaurants and services — take appointments and orders 24/7 with reminders and MoMo payments.","serviceType":"Booking & Online Ordering Systems","provider":{"@type":"Organization","name":"ShowMe Digital Agency","url":"https://agency.showmeworld.app/"},"areaServed":[{"@type":"Country","name":"Ghana"},{"@type":"Country","name":"United States"},{"@type":"Country","name":"United Kingdom"},{"@type":"Country","name":"Canada"}],"url":"https://agency.showmeworld.app/services/booking-online-ordering/"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://agency.showmeworld.app/"},{"@type":"ListItem","position":2,"name":"Services","item":"https://agency.showmeworld.app/services/"},{"@type":"ListItem","position":3,"name":"Booking & Online Ordering Systems","item":"https://agency.showmeworld.app/services/booking-online-ordering/"}]}</script>
@@ -38,6 +39,7 @@
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 <div class="scroll-progress" aria-hidden="true"></div>
+<div class="region-bar"><div class="wrap region-wrap"><span class="region-label" id="regionLabel">Prices for</span><div class="region-switch" role="group" aria-labelledby="regionLabel"><button type="button" data-set-region="us" aria-pressed="true">United States (USD)</button><button type="button" data-set-region="gh" aria-pressed="false">Ghana (GHS)</button></div></div></div>
 <header class="topbar">
   <nav class="wrap nav" aria-label="Primary">
     <a class="brand" href="/"><span>ShowMe<span class="dot">.</span></span><small>Digital Agency</small></a>
@@ -101,9 +103,8 @@
           <div class="detail-block" data-reveal>
             <h2>How pricing works</h2>
             <div class="price-panel">
-              <div class="price">From GHS 9,500</div>
-              <p class="price-usd">From USD 825 for diaspora clients</p>
-              <p style="color:var(--text-muted);font-size:15px;margin:12px 0 0;max-width:60ch">Booking or ordering flow, availability rules, confirmations and reminders, optional MoMo or card deposits and a simple dashboard. Typical delivery 3–6 weeks.</p>
+              <div class="price"><span data-us="From $4,500" data-gh="From GHS 9,500">From $4,500</span></div>
+              <p style="color:var(--text-muted);font-size:15px;margin:12px 0 0;max-width:60ch"><span data-us="Booking or ordering flow, availability rules, confirmations and reminders, optional card deposits and a simple dashboard. Typical delivery 3–6 weeks." data-gh="Booking or ordering flow, availability rules, confirmations and reminders, optional MoMo or card deposits and a simple dashboard. Typical delivery 3–6 weeks.">Booking or ordering flow, availability rules, confirmations and reminders, optional card deposits and a simple dashboard. Typical delivery 3–6 weeks.</span></p>
               <p style="color:var(--text-muted);font-size:14px;margin:12px 0 0">Projects: 50% deposit, 50% on launch, after you approve a working preview. Monthly plans are billed in advance. <a href="/pricing/" style="color:var(--mint)">Full pricing &amp; terms →</a></p>
             </div>
           </div>
@@ -124,7 +125,7 @@
         <aside class="detail-side">
           <div class="side-card">
             <h3>Start here</h3>
-            <div class="price">From GHS 9,500</div>
+            <div class="price"><span data-us="From $4,500" data-gh="From GHS 9,500">From $4,500</span></div>
             <p style="color:var(--text-muted);font-size:14px;margin:0 0 16px">Fixed quote after a free call — we reply within one business day.</p>
             <div class="btn-row" style="display:grid">
               <a class="btn" href="/free-audit/"><span>Get a free audit →</span></a>
@@ -173,6 +174,6 @@
     <a class="btn secondary" href="https://wa.me/13364572361" target="_blank" rel="noopener"><span>WhatsApp</span></a>
     <a class="btn" href="/free-audit/"><span>Free audit</span></a>
   </div>
-  <script src="/site.js?v=25412f7a5a" defer></script>
+  <script src="/site.js?v=b9577f99e0" defer></script>
 </body>
 </html>

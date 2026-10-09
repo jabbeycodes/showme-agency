@@ -1,0 +1,24 @@
+# =============================================================================
+# PREVIEW worker for the US-pricing branch — NOT production.
+#
+#   npx wrangler deploy --config wrangler.preview.toml
+#
+# Serves the same built site on showme-agency-preview.<subdomain>.workers.dev
+# with PREVIEW = "1": a "PREVIEW — proposed prices" banner, noindex, and
+# /api/lead + /api/event return a harmless 200 without storing anything.
+# Deliberately: NO KV (leads), NO AI, NO cron triggers, NO custom domain/routes,
+# NO secrets (so no email can ever be sent from here).
+# =============================================================================
+name = "showme-agency-preview"
+main = "src/index.js"
+compatibility_date = "2024-11-01"
+workers_dev = true
+
+[assets]
+directory = "../public"
+binding = "ASSETS"
+not_found_handling = "404-page"
+run_worker_first = true
+
+[vars]
+PREVIEW = "1"

@@ -10,6 +10,36 @@
   var WA_NUMBER = '13364572361';
   var EMAIL = 'josh@showmeworld.app';
 
+  /* ---- Region / currency (United States USD default, Ghana GHS) ----------
+     Every regional price/phrase is rendered with data-us / data-gh values.
+     The edge worker serves the visitor's region; this applies a stored or
+     ?region= choice and powers the switcher without a reload. */
+  var root = document.documentElement;
+  function setCookieRegion(r) {
+    document.cookie = 'sm_region=' + r + ';path=/;max-age=31536000;samesite=lax' + (location.protocol === 'https:' ? ';secure' : '');
+    try { localStorage.setItem('sm_region', r); } catch (e) {}
+  }
+  function applyRegion(r) {
+    if (r !== 'us' && r !== 'gh') return;
+    var els = document.querySelectorAll('[data-us][data-gh]');
+    for (var i = 0; i < els.length; i++) {
+      var v = els[i].getAttribute('data-' + r);
+      if (els[i].textContent !== v) els[i].textContent = v;
+    }
+    root.setAttribute('data-region', r);
+    root.classList.remove('region-pending');
+    var btns = document.querySelectorAll('[data-set-region]');
+    for (var j = 0; j < btns.length; j++) btns[j].setAttribute('aria-pressed', String(btns[j].getAttribute('data-set-region') === r));
+  }
+  applyRegion(root.getAttribute('data-region') || 'us');
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-set-region]');
+    if (!b) return;
+    var r = b.getAttribute('data-set-region');
+    setCookieRegion(r);
+    applyRegion(r);
+  });
+
   /* ---- Analytics beacons (pageview / lead_submitted / whatsapp_click) ---- */
   function track(event) {
     try {

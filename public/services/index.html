@@ -1,7 +1,8 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-region="us">
 <head>
   <meta charset="utf-8" />
+  <script>(function(){try{var d=document.documentElement,r=null,q=new URLSearchParams(location.search).get('region');if(q==='us'||q==='gh'){r=q;document.cookie='sm_region='+q+';path=/;max-age=31536000;samesite=lax';try{localStorage.setItem('sm_region',q)}catch(e){}}else{var m=document.cookie.match(/(?:^|; )sm_region=(us|gh)/);if(m)r=m[1];else{try{var l=localStorage.getItem('sm_region');if(l==='us'||l==='gh')r=l}catch(e){}}}if(r&&r!==d.getAttribute('data-region')){d.setAttribute('data-region',r);d.classList.add('region-pending')}}catch(e){}})();</script>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="dark light" />
   <meta name="theme-color" content="#07111f" />
@@ -29,13 +30,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css?v=d8a5f802f3" />
+  <link rel="stylesheet" href="/styles.css?v=456a3c0f3b" />
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"ShowMe Digital Agency","url":"https://agency.showmeworld.app/","email":"josh@showmeworld.app","description":"US-led digital agency with its own delivery team on the ground in Accra, Ghana, bringing 7+ years of experience and 50+ businesses helped across Ghana and abroad with websites, growth, brand, business technology, AI and software.","founder":{"@type":"Person","name":"Joshua Abbey","image":"https://agency.showmeworld.app/assets/joshua-abbey.jpg","url":"https://agency.showmeworld.app/about/","address":{"@type":"PostalAddress","addressCountry":"US"}},"location":[{"@type":"Place","name":"Delivery team","address":{"@type":"PostalAddress","addressLocality":"Accra","addressCountry":"GH"}},{"@type":"Place","name":"Founder","address":{"@type":"PostalAddress","addressCountry":"US"}}],"areaServed":[{"@type":"Country","name":"Ghana"},{"@type":"Country","name":"United States"},{"@type":"Country","name":"United Kingdom"},{"@type":"Country","name":"Canada"}],"sameAs":[]}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://agency.showmeworld.app/"},{"@type":"ListItem","position":2,"name":"Services","item":"https://agency.showmeworld.app/services/"}]}</script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 <div class="scroll-progress" aria-hidden="true"></div>
+<div class="region-bar"><div class="wrap region-wrap"><span class="region-label" id="regionLabel">Prices for</span><div class="region-switch" role="group" aria-labelledby="regionLabel"><button type="button" data-set-region="us" aria-pressed="true">United States (USD)</button><button type="button" data-set-region="gh" aria-pressed="false">Ghana (GHS)</button></div></div></div>
 <header class="topbar">
   <nav class="wrap nav" aria-label="Primary">
     <a class="brand" href="/"><span>ShowMe<span class="dot">.</span></span><small>Digital Agency</small></a>
@@ -81,27 +83,27 @@
         <div class="grid grid-3"><a class="card" href="/services/business-websites/" data-reveal>
     <h3>Business Websites</h3>
     <p>Fast, mobile-first websites that load on slow networks and turn visitors into enquiries.</p>
-    <span class="price-from">From GHS 7,500</span>
+    <span class="price-from"><span data-us="From $3,500" data-gh="From GHS 7,500">From $3,500</span></span>
     <span class="card-cta">Learn more →</span>
   </a><a class="card" href="/services/ecommerce-momo/" data-reveal>
     <h3>E-commerce &amp; Mobile Money Checkout</h3>
     <p>Online stores that accept MoMo, Paystack and card, with WhatsApp reordering built in.</p>
-    <span class="price-from">From GHS 13,500</span>
+    <span class="price-from"><span data-us="From $6,500" data-gh="From GHS 13,500">From $6,500</span></span>
     <span class="card-cta">Learn more →</span>
   </a><a class="card" href="/services/landing-pages-funnels/" data-reveal>
     <h3>Landing Pages &amp; Funnels</h3>
     <p>Focused pages built to convert ad and campaign traffic into qualified enquiries.</p>
-    <span class="price-from">From GHS 3,000</span>
+    <span class="price-from"><span data-us="From $1,500" data-gh="From GHS 3,000">From $1,500</span></span>
     <span class="card-cta">Learn more →</span>
   </a><a class="card" href="/services/booking-online-ordering/" data-reveal>
     <h3>Booking &amp; Online Ordering Systems</h3>
     <p>Let customers book appointments or place orders around the clock, without the back-and-forth.</p>
-    <span class="price-from">From GHS 9,500</span>
+    <span class="price-from"><span data-us="From $4,500" data-gh="From GHS 9,500">From $4,500</span></span>
     <span class="card-cta">Learn more →</span>
   </a><a class="card" href="/services/website-care/" data-reveal>
     <h3>Website Care &amp; Maintenance</h3>
     <p>Hosting, security, backups and updates so your site stays fast, safe and current.</p>
-    <span class="price-from">From GHS 750 / month</span>
+    <span class="price-from"><span data-us="From $150 / month" data-gh="From GHS 750 / month">From $150 / month</span></span>
     <span class="card-cta">Learn more →</span>
   </a></div>
       </div>
@@ -115,47 +117,47 @@
         <div class="grid grid-3"><a class="card" href="/services/growth-retainer/" data-reveal>
     <h3>ShowMe Growth Retainer</h3>
     <p>Our core offer: managed ads, a landing page and a WhatsApp lead system with weekly reporting.</p>
-    <span class="price-from">GHS 3,200 / month</span>
+    <span class="price-from"><span data-us="$1,800 / month" data-gh="GHS 3,200 / month">$1,800 / month</span></span>
     <span class="card-cta">Learn more →</span>
   </a><a class="card" href="/services/local-seo-gbp/" data-reveal>
     <h3>Local SEO &amp; Google Business Profile</h3>
     <p>Show up in the map pack and local searches when nearby customers are ready to buy.</p>
-    <span class="price-from">From GHS 1,600 / month</span>
+    <span class="price-from"><span data-us="From $600 / month" data-gh="From GHS 1,600 / month">From $600 / month</span></span>
     <span class="card-cta">Learn more →</span>
   </a><a class="card" href="/services/seo-programme/" data-reveal>
     <h3>SEO Programme</h3>
     <p>A full search programme: technical fixes, on-page work, content and links with monthly reporting.</p>
-    <span class="price-from">From GHS 3,800 / month</span>
+    <span class="price-from"><span data-us="From $1,500 / month" data-gh="From GHS 3,800 / month">From $1,500 / month</span></span>
     <span class="card-cta">Learn more →</span>
   </a><a class="card" href="/services/ai-search-visibility/" data-reveal>
     <h3>AI Search Visibility</h3>
     <p>Get your business recommended when customers ask AI assistants, with monthly AI-answer tracking.</p>
-    <span class="price-from">From GHS 2,800 / month</span>
+    <span class="price-from"><span data-us="From $1,000 / month" data-gh="From GHS 2,800 / month">From $1,000 / month</span></span>
     <span class="card-cta">Learn more →</span>
   </a><a class="card" href="/services/paid-ads/" data-reveal>
     <h3>Paid Ads (Google &amp; Meta)</h3>
     <p>Managed Google and Meta campaigns aimed at qualified enquiries, not vanity clicks.</p>
-    <span class="price-from">From GHS 2,200 / month</span>
+    <span class="price-from"><span data-us="From $900 / month" data-gh="From GHS 2,200 / month">From $900 / month</span></span>
     <span class="card-cta">Learn more →</span>
   </a><a class="card" href="/services/social-media/" data-reveal>
     <h3>Social Media Management</h3>
     <p>A consistent content calendar, on-brand design and community management across your channels.</p>
-    <span class="price-from">From GHS 3,000 / month</span>
+    <span class="price-from"><span data-us="From $1,200 / month" data-gh="From GHS 3,000 / month">From $1,200 / month</span></span>
     <span class="card-cta">Learn more →</span>
   </a><a class="card" href="/services/content-marketing/" data-reveal>
     <h3>Content Marketing</h3>
     <p>Articles, FAQs and schema that answer customer questions and earn search and AI visibility.</p>
-    <span class="price-from">From GHS 2,400 / month</span>
+    <span class="price-from"><span data-us="From $1,000 / month" data-gh="From GHS 2,400 / month">From $1,000 / month</span></span>
     <span class="card-cta">Learn more →</span>
   </a><a class="card" href="/services/email-sms/" data-reveal>
     <h3>Email &amp; SMS Campaigns</h3>
     <p>Turn your contact list into repeat business with well-timed email and SMS.</p>
-    <span class="price-from">From GHS 1,800 / month</span>
+    <span class="price-from"><span data-us="From $750 / month" data-gh="From GHS 1,800 / month">From $750 / month</span></span>
     <span class="card-cta">Learn more →</span>
   </a><a class="card" href="/services/analytics-reporting/" data-reveal>
     <h3>Analytics &amp; Reporting</h3>
     <p>Know what is working with proper tracking and a simple dashboard you actually read.</p>
-    <span class="price-from">From GHS 2,500</span>
+    <span class="price-from"><span data-us="From $1,200" data-gh="From GHS 2,500">From $1,200</span></span>
     <span class="card-cta">Learn more →</span>
   </a></div>
       </div>
@@ -169,22 +171,22 @@
         <div class="grid grid-3"><a class="card" href="/services/brand-identity/" data-reveal>
     <h3>Brand Identity</h3>
     <p>A distinctive identity — logo, colours, type and guidelines — from essentials to a full system.</p>
-    <span class="price-from">From GHS 3,800</span>
+    <span class="price-from"><span data-us="From $2,000" data-gh="From GHS 3,800">From $2,000</span></span>
     <span class="card-cta">Learn more →</span>
   </a><a class="card" href="/services/marketing-collateral/" data-reveal>
     <h3>Marketing Collateral &amp; Company Profiles</h3>
     <p>Company profiles, stationery and marketing materials that make your business look the part.</p>
-    <span class="price-from">From GHS 2,500</span>
+    <span class="price-from"><span data-us="From $900" data-gh="From GHS 2,500">From $900</span></span>
     <span class="card-cta">Learn more →</span>
   </a><a class="card" href="/services/photography-video/" data-reveal>
     <h3>Photography &amp; Video</h3>
     <p>Real photos and video of your business, products and team — content that builds trust.</p>
-    <span class="price-from">From GHS 3,500 per shoot</span>
+    <span class="price-from"><span data-us="From $1,200 per shoot" data-gh="From GHS 3,500 per shoot">From $1,200 per shoot</span></span>
     <span class="card-cta">Learn more →</span>
   </a><a class="card" href="/services/pitch-decks/" data-reveal>
     <h3>Pitch Decks</h3>
     <p>Investor and sales decks that tell a clear story and look the part.</p>
-    <span class="price-from">From GHS 3,000</span>
+    <span class="price-from"><span data-us="From $1,500" data-gh="From GHS 3,000">From $1,500</span></span>
     <span class="card-cta">Learn more →</span>
   </a></div>
       </div>
@@ -198,22 +200,22 @@
         <div class="grid grid-3"><a class="card" href="/services/microsoft-365/" data-reveal>
     <h3>Microsoft 365 &amp; Business Email</h3>
     <p>Professional email on your domain, plus Microsoft 365 and SharePoint set up for your team.</p>
-    <span class="price-from">From GHS 2,000</span>
+    <span class="price-from"><span data-us="From $900" data-gh="From GHS 2,000">From $900</span></span>
     <span class="card-cta">Learn more →</span>
   </a><a class="card" href="/services/cloud-document-management/" data-reveal>
     <h3>Cloud Storage &amp; Document Management</h3>
     <p>Get your files off scattered laptops and WhatsApp into a secure, organised, shared system.</p>
-    <span class="price-from">From GHS 2,500</span>
+    <span class="price-from"><span data-us="From $1,000" data-gh="From GHS 2,500">From $1,000</span></span>
     <span class="card-cta">Learn more →</span>
   </a><a class="card" href="/services/crm-setup/" data-reveal>
     <h3>CRM Setup</h3>
     <p>A simple CRM so every lead and customer is tracked and nothing slips through.</p>
-    <span class="price-from">From GHS 4,500</span>
+    <span class="price-from"><span data-us="From $2,000" data-gh="From GHS 4,500">From $2,000</span></span>
     <span class="card-cta">Learn more →</span>
   </a><a class="card" href="/services/it-consulting-training/" data-reveal>
     <h3>IT Consulting &amp; Staff Training</h3>
     <p>Practical advice on the tools you need, plus training so your team actually uses them.</p>
-    <span class="price-from">From GHS 1,200 per session</span>
+    <span class="price-from"><span data-us="From $500 per session" data-gh="From GHS 1,200 per session">From $500 per session</span></span>
     <span class="card-cta">Learn more →</span>
   </a></div>
       </div>
@@ -227,27 +229,27 @@
         <div class="grid grid-3"><a class="card" href="/services/whatsapp-ai-assistant/" data-reveal>
     <h3>WhatsApp AI Assistant</h3>
     <p>An AI assistant on WhatsApp that answers FAQs, qualifies leads and hands off to a human.</p>
-    <span class="price-from">From GHS 6,000</span>
+    <span class="price-from"><span data-us="From $2,500" data-gh="From GHS 6,000">From $2,500</span></span>
     <span class="card-cta">Learn more →</span>
   </a><a class="card" href="/services/whatsapp-ordering-booking/" data-reveal>
     <h3>WhatsApp Ordering &amp; Booking Flows</h3>
     <p>Let customers order or book on WhatsApp and pay with a MoMo link — no app required.</p>
-    <span class="price-from">From GHS 6,500</span>
+    <span class="price-from"><span data-us="From $2,750" data-gh="From GHS 6,500">From $2,750</span></span>
     <span class="card-cta">Learn more →</span>
   </a><a class="card" href="/services/business-process-automation/" data-reveal>
     <h3>Business Process Automation</h3>
     <p>Automate the repetitive work: invoice reminders, onboarding, reports, reminders and alerts.</p>
-    <span class="price-from">From GHS 4,500</span>
+    <span class="price-from"><span data-us="From $2,000" data-gh="From GHS 4,500">From $2,000</span></span>
     <span class="card-cta">Learn more →</span>
   </a><a class="card" href="/services/automation-audit/" data-reveal>
     <h3>Automation Audit</h3>
     <p>A focused paid audit that finds your biggest time-wasters and the automations worth building.</p>
-    <span class="price-from">GHS 1,500</span>
+    <span class="price-from"><span data-us="$500" data-gh="GHS 1,500">$500</span></span>
     <span class="card-cta">Learn more →</span>
   </a><a class="card" href="/services/ai-knowledge-base/" data-reveal>
     <h3>AI Knowledge Base</h3>
     <p>Turn your documents and SOPs into an internal AI assistant your team can just ask.</p>
-    <span class="price-from">From GHS 8,000</span>
+    <span class="price-from"><span data-us="From $3,500" data-gh="From GHS 8,000">From $3,500</span></span>
     <span class="card-cta">Learn more →</span>
   </a></div>
       </div>
@@ -261,22 +263,22 @@
         <div class="grid grid-3"><a class="card" href="/services/custom-web-apps/" data-reveal>
     <h3>Custom Web Apps &amp; Portals</h3>
     <p>Web apps, customer and staff portals, directories and marketplaces built around your workflow.</p>
-    <span class="price-from">From GHS 20,000</span>
+    <span class="price-from"><span data-us="From $9,000" data-gh="From GHS 20,000">From $9,000</span></span>
     <span class="card-cta">Learn more →</span>
   </a><a class="card" href="/services/mobile-apps/" data-reveal>
     <h3>Mobile Apps</h3>
     <p>iOS and Android apps for customers or staff, built to be genuinely useful.</p>
-    <span class="price-from">From GHS 35,000</span>
+    <span class="price-from"><span data-us="From $15,000" data-gh="From GHS 35,000">From $15,000</span></span>
     <span class="card-cta">Learn more →</span>
   </a><a class="card" href="/services/dashboards-internal-systems/" data-reveal>
     <h3>Dashboards &amp; Internal Systems</h3>
     <p>Bring your data together into dashboards and internal tools your team can act on.</p>
-    <span class="price-from">From GHS 9,000</span>
+    <span class="price-from"><span data-us="From $4,000" data-gh="From GHS 9,000">From $4,000</span></span>
     <span class="card-cta">Learn more →</span>
   </a><a class="card" href="/services/integrations-saas/" data-reveal>
     <h3>Integrations &amp; SaaS Development</h3>
     <p>Connect the tools you use, or build and launch a software product of your own.</p>
-    <span class="price-from">From GHS 5,000</span>
+    <span class="price-from"><span data-us="From $2,000" data-gh="From GHS 5,000">From $2,000</span></span>
     <span class="card-cta">Learn more →</span>
   </a></div>
       </div>
@@ -318,6 +320,6 @@
     <a class="btn secondary" href="https://wa.me/13364572361" target="_blank" rel="noopener"><span>WhatsApp</span></a>
     <a class="btn" href="/free-audit/"><span>Free audit</span></a>
   </div>
-  <script src="/site.js?v=25412f7a5a" defer></script>
+  <script src="/site.js?v=b9577f99e0" defer></script>
 </body>
 </html>

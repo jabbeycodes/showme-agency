@@ -1,7 +1,8 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-region="us">
 <head>
   <meta charset="utf-8" />
+  <script>(function(){try{var d=document.documentElement,r=null,q=new URLSearchParams(location.search).get('region');if(q==='us'||q==='gh'){r=q;document.cookie='sm_region='+q+';path=/;max-age=31536000;samesite=lax';try{localStorage.setItem('sm_region',q)}catch(e){}}else{var m=document.cookie.match(/(?:^|; )sm_region=(us|gh)/);if(m)r=m[1];else{try{var l=localStorage.getItem('sm_region');if(l==='us'||l==='gh')r=l}catch(e){}}}if(r&&r!==d.getAttribute('data-region')){d.setAttribute('data-region',r);d.classList.add('region-pending')}}catch(e){}})();</script>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="dark light" />
   <meta name="theme-color" content="#07111f" />
@@ -29,13 +30,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css?v=d8a5f802f3" />
+  <link rel="stylesheet" href="/styles.css?v=456a3c0f3b" />
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"ShowMe Digital Agency","url":"https://agency.showmeworld.app/","email":"josh@showmeworld.app","description":"US-led digital agency with its own delivery team on the ground in Accra, Ghana, bringing 7+ years of experience and 50+ businesses helped across Ghana and abroad with websites, growth, brand, business technology, AI and software.","founder":{"@type":"Person","name":"Joshua Abbey","image":"https://agency.showmeworld.app/assets/joshua-abbey.jpg","url":"https://agency.showmeworld.app/about/","address":{"@type":"PostalAddress","addressCountry":"US"}},"location":[{"@type":"Place","name":"Delivery team","address":{"@type":"PostalAddress","addressLocality":"Accra","addressCountry":"GH"}},{"@type":"Place","name":"Founder","address":{"@type":"PostalAddress","addressCountry":"US"}}],"areaServed":[{"@type":"Country","name":"Ghana"},{"@type":"Country","name":"United States"},{"@type":"Country","name":"United Kingdom"},{"@type":"Country","name":"Canada"}],"sameAs":[]}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://agency.showmeworld.app/"},{"@type":"ListItem","position":2,"name":"Work","item":"https://agency.showmeworld.app/work/"}]}</script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 <div class="scroll-progress" aria-hidden="true"></div>
+<div class="region-bar"><div class="wrap region-wrap"><span class="region-label" id="regionLabel">Prices for</span><div class="region-switch" role="group" aria-labelledby="regionLabel"><button type="button" data-set-region="us" aria-pressed="true">United States (USD)</button><button type="button" data-set-region="gh" aria-pressed="false">Ghana (GHS)</button></div></div></div>
 <header class="topbar">
   <nav class="wrap nav" aria-label="Primary">
     <a class="brand" href="/"><span>ShowMe<span class="dot">.</span></span><small>Digital Agency</small></a>
@@ -88,7 +90,7 @@
             <p class="sample-sub">Key features</p>
             <ul class="ticklist"><li>Mobile-first menu site that loads fast on 3G/4G</li><li>Guided WhatsApp ordering: dishes, pick-up or delivery, time</li><li>MoMo payment link in chat, confirmed automatically</li><li>Clean, paid orders sent to a kitchen dashboard</li><li>Repeat-order shortcut for regular office customers</li></ul>
             <p class="sample-scenario sample-outcome"><strong>Designed to deliver:</strong> Fewer missed or mistyped orders, payments confirmed without screenshot checks, and staff freed up during the lunch rush.</p>
-            <p class="sample-meta"><span><strong>Typical price:</strong> From GHS 14,000 (site + ordering flow)</span><span><strong>Timeline:</strong> 4–5 weeks</span></p>
+            <p class="sample-meta"><span><strong>Typical price:</strong> <span data-us="From $6,500 (site + ordering flow)" data-gh="From GHS 14,000 (site + ordering flow)">From $6,500 (site + ordering flow)</span></span><span><strong>Timeline:</strong> 4–5 weeks</span></p>
             <p class="sample-links"><a href="/services/whatsapp-ordering-booking/">WhatsApp Ordering &amp; Booking Flows →</a><a href="/services/business-websites/">Business Websites →</a></p>
           </div>
         </article><article class="sample" id="real-estate-listings" data-reveal>
@@ -100,7 +102,7 @@
             <p class="sample-sub">Key features</p>
             <ul class="ticklist"><li>Listings with photos, floor plans and price in GHS or USD</li><li>Filters by location, bedrooms and budget</li><li>&quot;Enquire on WhatsApp&quot; with the listing details pre-filled</li><li>Instant first response and lead qualification across time zones</li><li>Weekly report: enquiries, viewings booked, cost per lead</li></ul>
             <p class="sample-scenario sample-outcome"><strong>Designed to deliver:</strong> Better-qualified enquiries, faster first replies to buyers in any time zone, and a clear weekly view of where leads come from.</p>
-            <p class="sample-meta"><span><strong>Typical price:</strong> From GHS 7,500 + Growth retainer</span><span><strong>Timeline:</strong> Leads live in 7 days; full site 4–5 weeks</span></p>
+            <p class="sample-meta"><span><strong>Typical price:</strong> <span data-us="From $3,500 + Growth retainer" data-gh="From GHS 7,500 + Growth retainer">From $3,500 + Growth retainer</span></span><span><strong>Timeline:</strong> Leads live in 7 days; full site 4–5 weeks</span></p>
             <p class="sample-links"><a href="/services/business-websites/">Business Websites →</a><a href="/services/growth-retainer/">ShowMe Growth Retainer →</a></p>
           </div>
         </article><article class="sample" id="clinic-assistant" data-reveal>
@@ -112,7 +114,7 @@
             <p class="sample-sub">Key features</p>
             <ul class="ticklist"><li>AI assistant trained on the clinic’s own FAQs and price list</li><li>Answers at any hour in plain, friendly language</li><li>Offers available appointment slots and takes the booking</li><li>Hands sensitive or medical questions straight to staff</li><li>Day-before reminders to reduce no-shows</li></ul>
             <p class="sample-scenario sample-outcome"><strong>Designed to deliver:</strong> Routine questions answered around the clock, bookings taken out of hours, fewer no-shows and a front desk with more time for patients.</p>
-            <p class="sample-meta"><span><strong>Typical price:</strong> From GHS 6,000</span><span><strong>Timeline:</strong> 2–3 weeks</span></p>
+            <p class="sample-meta"><span><strong>Typical price:</strong> <span data-us="From $2,500" data-gh="From GHS 6,000">From $2,500</span></span><span><strong>Timeline:</strong> 2–3 weeks</span></p>
             <p class="sample-links"><a href="/services/whatsapp-ai-assistant/">WhatsApp AI Assistant →</a><a href="/services/booking-online-ordering/">Booking &amp; Online Ordering Systems →</a></p>
           </div>
         </article><article class="sample" id="invoice-automation" data-reveal>
@@ -124,7 +126,7 @@
             <p class="sample-sub">Key features</p>
             <ul class="ticklist"><li>Polite WhatsApp and email reminders before and after due dates</li><li>MoMo and card payment links included in every reminder</li><li>Invoices marked paid automatically, receipts sent</li><li>Monday 8am summary to the owner’s WhatsApp</li><li>Documented workflows the team can see and adjust</li></ul>
             <p class="sample-scenario sample-outcome"><strong>Designed to deliver:</strong> Faster payment with less awkward chasing, no manual reconciliation of paid invoices, and a weekly cash snapshot in the owner’s pocket.</p>
-            <p class="sample-meta"><span><strong>Typical price:</strong> From GHS 4,500 (Quick-Win, up to 3 workflows)</span><span><strong>Timeline:</strong> 2–3 weeks</span></p>
+            <p class="sample-meta"><span><strong>Typical price:</strong> <span data-us="From $2,000 (Quick-Win, up to 3 workflows)" data-gh="From GHS 4,500 (Quick-Win, up to 3 workflows)">From $2,000 (Quick-Win, up to 3 workflows)</span></span><span><strong>Timeline:</strong> 2–3 weeks</span></p>
             <p class="sample-links"><a href="/services/business-process-automation/">Business Process Automation →</a><a href="/services/automation-audit/">Automation Audit →</a></p>
           </div>
         </article>
@@ -227,6 +229,6 @@
     <a class="btn secondary" href="https://wa.me/13364572361" target="_blank" rel="noopener"><span>WhatsApp</span></a>
     <a class="btn" href="/free-audit/"><span>Free audit</span></a>
   </div>
-  <script src="/site.js?v=25412f7a5a" defer></script>
+  <script src="/site.js?v=b9577f99e0" defer></script>
 </body>
 </html>

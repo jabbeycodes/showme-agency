@@ -32,10 +32,10 @@ export const site = {
   facts: {
     experience: '7+ years',
     businessesHelped: '50+',
-    retainerPrice: 'GHS 3,200',
-    enterpriseRetainerPrice: 'GHS 7,500',
+    retainerPrice: '{{retainer}}',
+    enterpriseRetainerPrice: '{{enterprise}}',
     retainerMinimum: '3-month minimum',
-    adSpendMin: 'GHS 1,500',
+    adSpendMin: '{{adspend}}',
     guarantee: 'Live within 7 days of onboarding — or month 1 is free.',
     responsePromise: 'within one business day'
   }
@@ -71,13 +71,13 @@ export const divisions = [
 export const divisionBySlug = Object.fromEntries(divisions.map(d => [d.slug, d]));
 
 // ---- Services ---------------------------------------------------------------
-// Published "from" prices (GHS, with an indicative USD guide for diaspora
-// clients). Benchmarked against the Ghanaian market (see README). The Growth
-// retainer keeps its real, founder-set numbers below.
+// Published "from" prices as {{tokens}}: United States (USD, proposed) by
+// default and Ghana (GHS) as the alternate — see scripts/money.mjs. The Growth
+// retainer keeps its real, founder-set GHS numbers in money.mjs.
 function P(slug) {
   const p = PRICES[slug];
   if (!p) throw new Error('No price defined for service: ' + slug);
-  return { price: p.price, usd: p.usd, note: p.note, placeholder: false };
+  return { price: p.price, note: p.note, placeholder: false };
 }
 
 export const services = [
@@ -235,7 +235,7 @@ export const services = [
     slug: 'growth-retainer', division: 'growth', title: 'ShowMe Growth Retainer',
     metaTitle: 'ShowMe Growth Retainer — Managed Demand & Lead System',
     summary: 'Our core offer: managed ads, a landing page and a WhatsApp lead system with weekly reporting.',
-    metaDescription: 'The ShowMe Growth retainer: managed ads, a high-converting landing page, a WhatsApp lead system and weekly reporting for GHS 3,200/month, 3-month minimum.',
+    metaDescription: 'The ShowMe Growth retainer: managed ads, a high-converting landing page, a WhatsApp lead system and weekly reporting for {{retainer}}/month, 3-month minimum.',
     problem: 'Running your own ads and follow-up part-time means wasted spend and leads that go cold. You need one accountable partner running demand end to end.',
     deliverables: [
       'Managed advertising and a high-converting landing page',
@@ -255,12 +255,11 @@ export const services = [
     // Real pricing — do not change without founder input.
     pricing: {
       price: site.facts.retainerPrice + ' / month',
-      usd: 'About USD 280 / month',
-      note: 'Billed monthly in advance (MoMo, bank transfer or card), with a ' + site.facts.retainerMinimum + '. Ad spend is separate and prepaid in cedis (we recommend at least ' + site.facts.adSpendMin + '/month).',
+      note: 'Billed monthly in advance ({{bill_methods}}), with a ' + site.facts.retainerMinimum + '. Ad spend is separate and {{adspend_paid}} (we recommend at least ' + site.facts.adSpendMin + '/month).',
       placeholder: false
     },
     faqs: [
-      { q: 'What does the retainer cost?', a: site.facts.retainerPrice + ' per month with a ' + site.facts.retainerMinimum + ', billed monthly in advance by MoMo, bank transfer or card. Ad spend is separate and prepaid in cedis; we recommend at least ' + site.facts.adSpendMin + '/month.' },
+      { q: 'What does the retainer cost?', a: site.facts.retainerPrice + ' per month with a ' + site.facts.retainerMinimum + ', billed monthly in advance by {{bill_methods}}. Ad spend is separate and {{adspend_paid}}; we recommend at least ' + site.facts.adSpendMin + '/month.' },
       { q: 'Is ad spend included?', a: 'No. The retainer covers our management, landing page and lead system. Ad spend is paid separately and goes directly to the ad platforms.' },
       { q: 'Is there a plan for larger companies or in-house teams?', a: 'Yes — the ShowMe Enterprise retainer (' + site.facts.enterpriseRetainerPrice + '/month, ' + site.facts.retainerMinimum + ') adds a named senior strategist led by our founder, multi-outlet and multi-brand reporting, quarterly business reviews and priority response within 4 business hours. You own the ad accounts, data and creative outright on both tiers.' },
       { q: 'What is the guarantee?', a: site.facts.guarantee + ' We guarantee our speed and execution, not inflated lead promises.' },
@@ -855,7 +854,7 @@ export const services = [
     faqs: [
       { q: 'Why is the audit paid?', a: 'It is real, focused work: interviews, process mapping and a written roadmap you keep even if you build nothing with us. If you do build, the full fee is credited back.' },
       { q: 'How long does it take?', a: 'Usually 5–7 working days: a 60–90 minute discovery session, our analysis, then a walkthrough of your roadmap.' },
-      { q: 'How much does it cost?', a: 'A fixed GHS 1,500 (about USD 130). The full fee is credited toward any automation build you start with us within 60 days, so if you go ahead, the audit is effectively free.' },
+      { q: 'How much does it cost?', a: 'A fixed {{audit}}. The full fee is credited toward any automation build you start with us within 60 days, so if you go ahead, the audit is effectively free.' },
       { q: 'What do I get at the end?', a: 'A prioritised roadmap of what to automate first, with time and cost estimates and a clear starting point.' }
     ],
     related: ['business-process-automation', 'whatsapp-ai-assistant', 'ai-knowledge-base']
@@ -1117,11 +1116,11 @@ export const faqGroups = [
     { q: 'Do we need to meet in person?', a: 'No. Everything is delivered remotely over WhatsApp, video calls and shared workspaces, for businesses anywhere in Ghana and for diaspora and international clients in the US, UK and Canada, who can be quoted in USD. When you would like to meet, or a project needs on-site work such as a photo or video shoot, our team in Accra can meet you in person; travel outside Greater Accra is quoted separately.' }
   ]},
   { title: 'Pricing & payment', items: [
-    { q: 'How much is the ShowMe Growth retainer?', a: site.facts.retainerPrice + ' per month with a ' + site.facts.retainerMinimum + ', billed monthly in advance by MoMo, bank transfer or card. Ad spend is separate and prepaid in cedis; we recommend at least ' + site.facts.adSpendMin + '/month.' },
+    { q: 'How much is the ShowMe Growth retainer?', a: site.facts.retainerPrice + ' per month with a ' + site.facts.retainerMinimum + ', billed monthly in advance by {{bill_methods}}. Ad spend is separate and {{adspend_paid}}; we recommend at least ' + site.facts.adSpendMin + '/month.' },
     { q: 'How is everything else priced?', a: 'Every service has a published "from" price on our pricing page, so you know the starting point before we talk. Your fixed quote follows a short discovery call, based on exactly what you need.' },
-    { q: 'What payment methods do you accept?', a: 'Mobile Money (MTN MoMo, Telecel Cash, AT Money), bank transfer and debit or credit card via a secure payment link. Diaspora clients can pay USD quotes by card or international bank transfer.' },
+    { q: 'What payment methods do you accept?', a: '{{faq_pay}}' },
     { q: 'What are your payment terms?', a: 'Projects are 50% deposit to start and 50% on launch, and you approve a working preview before that final payment is due. Retainers and monthly plans are billed monthly in advance.' },
-    { q: 'Do you quote in US dollars?', a: 'Yes. Clients in the US, UK and Canada can receive a USD quote. Indicative USD prices are shown on our pricing page, and the exact figure is fixed in your proposal.' }
+    { q: 'Do you quote in US dollars?', a: '{{faq_usd}}' }
   ]},
   { title: 'Timelines', items: [
     { q: 'How fast can you launch?', a: 'For the Growth retainer, your landing page, lead system and reporting go live within 7 days of onboarding — or month 1 is free. A business website typically takes 3–5 weeks, an online store 5–8 weeks and a custom web app first version 6–10 weeks.' },

@@ -11,6 +11,7 @@ import { fileURLToPath } from 'node:url';
 import { site, services, industries, insights } from './data.mjs';
 import { serviceDetail, industryDetail } from './templates.mjs';
 import * as pages from './pages.mjs';
+import { regionize } from './region.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -24,7 +25,8 @@ function reg(routePath, html, priority = 0.7, changefreq = 'monthly') {
   const file = routePath === '/'
     ? 'index.html'
     : routePath.replace(/^\//, '').replace(/\/$/, '') + '/index.html';
-  routes.push({ path: routePath, file, html, priority, changefreq });
+  // Resolve {{price}} tokens: US by default, Ghana alternates in data-gh.
+  routes.push({ path: routePath, file, html: regionize(html), priority, changefreq });
 }
 
 // ---- Register every page ----------------------------------------------------
@@ -107,7 +109,7 @@ async function build() {
   for (const r of routes) await writeFile(r.file, r.html);
 
   // 404 (served at /404.html by the worker)
-  await writeFile('404.html', pages.notFound());
+  await writeFile('404.html', regionize(pages.notFound()));
 
   // sitemap + robots
   await computeLastmod();

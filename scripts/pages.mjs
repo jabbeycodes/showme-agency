@@ -42,9 +42,9 @@ function leadForm({ full = false, audit = false, id = 'leadForm', submitLabel = 
           <select id="${id}Budget" name="budget">
             <option value="">Prefer not to say</option>
             <option>Just exploring</option>
-            <option>Up to GHS 5,000</option>
-            <option>GHS 5,000–15,000</option>
-            <option>GHS 15,000+</option>
+            <option>{{budget1}}</option>
+            <option>{{budget2}}</option>
+            <option>{{budget3}}</option>
             <option>Monthly retainer</option>
           </select>
           <p class="field-error" aria-hidden="true"></p>
@@ -274,7 +274,7 @@ export function home() {
             <ul>
               <li>Managed ads and a high-converting landing page</li>
               <li>WhatsApp lead system and weekly reporting</li>
-              <li>Ad spend separate, prepaid in cedis (from ${esc(site.facts.adSpendMin)}/mo)</li>
+              <li>Ad spend separate, {{adspend_paid}} (from ${esc(site.facts.adSpendMin)}/mo)</li>
               <li>You own everything: ad accounts, data and creative</li>
               <li>${esc(site.facts.guarantee)}</li>
             </ul>
@@ -282,8 +282,8 @@ export function home() {
           </div>
           <div style="display:grid;gap:18px">
             <div class="promise-block highlight" data-reveal><span class="label">For teams &amp; multi-outlet companies</span><strong>ShowMe Enterprise: ${esc(site.facts.enterpriseRetainerPrice)}/month.</strong><p>Named senior strategist, multi-outlet reporting, quarterly business reviews. <a href="/pricing/" style="color:#fff;text-decoration:underline">See the tiers &rarr;</a></p></div>
-            <div class="promise-block" data-reveal><span class="label">Start small</span><strong>Automation Audit: GHS 1,500.</strong><p>A fixed-fee roadmap of what to automate first, from our team. The full fee is credited toward your build if you go ahead within 60 days.</p></div>
-            <div class="promise-block" data-reveal><span class="label">Published prices</span><strong>Websites from GHS 7,500. Bundles from GHS 11,500.</strong><p>Every service has a "from" price in GHS (with a USD guide). Projects are 50% to start and 50% on launch, after you approve a working preview.</p></div>
+            <div class="promise-block" data-reveal><span class="label">Start small</span><strong>Automation Audit: {{audit}}.</strong><p>A fixed-fee roadmap of what to automate first, from our team. The full fee is credited toward your build if you go ahead within 60 days.</p></div>
+            <div class="promise-block" data-reveal><span class="label">Published prices</span><strong>Websites from {{web}}. Bundles from {{b_launch}}.</strong><p>Every service has a "from" price {{prices_in_short}}. Projects are 50% to start and 50% on launch, after you approve a working preview.</p></div>
           </div>
         </div>
       </div>
@@ -418,11 +418,11 @@ export function pricing() {
   const path = '/pricing/';
   const crumbs = [{ name: 'Home', path: '/' }, { name: 'Pricing', path }];
   const pricingFaqs = faqGroups[1].items.concat([
-    { q: 'Is the Automation Audit fee credited toward a build?', a: 'Yes. The Automation Audit is a fixed GHS 1,500, and the full amount is credited toward any automation build you start with us within 60 days.' },
+    { q: 'Is the Automation Audit fee credited toward a build?', a: 'Yes. The Automation Audit is a fixed {{audit}}, and the full amount is credited toward any automation build you start with us within 60 days.' },
     { q: 'What does a "from" price mean?', a: 'It is the starting price for the scope described next to it. Your fixed quote follows a free call and depends on things like page count, number of products or workflows, and integrations. You will always see the full price before you commit.' },
     { q: 'What is not included in your prices?', a: 'Third-party costs are separate and paid at cost: ad spend, Microsoft or software licences, domain and payment-provider fees, WhatsApp and AI usage fees, printing and travel outside Greater Accra. We list any that apply in your proposal.' },
     { q: 'What if I need to pause or cancel?', a: 'Monthly plans run month to month after any minimum term; give us notice at least 14 days before your next billing date. For projects, you pay for the work completed to date. Full details are in our Terms of Service.' },
-    { q: 'Is there a plan for larger companies or in-house teams?', a: 'Yes — the ShowMe Enterprise retainer (GHS 7,500/month, 3-month minimum) adds a named senior strategist led by our founder, multi-outlet and multi-brand reporting, quarterly business reviews and priority response within 4 business hours. On both retainers you own the ad accounts, data and creative outright.' }
+    { q: 'Is there a plan for larger companies or in-house teams?', a: 'Yes — the ShowMe Enterprise retainer ({{enterprise}}/month, 3-month minimum) adds a named senior strategist led by our founder, multi-outlet and multi-brand reporting, quarterly business reviews and priority response within 4 business hours. On both retainers you own the ad accounts, data and creative outright.' }
   ]);
 
   const waAbout = (what) => wa("Hi Josh, I'm interested in the " + what + '. Could we have a quick chat about it?');
@@ -432,7 +432,7 @@ export function pricing() {
             <h3 class="bundle-name">${esc(b.name)}</h3>
             <p style="color:var(--text-muted);margin:0">${esc(b.tagline)}</p>
             <div class="amount amount-sm">${esc(b.price)}</div>
-            <p class="price-usd">${esc(b.usd)} · ${esc(b.unit)}</p>
+            <p class="price-usd">${esc(b.unit)}</p>
             ${b.monthly ? `<p class="bundle-monthly">${esc(b.monthly)}</p>` : ''}
             <ul>${b.includes.map(x => `<li>${esc(x)}</li>`).join('')}</ul>
             <p class="bundle-meta"><strong>Timeline:</strong> ${esc(b.timeline)}<br><strong>Best for:</strong> ${esc(b.forWho)}</p>
@@ -444,7 +444,7 @@ export function pricing() {
   const no = '<span class="no" aria-label="Not included">–</span>';
   const compareRows = [
     ['Business website (mobile-first, SEO-ready)', 'Up to 6 pages', 'Up to 8 pages', 'Full online store'],
-    ['MoMo, card &amp; bank checkout', no, no, yes],
+    ['{{checkout_row}}', no, no, yes],
     ['Brand identity', 'Essentials', no, 'Full identity system'],
     ['Google Business Profile optimisation', yes, yes, no],
     ['WhatsApp enquiry capture', yes, yes, yes],
@@ -452,19 +452,19 @@ export function pricing() {
     ['WhatsApp reordering', no, no, yes],
     ['Managed ads &amp; landing page (Growth retainer)', no, yes, no],
     ['Automated workflows', no, no, 'Up to 3'],
-    ['Website Care included', '3 months', 'Add from GHS 750/mo', '3 months'],
+    ['Website Care included', '3 months', 'Add from {{care}}/mo', '3 months'],
     ['Preview before final payment', yes, yes, yes],
     ['Typical timeline', '3–5 weeks', '7 days to first leads', '6–9 weeks'],
-    ['Starting price', 'GHS 11,500', 'GHS 12,500 + GHS 3,200/mo', 'GHS 24,500']
+    ['Starting price', '{{b_launch}}', '{{b_grow}} + {{retainer}}/mo', '{{b_scale}}']
   ];
 
   const priceTables = divisions.map(d => `<div class="price-division" data-reveal>
           <h3><span class="num">${d.num}</span> ShowMe ${esc(d.title)}</h3>
           <div class="table-wrap">
             <table class="compare price-list">
-              <thead><tr><th scope="col">Service</th><th scope="col">From (GHS)</th><th scope="col">USD guide</th></tr></thead>
+              <thead><tr><th scope="col">Service</th><th scope="col">From ({{cur}})</th></tr></thead>
               <tbody>
-                ${servicesByDivision(d.slug).map(s => `<tr><td><a href="/services/${s.slug}/">${esc(s.title)}</a><span class="price-note">${esc(s.pricing.note)}</span></td><td class="nowrap">${esc(s.pricing.price.replace(/^From /, ''))}</td><td class="nowrap">${esc((s.pricing.usd || '').replace(/^(From|About) /, ''))}</td></tr>`).join('')}
+                ${servicesByDivision(d.slug).map(s => `<tr><td><a href="/services/${s.slug}/">${esc(s.title)}</a><span class="price-note">${esc(s.pricing.note)}</span></td><td class="nowrap">${esc(s.pricing.price.replace(/^From /, ''))}</td></tr>`).join('')}
               </tbody>
             </table>
           </div>
@@ -487,18 +487,18 @@ export function pricing() {
       <div class="wrap">
         <p class="kicker" data-reveal>Retainers</p>
         <h2 data-reveal>Start with growth. Scale when you&rsquo;re ready.</h2>
-        <p class="section-lead" data-reveal>Two retainers, billed monthly in advance by MoMo, bank transfer or card, with a ${esc(site.facts.retainerMinimum)}. Have an in-house marketing team? We plug in as your paid-media strike team &mdash; creative testing, dollar ad accounts, and reporting your team doesn&rsquo;t have time for.</p>
+        <p class="section-lead" data-reveal>Two retainers, billed monthly in advance by {{bill_methods}}, with a ${esc(site.facts.retainerMinimum)}. Have an in-house marketing team? We plug in as your paid-media strike team &mdash; {{dollar_ads_lead}}, and reporting your team doesn&rsquo;t have time for.</p>
         <div class="grid grid-2" style="align-items:start;margin-top:36px">
           <div class="price-card featured" data-reveal>
             <span class="badge">Core offer</span>
             <div class="amount">${esc(site.facts.retainerPrice)} <small>/ month</small></div>
-            <p style="color:var(--text-muted);margin:0">ShowMe Growth retainer &middot; ${esc(site.facts.retainerMinimum)} &middot; about USD 280/month</p>
+            <p style="color:var(--text-muted);margin:0">ShowMe Growth retainer &middot; ${esc(site.facts.retainerMinimum)}</p>
             <ul>
               <li>Managed advertising and a high-converting landing page</li>
               <li>WhatsApp lead system that captures every enquiry</li>
               <li>Weekly reporting on what the spend returns</li>
-              <li>Ad spend separate, prepaid in cedis (recommended from ${esc(site.facts.adSpendMin)}/month)</li>
-              <li>We handle the dollar ad-account side &mdash; you never touch a dollar card</li>
+              <li>Ad spend separate, {{adspend_paid}} (recommended from ${esc(site.facts.adSpendMin)}/month)</li>
+              <li>{{dollar_ads}}</li>
               <li>You own everything: ad accounts, data and creative</li>
               <li>${esc(site.facts.guarantee)}</li>
             </ul>
@@ -507,7 +507,7 @@ export function pricing() {
           <div class="price-card" data-reveal>
             <span class="badge badge-quiet">For teams &amp; multi-outlet companies</span>
             <div class="amount">${esc(site.facts.enterpriseRetainerPrice)} <small>/ month</small></div>
-            <p style="color:var(--text-muted);margin:0">ShowMe Enterprise retainer &middot; ${esc(site.facts.retainerMinimum)} &middot; about USD 650/month</p>
+            <p style="color:var(--text-muted);margin:0">ShowMe Enterprise retainer &middot; ${esc(site.facts.retainerMinimum)}</p>
             <ul>
               <li>Everything in the Growth retainer</li>
               <li>Named senior strategist, led by our founder</li>
@@ -521,8 +521,8 @@ export function pricing() {
         </div>
         <div class="grid grid-2" style="margin-top:28px">
           <div style="display:grid;gap:18px">
-            <div class="promise-block highlight" data-reveal><span class="label">Start small</span><strong>Automation Audit: GHS 1,500.</strong><p>A fixed-fee roadmap of what to automate first. The full fee is credited toward your build if you go ahead within 60 days.</p></div>
-            <div class="promise-block" data-reveal><span class="label">Everything else</span><strong>A published "from" price for every service.</strong><p>Websites from GHS 7,500, stores from GHS 13,500, WhatsApp AI assistants from GHS 6,000. <a href="#price-list" style="color:var(--mint)">Full price list ↓</a></p></div>
+            <div class="promise-block highlight" data-reveal><span class="label">Start small</span><strong>Automation Audit: {{audit}}.</strong><p>A fixed-fee roadmap of what to automate first. The full fee is credited toward your build if you go ahead within 60 days.</p></div>
+            <div class="promise-block" data-reveal><span class="label">Everything else</span><strong>A published "from" price for every service.</strong><p>Websites from {{web}}, stores from {{store}}, WhatsApp AI assistants from {{wa_ai}}. <a href="#price-list" style="color:var(--mint)">Full price list ↓</a></p></div>
           </div>
         </div>
       </div>
@@ -558,7 +558,7 @@ export function pricing() {
       <div class="wrap">
         <p class="kicker" data-reveal>À la carte</p>
         <h2 data-reveal>Every service, every starting price.</h2>
-        <p class="section-lead" data-reveal>Buy any service on its own. Prices are in Ghana cedis, with an indicative US dollar guide for clients in the US, UK and Canada. ${esc(USD_NOTE)}</p>
+        <p class="section-lead" data-reveal>Buy any service on its own. {{prices_in}} ${esc(USD_NOTE)}</p>
         ${priceTables}
       </div>
     </section>
@@ -572,8 +572,8 @@ export function pricing() {
             <ul class="ticklist" style="margin-top:20px">
               <li><span><strong>Projects:</strong> ${esc(PAYMENT.projectSplit)}. The final payment is only due after you approve a working preview.</span></li>
               <li><span><strong>Retainers &amp; monthly plans:</strong> billed monthly in advance. The Growth retainer has a ${esc(site.facts.retainerMinimum)}.</span></li>
-              <li><span><strong>Ad spend:</strong> separate, prepaid in cedis and paid directly to the ad platforms (recommended from ${esc(site.facts.adSpendMin)}/month).</span></li>
-              <li><span><strong>Diaspora clients:</strong> ${esc(PAYMENT.usd)}.</span></li>
+              <li><span><strong>Ad spend:</strong> {{adspend_paid_full}} (recommended from ${esc(site.facts.adSpendMin)}/month).</span></li>
+              <li><span><strong>{{pay_note_label}}:</strong> ${esc(PAYMENT.usd)}.</span></li>
               <li><span><strong>Quotes</strong> are valid for 30 days and list any third-party costs (licences, ad spend, payment fees) separately.</span></li>
             </ul>
             <h3 style="margin-top:28px">Ways to pay</h3>
@@ -609,7 +609,7 @@ export function pricing() {
             <h2>Mid-market price, premium on what's included.</h2>
           </div>
           <div data-reveal>
-            <p class="section-lead" style="margin-top:0">Our starting prices sit in the middle of the Ghanaian market. What sets them apart is everything included as standard: WhatsApp lead capture on every build, analytics from day one, training and handover, 30 days of launch support, a preview before final payment and full ownership of what we build. You won't find those listed as extras on your invoice.</p>
+            <p class="section-lead" style="margin-top:0">{{market_position}} What sets them apart is everything included as standard: WhatsApp lead capture on every build, analytics from day one, training and handover, 30 days of launch support, a preview before final payment and full ownership of what we build. You won't find those listed as extras on your invoice.</p>
           </div>
         </div>
       </div>
@@ -627,7 +627,7 @@ export function pricing() {
 
   return page({
     title: 'Pricing & Packages | ' + site.name,
-    description: 'ShowMe Digital Agency prices in GHS (with USD guides): websites from GHS 7,500, Launch/Grow/Scale bundles, the Growth retainer at ' + site.facts.retainerPrice + '/month and clear payment terms.',
+    description: 'ShowMe Digital Agency prices in {{cur}}: websites from {{web}}, Launch/Grow/Scale bundles, the Growth retainer at ' + site.facts.retainerPrice + '/month and clear payment terms.',
     path,
     jsonLd: [orgLd(), breadcrumbLd(crumbs), faqLd(pricingFaqs)],
     main
@@ -755,7 +755,7 @@ const SOLUTIONS = [
     problem: 'Restaurants that take most orders on WhatsApp often lose time at rush hour copying orders onto paper and checking MoMo screenshots by hand.',
     build: ['Mobile-first menu site that loads fast on 3G/4G', 'Guided WhatsApp ordering: dishes, pick-up or delivery, time', 'MoMo payment link in chat, confirmed automatically', 'Clean, paid orders sent to a kitchen dashboard', 'Repeat-order shortcut for regular office customers'],
     outcomes: 'Fewer missed or mistyped orders, payments confirmed without screenshot checks, and staff freed up during the lunch rush.',
-    services: ['whatsapp-ordering-booking', 'business-websites'], from: 'From GHS 14,000 (site + ordering flow)', timeline: '4–5 weeks',
+    services: ['whatsapp-ordering-booking', 'business-websites'], from: 'From {{w_restaurant}} (site + ordering flow)', timeline: '4–5 weeks',
     image: 'solution-restaurant-ordering'
   },
   {
@@ -763,7 +763,7 @@ const SOLUTIONS = [
     problem: 'Developers and agents often get plenty of social media interest but few serious enquiries, while buyers abroad wait hours for a reply.',
     build: ['Listings with photos, floor plans and price in GHS or USD', 'Filters by location, bedrooms and budget', '"Enquire on WhatsApp" with the listing details pre-filled', 'Instant first response and lead qualification across time zones', 'Weekly report: enquiries, viewings booked, cost per lead'],
     outcomes: 'Better-qualified enquiries, faster first replies to buyers in any time zone, and a clear weekly view of where leads come from.',
-    services: ['business-websites', 'growth-retainer'], from: 'From GHS 7,500 + Growth retainer', timeline: 'Leads live in 7 days; full site 4–5 weeks',
+    services: ['business-websites', 'growth-retainer'], from: 'From {{web}} + Growth retainer', timeline: 'Leads live in 7 days; full site 4–5 weeks',
     image: 'solution-real-estate-listings'
   },
   {
@@ -771,7 +771,7 @@ const SOLUTIONS = [
     problem: 'Clinic front desks are flooded with the same questions (hours, prices, insurance, directions), and evening messages wait until morning.',
     build: ['AI assistant trained on the clinic\u2019s own FAQs and price list', 'Answers at any hour in plain, friendly language', 'Offers available appointment slots and takes the booking', 'Hands sensitive or medical questions straight to staff', 'Day-before reminders to reduce no-shows'],
     outcomes: 'Routine questions answered around the clock, bookings taken out of hours, fewer no-shows and a front desk with more time for patients.',
-    services: ['whatsapp-ai-assistant', 'booking-online-ordering'], from: 'From GHS 6,000', timeline: '2–3 weeks',
+    services: ['whatsapp-ai-assistant', 'booking-online-ordering'], from: 'From {{wa_ai}}', timeline: '2–3 weeks',
     image: 'solution-clinic-assistant'
   },
   {
@@ -779,7 +779,7 @@ const SOLUTIONS = [
     problem: 'Growing service businesses often chase late invoices by hand, and owners have no quick view of cash, sales and overdue accounts.',
     build: ['Polite WhatsApp and email reminders before and after due dates', 'MoMo and card payment links included in every reminder', 'Invoices marked paid automatically, receipts sent', 'Monday 8am summary to the owner\u2019s WhatsApp', 'Documented workflows the team can see and adjust'],
     outcomes: 'Faster payment with less awkward chasing, no manual reconciliation of paid invoices, and a weekly cash snapshot in the owner\u2019s pocket.',
-    services: ['business-process-automation', 'automation-audit'], from: 'From GHS 4,500 (Quick-Win, up to 3 workflows)', timeline: '2–3 weeks',
+    services: ['business-process-automation', 'automation-audit'], from: 'From {{bpa}} (Quick-Win, up to 3 workflows)', timeline: '2–3 weeks',
     image: 'solution-invoice-automation'
   }
 ];
@@ -1389,7 +1389,7 @@ export function terms() {
         <h2>3. Prices and quotes</h2>
         <ul>
           <li>Prices on our website are starting ("from") prices for the scope described. Your proposal gives a fixed price for your specific project.</li>
-          <li>Quotes are valid for 30 days. Prices are in Ghana cedis (GHS); clients in the US, UK and Canada may be quoted in US dollars (USD).</li>
+          <li>Quotes are valid for 30 days. Prices are shown in US dollars (USD) by default and in Ghana cedis (GHS) for clients in Ghana; your proposal states the currency you will be invoiced in.</li>
           <li>Third-party costs are not included unless stated: for example ad spend, software and Microsoft licences, domain names, payment-provider fees, WhatsApp and AI usage fees, printing, and travel outside Greater Accra. We list any that apply in your proposal.</li>
         </ul>
 
@@ -1397,7 +1397,7 @@ export function terms() {
         <ul>
           <li><span><strong>Projects:</strong> 50% deposit before work starts and 50% on launch, after you approve a working preview (see section 5).</span></li>
           <li><span><strong>Retainers and monthly plans:</strong> billed monthly in advance.</span></li>
-          <li><span><strong>Methods:</strong> Mobile Money (MTN MoMo, Telecel Cash, AT Money), bank transfer, or debit or credit card via a secure payment link. USD invoices can be paid by card or international bank transfer.</span></li>
+          <li><span><strong>Methods:</strong> {{faq_pay}}</span></li>
           <li><span><strong>Late payment:</strong> invoices are due within 7 days unless agreed otherwise. If a payment is more than 7 days late, we may pause work or monthly services until it is settled, and timelines move accordingly.</span></li>
         </ul>
 
@@ -1407,7 +1407,7 @@ export function terms() {
         <h2>6. The ShowMe Growth retainer</h2>
         <ul>
           <li>The Growth retainer costs ${esc(site.facts.retainerPrice)} per month, billed monthly in advance, with a 3-month minimum term.</li>
-          <li>Ad spend is separate, prepaid in cedis and paid to the ad platforms. We recommend at least ${esc(site.facts.adSpendMin)} per month.</li>
+          <li>Ad spend is {{adspend_paid_full}}. We recommend at least ${esc(site.facts.adSpendMin)} per month.</li>
           <li>After the minimum term, the retainer continues month to month. To cancel, give written notice (email or WhatsApp) at least 14 days before your next billing date.</li>
         </ul>
 

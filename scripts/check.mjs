@@ -105,6 +105,21 @@ async function main() {
       catch (e) { errors.push(`${rel}: invalid JSON-LD (${e.message})`); }
       if (/aggregateRating|"@type":"Review"/.test(raw)) errors.push(`${rel}: JSON-LD must not contain ratings/reviews`);
     }
+    // ---- Region pricing: tokens resolved; US view (default HTML, meta, JSON-LD)
+    // shows no cedi amounts; Ghana view (data-gh swapped in) shows no $ amounts.
+    if (html.includes('{{')) errors.push(`${rel}: unresolved {{token}} in output`);
+    if (!/<html lang="en" data-region="us"/.test(html)) errors.push(`${rel}: <html> must default to data-region="us"`);
+    if (!html.includes('data-set-region="gh"')) errors.push(`${rel}: missing region switcher`);
+    {
+      const usView = html.replace(/ data-gh="[^"]*"/g, '');
+      const m = usView.match(/.{0,40}(GHS\s?[0-9]|GH₵|₵\s?[0-9]).{0,20}/);
+      if (m) errors.push(`${rel}: US view shows a cedi amount: ${m[0]}`);
+      const ghView = html
+        .replace(/(<[a-z]+\b[^>]*?) data-us="[^"]*" data-gh="([^"]*)"([^>]*>)[^<]*/g, (x, a, gh, b) => a + b + gh)
+        .replace(/<script[\s\S]*?<\/script>|<head>[\s\S]*?<\/head>|<[^>]+>/g, ' ');
+      const g = ghView.match(/.{0,40}(\$\s?[0-9]|USD\s?[0-9]).{0,20}/);
+      if (g) errors.push(`${rel}: Ghana view shows a USD amount: ${g[0]}`);
+    }
     if (!is404 && rel !== '/index.html' && !ldTypes.includes('BreadcrumbList')) errors.push(`${rel}: missing BreadcrumbList JSON-LD`);
 
     // Internal link checks (href="/..." and src="/...")

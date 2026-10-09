@@ -675,3 +675,14 @@ table.price-list td:last-child.nowrap { color: var(--gold); font-weight: 600; }
   .founder-note { align-items: flex-start; gap: 16px; padding: 18px; }
   .how-cols { grid-template-columns: 1fr; }
 }
+
+/* ---- Region / currency switcher (United States USD default, Ghana GHS) ---- */
+.region-bar { background: var(--night-2); border-bottom: 1px solid var(--night-line); font-size: 0.82rem; }
+.region-wrap { display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding-top: 6px; padding-bottom: 6px; flex-wrap: wrap; }
+.region-label { color: var(--text-muted); }
+.region-switch { display: inline-flex; border: 1px solid var(--night-line); border-radius: 999px; overflow: hidden; }
+.region-switch button { background: transparent; color: var(--text-muted); border: 0; padding: 5px 12px; font: inherit; cursor: pointer; }
+.region-switch button[aria-pressed="true"] { background: var(--mint); color: var(--night); font-weight: 700; }
+.region-switch button:focus-visible { outline: 2px solid var(--gold); outline-offset: -2px; }
+.region-pending [data-us] { visibility: hidden; }
+.preview-banner { background: var(--gold); color: var(--night); text-align: center; font-weight: 700; padding: 8px 12px; font-size: 0.9rem; }
