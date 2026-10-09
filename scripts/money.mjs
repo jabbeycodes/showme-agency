@@ -24,7 +24,7 @@ export const MONEY = {
   // ---- Web & Commerce
   web: ['GHS 7,500', '$3,500', 'Up to 6 custom pages; typical US small-business custom sites are often quoted from roughly $2,500 to $10,000.'],
   store: ['GHS 13,500', '$6,500', 'Up to 50 products; typical US small-business e-commerce builds are often quoted from roughly $5,000 to $15,000+.'],
-  landing: ['GHS 3,000', '$1,500', 'One campaign page with copy and tracking; typical US range roughly $1,000–$3,000.'],
+  landing: ['GHS 3,000', '$589', 'DECIDED by Josh (9 Oct 2026), replacing the proposed $1,500. One campaign page with copy and tracking; sits below the typical US range of roughly $1,000–$3,000.'],
   landing_variant: ['GHS 1,200', '$500', 'Additional page variant.'],
   booking: ['GHS 9,500', '$4,500', 'Booking/ordering flow with reminders and deposits; typical US custom booking builds roughly $3,000–$8,000.'],
   care: ['GHS 750', '$150', 'Hosting, backups, updates, 1 hour of changes; typical US website care plans roughly $100–$300/month.'],
