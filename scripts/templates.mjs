@@ -2,15 +2,24 @@
 // Detail-page templates: service pages and industry pages (shared layout)
 // ============================================================================
 import { site, divisionBySlug, serviceBySlug } from './data.mjs';
+import { SHOW_PRICES } from './money.mjs';
 import { illo, illoUrl, ILLO_ALT } from './images.mjs';
 import {
   esc, page, breadcrumb, ctaBand, faqAccordion,
-  breadcrumbLd, serviceLd, faqLd, orgLd
+  breadcrumbLd, serviceLd, faqLd, orgLd, quoteCtas
 } from './render.mjs';
 
 function waLink(text) { return 'https://wa.me/' + site.whatsappNumber + '?text=' + encodeURIComponent(text); }
 
-function priceBlock(pricing) {
+function priceBlock(pricing, s) {
+  if (!SHOW_PRICES) {
+    // Prices hidden: scope + how quotes work + quote CTAs. No figures.
+    return `<div class="price-panel">
+              <p style="color:var(--text-muted);font-size:15px;margin:0;max-width:60ch">${esc(pricing.note)}</p>
+              <p style="color:var(--text-muted);font-size:14px;margin:12px 0 0">You get a fixed quote after a short call. Projects: 50% deposit, 50% on launch, after you approve a working preview. Monthly plans are billed in advance. <a href="/pricing/" style="color:var(--mint)">How pricing works &rarr;</a></p>
+              <div style="margin-top:16px">${quoteCtas(s.title)}</div>
+            </div>`;
+  }
   return `<div class="price-panel">
               <div class="price">${esc(pricing.price)}</div>
               <p style="color:var(--text-muted);font-size:15px;margin:12px 0 0;max-width:60ch">${esc(pricing.note)}</p>
@@ -75,7 +84,7 @@ export function serviceDetail(s) {
           </div>
           <div class="detail-block" data-reveal>
             <h2>How pricing works</h2>
-            ${priceBlock(s.pricing)}
+            ${priceBlock(s.pricing, s)}
           </div>
           <div class="detail-block" data-reveal>
             <h2>Frequently asked questions</h2>
@@ -85,11 +94,13 @@ export function serviceDetail(s) {
         <aside class="detail-side">
           <div class="side-card">
             <h3>Start here</h3>
-            <div class="price">${esc(s.pricing.price)}</div>
+            ${s.pricing.price ? `<div class="price">${esc(s.pricing.price)}</div>` : ''}
             <p style="color:var(--text-muted);font-size:14px;margin:0 0 16px">${s.slug === 'growth-retainer' ? esc(s.pricing.note) : 'Fixed quote after a free call — we reply ' + site.facts.responsePromise + '.'}</p>
             <div class="btn-row" style="display:grid">
-              <a class="btn" href="/free-audit/"><span>Get a free audit →</span></a>
-              <a class="btn whatsapp" href="${waLink('Hi ShowMe, I\'m interested in ' + s.title + '.')}" target="_blank" rel="noopener"><span>Ask on WhatsApp</span></a>
+${SHOW_PRICES ? `              <a class="btn" href="/free-audit/"><span>Get a free audit →</span></a>
+              <a class="btn whatsapp" href="${waLink('Hi ShowMe, I\'m interested in ' + s.title + '.')}" target="_blank" rel="noopener"><span>Ask on WhatsApp</span></a>` : `              <a class="btn" href="/contact/"><span>Request pricing →</span></a>
+              <a class="btn whatsapp" href="${waLink('Hi ShowMe, could I get a quote for ' + s.title + '?')}" target="_blank" rel="noopener"><span>Get a quote on WhatsApp</span></a>
+              <a class="btn secondary" href="/free-audit/"><span>Get a free audit →</span></a>`}
             </div>
           </div>
           ${relatedList}

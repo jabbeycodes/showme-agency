@@ -5,6 +5,7 @@
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { illo } from './images.mjs';
+import { SHOW_PRICES } from './money.mjs';
 import { site, divisions, services, servicesByDivision, industries, serviceBySlug, bookCallUrl, bookCallMailto } from './data.mjs';
 
 export function esc(s) {
@@ -171,7 +172,7 @@ export function header() {
 
   return `<a class="skip-link" href="#main">Skip to content</a>
 <div class="scroll-progress" aria-hidden="true"></div>
-${regionSwitch()}
+${SHOW_PRICES ? regionSwitch() : ''}
 <header class="topbar">
   <nav class="wrap nav" aria-label="Primary">
     <a class="brand" href="/"><span>ShowMe<span class="dot">.</span></span><small>Digital Agency</small></a>
@@ -292,7 +293,8 @@ export function faqAccordion(faqs, idPrefix) {
 
 // ---- Cards ------------------------------------------------------------------
 export function serviceCard(s) {
-  const priceLine = `<span class="price-from">${esc(s.pricing.price)}</span>`;
+  // SHOW_PRICES = false: cards carry no price line.
+  const priceLine = s.pricing.price ? `<span class="price-from">${esc(s.pricing.price)}</span>` : '';
   return `<a class="card" href="/services/${s.slug}/" data-reveal>
     <h3>${esc(s.title)}</h3>
     <p>${esc(s.summary)}</p>
@@ -323,4 +325,14 @@ ${main}
   <script src="/site.js?v=${ASSET_V.js}" defer></script>
 </body>
 </html>`;
+}
+
+// ---- Quote CTAs (used when SHOW_PRICES = false) -----------------------------
+export function quoteCtas(what = '', { stack = false } = {}) {
+  const text = 'Hi ShowMe, could I get a quote' + (what ? ' for ' + what : '') + '?';
+  const waHref = 'https://wa.me/' + site.whatsappNumber + '?text=' + encodeURIComponent(text);
+  return `<div class="btn-row"${stack ? ' style="display:grid"' : ''}>
+              <a class="btn" href="/contact/"><span>Request pricing &rarr;</span></a>
+              <a class="btn whatsapp" href="${esc(waHref)}" target="_blank" rel="noopener"><span>Get a quote on WhatsApp</span></a>
+            </div>`;
 }

@@ -6,7 +6,8 @@ import { readFileSync } from 'node:fs';
 // growth-retainer service so they stay consistent and easy to update.
 // ============================================================================
 
-import { PRICES } from './prices.mjs';
+import { PRICES, NOTES_HIDDEN } from './prices.mjs';
+import { pr, SHOW_PRICES } from './money.mjs';
 
 export const site = {
   name: 'ShowMe Digital Agency',
@@ -77,7 +78,8 @@ export const divisionBySlug = Object.fromEntries(divisions.map(d => [d.slug, d])
 function P(slug) {
   const p = PRICES[slug];
   if (!p) throw new Error('No price defined for service: ' + slug);
-  return { price: p.price, note: p.note, placeholder: false };
+  // SHOW_PRICES = false: no price; scope note without figures.
+  return { price: pr(p.price, null), note: pr(p.note, NOTES_HIDDEN[slug] || p.note), placeholder: false };
 }
 
 export const services = [
@@ -235,7 +237,7 @@ export const services = [
     slug: 'growth-retainer', division: 'growth', title: 'ShowMe Growth Retainer',
     metaTitle: 'ShowMe Growth Retainer — Managed Demand & Lead System',
     summary: 'Our core offer: managed ads, a landing page and a WhatsApp lead system with weekly reporting.',
-    metaDescription: 'The ShowMe Growth retainer: managed ads, a high-converting landing page, a WhatsApp lead system and weekly reporting for {{retainer}}/month, 3-month minimum.',
+    metaDescription: pr('The ShowMe Growth retainer: managed ads, a high-converting landing page, a WhatsApp lead system and weekly reporting for {{retainer}}/month, 3-month minimum.', 'The ShowMe Growth retainer: managed ads, a high-converting landing page, a WhatsApp lead system and weekly reporting, with a 3-month minimum. Request pricing.'),
     problem: 'Running your own ads and follow-up part-time means wasted spend and leads that go cold. You need one accountable partner running demand end to end.',
     deliverables: [
       'Managed advertising and a high-converting landing page',
@@ -254,14 +256,14 @@ export const services = [
     ],
     // Real pricing — do not change without founder input.
     pricing: {
-      price: site.facts.retainerPrice + ' / month',
-      note: 'Billed monthly in advance ({{bill_methods}}), with a ' + site.facts.retainerMinimum + '. Ad spend is separate and {{adspend_paid}} (we recommend at least ' + site.facts.adSpendMin + '/month).',
+      price: pr(site.facts.retainerPrice + ' / month', null),
+      note: pr('Billed monthly in advance ({{bill_methods}}), with a ' + site.facts.retainerMinimum + '. Ad spend is separate and {{adspend_paid}} (we recommend at least ' + site.facts.adSpendMin + '/month).', 'Billed monthly in advance ({{bill_methods}}), with a ' + site.facts.retainerMinimum + '. Ad spend is separate and {{adspend_paid}}; we recommend a starting budget in your quote.'),
       placeholder: false
     },
     faqs: [
-      { q: 'What does the retainer cost?', a: site.facts.retainerPrice + ' per month with a ' + site.facts.retainerMinimum + ', billed monthly in advance by {{bill_methods}}. Ad spend is separate and {{adspend_paid}}; we recommend at least ' + site.facts.adSpendMin + '/month.' },
+      { q: 'What does the retainer cost?', a: pr(site.facts.retainerPrice + ' per month with a ' + site.facts.retainerMinimum + ', billed monthly in advance by {{bill_methods}}. Ad spend is separate and {{adspend_paid}}; we recommend at least ' + site.facts.adSpendMin + '/month.', 'You get a fixed monthly price in your quote after a short call. The retainer has a ' + site.facts.retainerMinimum + ' and is billed monthly in advance by {{bill_methods}}. Ad spend is separate and {{adspend_paid}}.') },
       { q: 'Is ad spend included?', a: 'No. The retainer covers our management, landing page and lead system. Ad spend is paid separately and goes directly to the ad platforms.' },
-      { q: 'Is there a plan for larger companies or in-house teams?', a: 'Yes — the ShowMe Enterprise retainer (' + site.facts.enterpriseRetainerPrice + '/month, ' + site.facts.retainerMinimum + ') adds a named senior strategist led by our founder, multi-outlet and multi-brand reporting, quarterly business reviews and priority response within 4 business hours. You own the ad accounts, data and creative outright on both tiers.' },
+      { q: 'Is there a plan for larger companies or in-house teams?', a: 'Yes — the ShowMe Enterprise retainer (' + pr(site.facts.enterpriseRetainerPrice + '/month, ', '') + site.facts.retainerMinimum + ') adds a named senior strategist led by our founder, multi-outlet and multi-brand reporting, quarterly business reviews and priority response within 4 business hours. You own the ad accounts, data and creative outright on both tiers.' },
       { q: 'What is the guarantee?', a: site.facts.guarantee + ' We guarantee our speed and execution, not inflated lead promises.' },
       { q: 'How quickly will we see work happening?', a: 'Fast. Our team follows a proven onboarding process: once we have your first payment and access, your landing page, lead system and reporting go live within 7 days, or month 1 is free.' }
     ],
@@ -381,7 +383,7 @@ export const services = [
     pricing: P('paid-ads'),
     faqs: [
       { q: 'Is ad spend included in your fee?', a: 'No. Our fee covers management and reporting. Ad spend is separate and goes directly to Google or Meta.' },
-      { q: 'What budget do I need?', a: 'It depends on your market and goal. For the Growth retainer we recommend at least ' + site.facts.adSpendMin + '/month in ad spend; we will advise on the right level for you.' },
+      { q: 'What budget do I need?', a: 'It depends on your market and goal. ' + pr('For the Growth retainer we recommend at least ' + site.facts.adSpendMin + '/month in ad spend; we', 'We') + ' will advise on the right level for you.' },
       { q: 'Google or Meta?', a: 'Whichever reaches your buyers best — often both. We recommend the mix during planning.' }
     ],
     related: ['landing-pages-funnels', 'growth-retainer', 'social-media']
@@ -854,7 +856,7 @@ export const services = [
     faqs: [
       { q: 'Why is the audit paid?', a: 'It is real, focused work: interviews, process mapping and a written roadmap you keep even if you build nothing with us. If you do build, the full fee is credited back.' },
       { q: 'How long does it take?', a: 'Usually 5–7 working days: a 60–90 minute discovery session, our analysis, then a walkthrough of your roadmap.' },
-      { q: 'How much does it cost?', a: 'A fixed {{audit}}. The full fee is credited toward any automation build you start with us within 60 days, so if you go ahead, the audit is effectively free.' },
+      { q: 'How much does it cost?', a: pr('A fixed {{audit}}.', 'A fixed fee, confirmed in writing before we start.') + ' The full fee is credited toward any automation build you start with us within 60 days, so if you go ahead, the audit is effectively free.' },
       { q: 'What do I get at the end?', a: 'A prioritised roadmap of what to automate first, with time and cost estimates and a clear starting point.' }
     ],
     related: ['business-process-automation', 'whatsapp-ai-assistant', 'ai-knowledge-base']
@@ -1116,8 +1118,8 @@ export const faqGroups = [
     { q: 'Do we need to meet in person?', a: 'No. Everything is delivered remotely over WhatsApp, video calls and shared workspaces, for businesses anywhere in Ghana and for diaspora and international clients in the US, UK and Canada, who can be quoted in USD. When you would like to meet, or a project needs on-site work such as a photo or video shoot, our team in Accra can meet you in person; travel outside Greater Accra is quoted separately.' }
   ]},
   { title: 'Pricing & payment', items: [
-    { q: 'How much is the ShowMe Growth retainer?', a: site.facts.retainerPrice + ' per month with a ' + site.facts.retainerMinimum + ', billed monthly in advance by {{bill_methods}}. Ad spend is separate and {{adspend_paid}}; we recommend at least ' + site.facts.adSpendMin + '/month.' },
-    { q: 'How is everything else priced?', a: 'Every service has a published "from" price on our pricing page, so you know the starting point before we talk. Your fixed quote follows a short discovery call, based on exactly what you need.' },
+    { q: 'How much is the ShowMe Growth retainer?', a: pr(site.facts.retainerPrice + ' per month with a ' + site.facts.retainerMinimum + ', billed monthly in advance by {{bill_methods}}. Ad spend is separate and {{adspend_paid}}; we recommend at least ' + site.facts.adSpendMin + '/month.', 'You get a fixed monthly price in your quote after a short call. The retainer has a ' + site.facts.retainerMinimum + ' and is billed monthly in advance by {{bill_methods}}. Ad spend is separate and {{adspend_paid}}.') },
+    { q: 'How is everything else priced?', a: pr('Every service has a published "from" price on our pricing page, so you know the starting point before we talk. Your fixed quote follows a short discovery call, based on exactly what you need.', 'Every service has a clear, written scope. Your fixed quote follows a short discovery call, based on exactly what you need, and you see the full price before you commit.') },
     { q: 'What payment methods do you accept?', a: '{{faq_pay}}' },
     { q: 'What are your payment terms?', a: 'Projects are 50% deposit to start and 50% on launch, and you approve a working preview before that final payment is due. Retainers and monthly plans are billed monthly in advance.' },
     { q: 'Do you quote in US dollars?', a: '{{faq_usd}}' }

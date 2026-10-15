@@ -15,6 +15,20 @@
 
 export const US_PRICES_STATUS = 'proposed';
 
+// ---- THE PRICE SWITCH -------------------------------------------------------
+// SHOW_PRICES = true  -> today's preview: USD/GHS prices, region switcher.
+// SHOW_PRICES = false -> every visible price (and price mention in meta /
+//   JSON-LD) is replaced with "Request pricing" / "Get a quote" CTAs; the
+//   region switcher is hidden and regional wording uses NEUTRAL (below).
+// All price data in this file stays intact either way. Rebuild after flipping.
+// An environment override is also honoured for one-off builds:
+//   SHOW_PRICES=true npm run build   /   SHOW_PRICES=false npm run build
+const SHOW_PRICES_DEFAULT = false; // <- flip to true to show prices again
+export const SHOW_PRICES = process.env.SHOW_PRICES ? process.env.SHOW_PRICES === 'true' : SHOW_PRICES_DEFAULT;
+
+/** Pick the priced or the price-free version of a string/markup. */
+export const pr = (priced, hidden) => (SHOW_PRICES ? priced : hidden);
+
 // key: [ghana, united states, basis note for the US figure]
 export const MONEY = {
   // ---- Retainers & core facts
@@ -109,6 +123,31 @@ export const WORDS = {
   faq_usd: ['Yes. Clients in the US, UK and Canada are quoted in US dollars: switch the price display to United States (USD) to see our US prices. The exact figure is fixed in your proposal.', 'Yes. Prices shown for the United States are in US dollars, and the exact figure is fixed in your proposal. Businesses in Ghana can switch to Ghana (GHS) prices.'],
   faq_pay: ['Mobile Money (MTN MoMo, Telecel Cash, AT Money), bank transfer and debit or credit card via a secure payment link. Clients outside Ghana pay USD invoices by card or international bank transfer.', 'Debit or credit card via a secure payment link, or bank transfer in US dollars. Clients in Ghana can also pay by Mobile Money in cedis.']
 };
+
+// Region-neutral wording used when SHOW_PRICES = false (no switcher, so one
+// text must hold for every visitor). Only wording that can still appear
+// without prices needs an entry; price tokens are an error in that mode.
+export const NEUTRAL = {
+  bill_methods: 'card, bank transfer or Mobile Money (Ghana)',
+  adspend_paid: 'paid directly to the ad platforms',
+  adspend_paid_full: 'separate and paid directly to the ad platforms',
+  checkout_row: 'Card, bank and Mobile Money checkout',
+  checkout_methods: 'card, bank and Mobile Money checkout',
+  deposit_methods: 'card or Mobile Money',
+  momo_links: 'card or Mobile Money payment links',
+  photo_where: 'A half-day shoot in Accra, Ghana',
+  dollar_ads: 'We set up and run the ad accounts in your name &mdash; you keep full ownership',
+  dollar_ads_lead: 'creative testing, ad-account management',
+  pay1: 'Debit or credit card via a secure payment link',
+  pay2: 'Bank transfer (USD or GHS)',
+  pay3: 'Mobile Money in Ghana (MTN MoMo, Telecel Cash, AT Money)',
+  faq_usd: 'Yes. Clients in the US and elsewhere are quoted in US dollars (USD), and clients in Ghana in Ghana cedis (GHS). The exact figure is fixed in your proposal.',
+  faq_pay: 'Debit or credit card via a secure payment link, or bank transfer. Clients in Ghana can also pay by Mobile Money (MTN MoMo, Telecel Cash, AT Money).'
+};
+for (const [k, v] of Object.entries(NEUTRAL)) {
+  if (!WORDS[k]) throw new Error('money.mjs: NEUTRAL has unknown key ' + k);
+  if (/["<>]|&(?!mdash;)/.test(v)) throw new Error('money.mjs: unsafe character in NEUTRAL.' + k);
+}
 
 export const ALL = { ...Object.fromEntries(Object.entries(MONEY).map(([k, v]) => [k, v])), ...Object.fromEntries(Object.entries(WORDS).map(([k, v]) => [k, v])) };
 

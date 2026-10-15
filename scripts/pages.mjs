@@ -7,9 +7,10 @@ import {
   industries, faqGroups, insights, bookCallUrl, bookCallMailto
 } from './data.mjs';
 import { BUNDLES, PAYMENT, USD_NOTE } from './prices.mjs';
+import { SHOW_PRICES, pr } from './money.mjs';
 import {
   esc, url, page, breadcrumb, ctaBand, faqAccordion, serviceCard, industryCard,
-  orgLd, breadcrumbLd, faqLd, founderPhoto, AREA_SERVED
+  orgLd, breadcrumbLd, faqLd, founderPhoto, AREA_SERVED, quoteCtas
 } from './render.mjs';
 import { illo, illoUrl, ILLO_ALT, ARTICLE_IMAGE } from './images.mjs';
 
@@ -38,13 +39,13 @@ function leadForm({ full = false, audit = false, id = 'leadForm', submitLabel = 
           <p class="field-error" aria-hidden="true"></p>
         </div>
         <div class="field">
-          <label for="${id}Budget">Budget band (optional)</label>
+          <label for="${id}Budget">${pr('Budget band (optional)', 'What are you looking for? (optional)')}</label>
           <select id="${id}Budget" name="budget">
             <option value="">Prefer not to say</option>
             <option>Just exploring</option>
-            <option>{{budget1}}</option>
+            ${pr(`<option>{{budget1}}</option>
             <option>{{budget2}}</option>
-            <option>{{budget3}}</option>
+            <option>{{budget3}}</option>`, `<option>A one-off project</option>`)}
             <option>Monthly retainer</option>
           </select>
           <p class="field-error" aria-hidden="true"></p>
@@ -267,7 +268,7 @@ export function home() {
         <p class="kicker" data-reveal>A practical place to start</p>
         <h2 data-reveal>Start with growth. Scale when you&rsquo;re ready.</h2>
         <div class="grid grid-2" style="margin-top:40px;align-items:start">
-          <div class="price-card featured" data-reveal>
+${SHOW_PRICES ? `          <div class="price-card featured" data-reveal>
             <span class="badge">Core offer</span>
             <div class="amount">${esc(site.facts.retainerPrice)} <small>/ month</small></div>
             <p style="color:var(--text-muted);margin:0">ShowMe Growth retainer &middot; ${esc(site.facts.retainerMinimum)}</p>
@@ -284,7 +285,25 @@ export function home() {
             <div class="promise-block highlight" data-reveal><span class="label">For teams &amp; multi-outlet companies</span><strong>ShowMe Enterprise: ${esc(site.facts.enterpriseRetainerPrice)}/month.</strong><p>Named senior strategist, multi-outlet reporting, quarterly business reviews. <a href="/pricing/" style="color:#fff;text-decoration:underline">See the tiers &rarr;</a></p></div>
             <div class="promise-block" data-reveal><span class="label">Start small</span><strong>Automation Audit: {{audit}}.</strong><p>A fixed-fee roadmap of what to automate first, from our team. The full fee is credited toward your build if you go ahead within 60 days.</p></div>
             <div class="promise-block" data-reveal><span class="label">Published prices</span><strong>Websites from {{web}}. Bundles from {{b_launch}}.</strong><p>Every service has a "from" price {{prices_in_short}}. Projects are 50% to start and 50% on launch, after you approve a working preview.</p></div>
+` : `          <div class="price-card featured" data-reveal>
+            <span class="badge">Core offer</span>
+            <div class="amount amount-sm">ShowMe Growth retainer</div>
+            <p style="color:var(--text-muted);margin:0">Monthly &middot; ${esc(site.facts.retainerMinimum)} &middot; priced in your quote</p>
+            <ul>
+              <li>Managed ads and a high-converting landing page</li>
+              <li>WhatsApp lead system and weekly reporting</li>
+              <li>Ad spend separate, {{adspend_paid}}</li>
+              <li>You own everything: ad accounts, data and creative</li>
+              <li>${esc(site.facts.guarantee)}</li>
+            </ul>
+            <div style="margin-top:24px">${quoteCtas('the Growth retainer')}</div>
+            <p style="margin:14px 0 0"><a href="/pricing/" style="color:var(--mint)">How pricing works &amp; packages &rarr;</a></p>
           </div>
+          <div style="display:grid;gap:18px">
+            <div class="promise-block highlight" data-reveal><span class="label">For teams &amp; multi-outlet companies</span><strong>ShowMe Enterprise retainer.</strong><p>Named senior strategist, multi-outlet reporting, quarterly business reviews. <a href="/pricing/" style="color:#fff;text-decoration:underline">See the tiers &rarr;</a></p></div>
+            <div class="promise-block" data-reveal><span class="label">Start small</span><strong>Automation Audit: a fixed fee.</strong><p>A fixed-fee roadmap of what to automate first, from our team. The full fee is credited toward your build if you go ahead within 60 days.</p></div>
+            <div class="promise-block" data-reveal><span class="label">Clear quotes</span><strong>A fixed quote for every project.</strong><p>Tell us what you need and we send a fixed price after a short call. Projects are 50% to start and 50% on launch, after you approve a working preview. <a href="/contact/" style="color:var(--mint)">Request pricing &rarr;</a></p></div>
+`}          </div>
         </div>
       </div>
     </section>
@@ -413,8 +432,235 @@ export function industriesHub() {
   });
 }
 
+// ---- Pricing page with prices hidden (SHOW_PRICES = false) -------------------
+// Same URL (/pricing/): "how pricing works" + packages, no figures, quote CTAs.
+function pricingHidden() {
+  const path = '/pricing/';
+  const crumbs = [{ name: 'Home', path: '/' }, { name: 'Pricing', path }];
+  const pricingFaqs = faqGroups[1].items.concat([
+    { q: 'Is the Automation Audit fee credited toward a build?', a: 'Yes. The Automation Audit is a fixed fee, and the full amount is credited toward any automation build you start with us within 60 days.' },
+    { q: 'What is not included in a quote?', a: 'Third-party costs are separate and paid at cost: ad spend, Microsoft or software licences, domain and payment-provider fees, WhatsApp and AI usage fees, printing and travel outside Greater Accra. We list any that apply in your proposal.' },
+    { q: 'What if I need to pause or cancel?', a: 'Monthly plans run month to month after any minimum term; give us notice at least 14 days before your next billing date. For projects, you pay for the work completed to date. Full details are in our Terms of Service.' },
+    { q: 'Is there a plan for larger companies or in-house teams?', a: 'Yes — the ShowMe Enterprise retainer (3-month minimum) adds a named senior strategist led by our founder, multi-outlet and multi-brand reporting, quarterly business reviews and priority response within 4 business hours. On both retainers you own the ad accounts, data and creative outright.' }
+  ]);
+
+  const waAbout = (what) => wa("Hi Josh, I'm interested in the " + what + '. Could I get a quote?');
+
+  const bundleCards = BUNDLES.map(b => `<div class="price-card${b.featured ? ' featured' : ''}" data-reveal>
+            ${b.featured ? '<span class="badge">Most popular</span>' : '<span class="badge badge-quiet">Bundle</span>'}
+            <h3 class="bundle-name">${esc(b.name)}</h3>
+            <p style="color:var(--text-muted);margin:0">${esc(b.tagline)}</p>
+            <p class="price-usd">${esc(b.unit)}</p>
+            ${b.monthly ? `<p class="bundle-monthly">${esc(b.monthly)}</p>` : ''}
+            <ul>${b.includes.map(x => `<li>${esc(x)}</li>`).join('')}</ul>
+            <p class="bundle-meta"><strong>Timeline:</strong> ${esc(b.timeline)}<br><strong>Best for:</strong> ${esc(b.forWho)}</p>
+            <div style="margin-top:20px"><a class="btn${b.featured ? '' : ' secondary'}" href="${esc(waAbout(b.name + ' bundle'))}" target="_blank" rel="noopener"><span>Get a ${esc(b.name)} quote →</span></a></div>
+          </div>`).join('');
+
+  const yes = '<span class="yes" aria-label="Included">✓</span>';
+  const no = '<span class="no" aria-label="Not included">–</span>';
+  const compareRows = [
+    ['Business website (mobile-first, SEO-ready)', 'Up to 6 pages', 'Up to 8 pages', 'Full online store'],
+    ['{{checkout_row}}', no, no, yes],
+    ['Brand identity', 'Essentials', no, 'Full identity system'],
+    ['Google Business Profile optimisation', yes, yes, no],
+    ['WhatsApp enquiry capture', yes, yes, yes],
+    ['WhatsApp AI assistant', no, yes, no],
+    ['WhatsApp reordering', no, no, yes],
+    ['Managed ads &amp; landing page (Growth retainer)', no, yes, no],
+    ['Automated workflows', no, no, 'Up to 3'],
+    ['Website Care included', '3 months', 'Optional add-on', '3 months'],
+    ['Preview before final payment', yes, yes, yes],
+    ['Typical timeline', '3–5 weeks', '7 days to first leads', '6–9 weeks']
+  ];
+
+  const serviceTables = divisions.map(d => `<div class="price-division" data-reveal>
+          <h3><span class="num">${d.num}</span> ShowMe ${esc(d.title)}</h3>
+          <div class="table-wrap">
+            <table class="compare price-list">
+              <thead><tr><th scope="col">Service</th><th scope="col">What&rsquo;s included</th></tr></thead>
+              <tbody>
+                ${servicesByDivision(d.slug).map(s => `<tr><td><a href="/services/${s.slug}/">${esc(s.title)}</a></td><td><span class="price-note" style="margin:0">${esc(s.pricing.note)}</span></td></tr>`).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>`).join('');
+
+  const main = `    <section class="page-hero">
+      <div class="wrap">
+        ${breadcrumb(crumbs)}
+        <p class="kicker">Pricing</p>
+        <h1>How pricing works. Fixed quotes, no surprises.</h1>
+        <p class="lead">Tell us what you need and, after a short free call, you get a fixed quote in writing. On projects you approve a working preview before the final payment.</p>
+        ${quoteCtas()}
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <p class="kicker" data-reveal>How it works</p>
+        <h2 data-reveal>Three steps to a fixed price.</h2>
+        <ol class="numsteps" style="margin-top:28px;max-width:760px">
+          <li data-reveal><strong>Tell us what you need</strong>Use the contact form or WhatsApp. A few lines is enough.</li>
+          <li data-reveal><strong>A short call</strong>We agree the scope, timeline and anything you already have in place.</li>
+          <li data-reveal><strong>Your fixed quote</strong>A written price for that scope, valid for 30 days, with any third-party costs listed separately.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section-alt">
+      <div class="wrap">
+        <p class="kicker" data-reveal>Retainers</p>
+        <h2 data-reveal>Start with growth. Scale when you&rsquo;re ready.</h2>
+        <p class="section-lead" data-reveal>Two retainers, billed monthly in advance by {{bill_methods}}, with a ${esc(site.facts.retainerMinimum)}. Have an in-house marketing team? We plug in as your paid-media strike team &mdash; {{dollar_ads_lead}}, and reporting your team doesn&rsquo;t have time for.</p>
+        <div class="grid grid-2" style="align-items:start;margin-top:36px">
+          <div class="price-card featured" data-reveal>
+            <span class="badge">Core offer</span>
+            <div class="amount amount-sm">ShowMe Growth retainer</div>
+            <p style="color:var(--text-muted);margin:0">Monthly &middot; ${esc(site.facts.retainerMinimum)}</p>
+            <ul>
+              <li>Managed advertising and a high-converting landing page</li>
+              <li>WhatsApp lead system that captures every enquiry</li>
+              <li>Weekly reporting on what the spend returns</li>
+              <li>Ad spend separate, {{adspend_paid}}</li>
+              <li>{{dollar_ads}}</li>
+              <li>You own everything: ad accounts, data and creative</li>
+              <li>${esc(site.facts.guarantee)}</li>
+            </ul>
+            <div style="margin-top:24px">${quoteCtas('the Growth retainer')}</div>
+          </div>
+          <div class="price-card" data-reveal>
+            <span class="badge badge-quiet">For teams &amp; multi-outlet companies</span>
+            <div class="amount amount-sm">ShowMe Enterprise retainer</div>
+            <p style="color:var(--text-muted);margin:0">Monthly &middot; ${esc(site.facts.retainerMinimum)}</p>
+            <ul>
+              <li>Everything in the Growth retainer</li>
+              <li>Named senior strategist, led by our founder</li>
+              <li>Multi-outlet and multi-brand reporting</li>
+              <li>Quarterly business reviews with your team</li>
+              <li>Priority response &mdash; within 4 business hours</li>
+              <li>You own everything: ad accounts, data and creative</li>
+            </ul>
+            <div style="margin-top:24px"><a class="btn secondary" href="${esc(waAbout('Enterprise retainer'))}" target="_blank" rel="noopener"><span>Get an Enterprise quote &rarr;</span></a></div>
+          </div>
+        </div>
+        <div class="grid grid-2" style="margin-top:28px">
+          <div class="promise-block highlight" data-reveal><span class="label">Start small</span><strong>Automation Audit: a fixed fee.</strong><p>A fixed-fee roadmap of what to automate first. The full fee is credited toward your build if you go ahead within 60 days.</p></div>
+          <div class="promise-block" data-reveal><span class="label">Everything else</span><strong>Every service has a clear, written scope.</strong><p>See what each one includes below, then ask for a quote. <a href="#price-list" style="color:var(--mint)">All services ↓</a></p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="bundles">
+      <div class="wrap">
+        <p class="kicker" data-reveal>Bundles</p>
+        <h2 data-reveal>Launch, Grow or Scale.</h2>
+        <p class="section-lead" data-reveal>Three proven combinations. Every bundle includes a preview before final payment and 30 days of launch support.</p>
+        <div class="grid grid-3 bundle-grid" style="margin-top:36px">
+          ${bundleCards}
+        </div>
+      </div>
+    </section>
+
+    <section class="section-alt">
+      <div class="wrap">
+        <p class="kicker" data-reveal>Compare bundles</p>
+        <h2 data-reveal>What's in each bundle.</h2>
+        <div class="table-wrap" data-reveal>
+          <table class="compare bundle-compare">
+            <thead><tr><th scope="col">Included</th><th scope="col">Launch</th><th scope="col">Grow</th><th scope="col">Scale</th></tr></thead>
+            <tbody>
+              ${compareRows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="price-list">
+      <div class="wrap">
+        <p class="kicker" data-reveal>À la carte</p>
+        <h2 data-reveal>Every service, and what it includes.</h2>
+        <p class="section-lead" data-reveal>Buy any service on its own. Your quote fixes the exact price for your scope.</p>
+        ${serviceTables}
+        <div style="margin-top:28px" data-reveal>${quoteCtas()}</div>
+      </div>
+    </section>
+
+    <section class="section-alt">
+      <div class="wrap">
+        <div class="grid grid-2" style="align-items:start">
+          <div data-reveal>
+            <p class="kicker">Payment terms &amp; methods</p>
+            <h2>Simple, upfront terms.</h2>
+            <ul class="ticklist" style="margin-top:20px">
+              <li><span><strong>Projects:</strong> ${esc(PAYMENT.projectSplit)}. The final payment is only due after you approve a working preview.</span></li>
+              <li><span><strong>Retainers &amp; monthly plans:</strong> billed monthly in advance. The Growth retainer has a ${esc(site.facts.retainerMinimum)}.</span></li>
+              <li><span><strong>Ad spend:</strong> {{adspend_paid_full}}; we recommend a starting budget in your quote.</span></li>
+              <li><span><strong>Currency:</strong> quotes are in US dollars (USD) or, for clients in Ghana, Ghana cedis (GHS).</span></li>
+              <li><span><strong>Quotes</strong> are valid for 30 days and list any third-party costs (licences, ad spend, payment fees) separately.</span></li>
+            </ul>
+            <h3 style="margin-top:28px">Ways to pay</h3>
+            <ul class="method-list">
+              ${PAYMENT.methods.map(m => `<li>${esc(m)}</li>`).join('')}
+            </ul>
+          </div>
+          <div data-reveal>
+            <p class="kicker">Risk reversal</p>
+            <h2>Why it's safe to start.</h2>
+            <div class="promise-formal">
+              <span class="label">Our formal promise</span>
+              <strong>Preview before final payment.</strong>
+              <p>On every project, you see and approve a working preview before the final 50% is due. If it does not match the scope we agreed in writing, we fix it first, at no extra cost.</p>
+            </div>
+            <ul class="ticklist" style="margin-top:20px">
+              <li><span><strong>The 7-day guarantee.</strong> ${esc(site.facts.guarantee)}</span></li>
+              <li><span><strong>Fixed scope, fixed price.</strong> We agree exactly what's included before we start.</span></li>
+              <li><span><strong>You own your assets.</strong> Domain, content, brand files and, for software, your code.</span></li>
+              <li><span><strong>30 days of launch support</strong> on every project.</span></li>
+              <li><span><strong>No lock-in</strong> beyond any minimum term you agreed to.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <div class="grid grid-2" style="align-items:start">
+          <div data-reveal>
+            <p class="kicker">Included as standard</p>
+            <h2>What every quote already includes.</h2>
+          </div>
+          <div data-reveal>
+            <p class="section-lead" style="margin-top:0">WhatsApp lead capture on every build, analytics from day one, training and handover, 30 days of launch support, a preview before final payment and full ownership of what we build. You won't find those listed as extras on your invoice.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-alt">
+      <div class="wrap">
+        <p class="kicker" data-reveal>Pricing FAQ</p>
+        <h2 data-reveal>Money questions, answered.</h2>
+        <div style="margin-top:32px">${faqAccordion(pricingFaqs, 'pricing-faq')}</div>
+      </div>
+    </section>
+
+    ${ctaBand({ heading: 'Ready for a quote?', text: 'Send a few lines through the contact page or WhatsApp and we\u2019ll come back with the smallest, highest-impact place to begin, and a fixed price for it.' })}`;
+
+  return page({
+    title: 'Pricing & Packages | ' + site.name,
+    description: 'How ShowMe Digital Agency pricing works: a fixed quote after a free call, Launch/Grow/Scale bundles, Growth and Enterprise retainers, and clear payment terms.',
+    path,
+    jsonLd: [orgLd(), breadcrumbLd(crumbs), faqLd(pricingFaqs)],
+    main
+  });
+}
+
 // ---- Pricing ----------------------------------------------------------------
 export function pricing() {
+  if (!SHOW_PRICES) return pricingHidden();
   const path = '/pricing/';
   const crumbs = [{ name: 'Home', path: '/' }, { name: 'Pricing', path }];
   const pricingFaqs = faqGroups[1].items.concat([
@@ -798,7 +1044,7 @@ export function work() {
             <p class="sample-sub">Key features</p>
             <ul class="ticklist">${p.build.map(b => `<li>${esc(b)}</li>`).join('')}</ul>
             <p class="sample-scenario sample-outcome"><strong>Designed to deliver:</strong> ${esc(p.outcomes)}</p>
-            <p class="sample-meta"><span><strong>Typical price:</strong> ${esc(p.from)}</span><span><strong>Timeline:</strong> ${esc(p.timeline)}</span></p>
+            <p class="sample-meta">${SHOW_PRICES ? `<span><strong>Typical price:</strong> ${esc(p.from)}</span>` : `<span><strong>Price:</strong> <a href="/contact/">request a quote</a></span>`}<span><strong>Timeline:</strong> ${esc(p.timeline)}</span></p>
             <p class="sample-links">${p.services.map(slug => serviceBySlug[slug]).filter(Boolean).map(s => `<a href="/services/${s.slug}/">${esc(s.title)} →</a>`).join('')}</p>
           </div>
         </article>`).join('');
@@ -820,7 +1066,7 @@ export function work() {
       <div class="wrap">
         <p class="kicker" data-reveal>Solutions we deliver</p>
         <h2 data-reveal>What we build for businesses like yours.</h2>
-        <p class="section-lead" data-reveal>Four systems we build and tailor to each business: the problem each one solves, its key features, the outcomes it is designed to deliver, and a typical price and timeline.</p>
+        <p class="section-lead" data-reveal>Four systems we build and tailor to each business: the problem each one solves, its key features, the outcomes it is designed to deliver, and ${pr('a typical price and timeline', 'a typical timeline')}.</p>
         <div class="sample-list">
           ${projects}
         </div>
@@ -877,7 +1123,7 @@ export function work() {
         <p class="kicker" data-reveal>See our standards for yourself</p>
         <h2 data-reveal>The same care goes into everything we build.</h2>
         <div class="grid grid-4" style="margin-top:36px">
-          <div class="card" data-reveal><h3>This website</h3><p>Fast, mobile-first and accessible, with published prices and every enquiry answered quickly.</p></div>
+          <div class="card" data-reveal><h3>This website</h3><p>Fast, mobile-first and accessible, with ${pr('published prices', 'clear service scopes')} and every enquiry answered quickly.</p></div>
           <div class="card" data-reveal><h3>Our own lead system</h3><p>Our forms capture every enquiry and fall back to WhatsApp, the same pattern we build for clients.</p></div>
           <div class="card" data-reveal><h3>Our guides</h3><p>Read our <a href="/insights/" style="color:var(--mint)">Insights</a> to see how we think about search, payments and automation.</p></div>
           <div class="card" data-reveal><h3>A free audit</h3><p>Get a scored review of your business with three priorities, free, before you spend anything.</p></div>
@@ -1006,7 +1252,7 @@ export function about() {
               <li><span><strong>Proof, not promises.</strong> We guarantee our speed and execution, not inflated lead numbers.</span></li>
               <li><span><strong>One accountable partner.</strong> Six divisions under one roof, so there's no finger-pointing.</span></li>
               <li><span><strong>You own everything.</strong> Your domain, content, brand assets and code are yours.</span></li>
-              <li><span><strong>Plain English.</strong> No jargon: clear plans, clear reporting, published prices.</span></li>
+              <li><span><strong>Plain English.</strong> No jargon: clear plans, clear reporting, ${pr('published prices', 'fixed quotes')}.</span></li>
             </ul>
           </div>
           <div class="detail-block" data-reveal>
@@ -1388,8 +1634,9 @@ export function terms() {
 
         <h2>3. Prices and quotes</h2>
         <ul>
-          <li>Prices on our website are starting ("from") prices for the scope described. Your proposal gives a fixed price for your specific project.</li>
-          <li>Quotes are valid for 30 days. Prices are shown in US dollars (USD) by default and in Ghana cedis (GHS) for clients in Ghana; your proposal states the currency you will be invoiced in.</li>
+${pr(`          <li>Prices on our website are starting ("from") prices for the scope described. Your proposal gives a fixed price for your specific project.</li>
+          <li>Quotes are valid for 30 days. Prices are shown in US dollars (USD) by default and in Ghana cedis (GHS) for clients in Ghana; your proposal states the currency you will be invoiced in.</li>`, `          <li>Prices are given in your quote or proposal, which sets a fixed price for the scope described.</li>
+          <li>Quotes are valid for 30 days and are in US dollars (USD) or, for clients in Ghana, Ghana cedis (GHS); your proposal states the currency you will be invoiced in.</li>`)}
           <li>Third-party costs are not included unless stated: for example ad spend, software and Microsoft licences, domain names, payment-provider fees, WhatsApp and AI usage fees, printing, and travel outside Greater Accra. We list any that apply in your proposal.</li>
         </ul>
 
@@ -1406,8 +1653,9 @@ export function terms() {
 
         <h2>6. The ShowMe Growth retainer</h2>
         <ul>
-          <li>The Growth retainer costs ${esc(site.facts.retainerPrice)} per month, billed monthly in advance, with a 3-month minimum term.</li>
-          <li>Ad spend is {{adspend_paid_full}}. We recommend at least ${esc(site.facts.adSpendMin)} per month.</li>
+${pr(`          <li>The Growth retainer costs ${esc(site.facts.retainerPrice)} per month, billed monthly in advance, with a 3-month minimum term.</li>
+          <li>Ad spend is {{adspend_paid_full}}. We recommend at least ${esc(site.facts.adSpendMin)} per month.</li>`, `          <li>The Growth retainer is charged at the monthly price in your proposal, billed monthly in advance, with a 3-month minimum term.</li>
+          <li>Ad spend is {{adspend_paid_full}}. We recommend a starting budget in your proposal.</li>`)}
           <li>After the minimum term, the retainer continues month to month. To cancel, give written notice (email or WhatsApp) at least 14 days before your next billing date.</li>
         </ul>
 

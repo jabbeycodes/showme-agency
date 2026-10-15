@@ -17,6 +17,8 @@
 // PROPOSED and need founder approval before going live.
 // ============================================================================
 
+import { pr } from './money.mjs';
+
 export const USD_NOTE = 'Your proposal fixes the exact amount.';
 
 export const PRICES = {
@@ -83,7 +85,7 @@ export const BUNDLES = [
   {
     name: 'Grow', tagline: 'Turn attention into enquiries.', featured: true,
     price: 'From {{b_grow}}', unit: 'setup + Growth retainer',
-    monthly: 'then {{retainer}}/month Growth retainer (3-month minimum)',
+    monthly: pr('then {{retainer}}/month Growth retainer (3-month minimum)', 'then the Growth retainer (3-month minimum)'),
     saving: 'Over {{b_grow_saving}} less on setup than buying each part separately',
     timeline: 'Lead system live in 7 days; full site 3–5 weeks',
     forWho: 'Businesses with a proven offer that want a steady, measured flow of qualified leads.',
@@ -93,13 +95,13 @@ export const BUNDLES = [
       'Google Business Profile optimisation',
       'ShowMe Growth retainer: managed ads, landing page, weekly reporting',
       'Live in 7 days of onboarding, or month 1 of the retainer is free',
-      'Ad spend separate, recommended from {{adspend}}/month'
+      pr('Ad spend separate, recommended from {{adspend}}/month', 'Ad spend separate, paid directly to the ad platforms')
     ]
   },
   {
     name: 'Scale', tagline: 'Sell more and automate operations.',
     price: 'From {{b_scale}}', unit: 'one-off',
-    monthly: 'optional support from {{bpa_support}}/month after month 3',
+    monthly: pr('optional support from {{bpa_support}}/month after month 3', 'optional monthly support after month 3'),
     saving: 'Over {{b_scale_saving}} less than buying each part separately',
     timeline: '6–9 weeks',
     forWho: 'Established businesses ready to sell online and take repetitive work off their team.',
@@ -120,4 +122,23 @@ export const PAYMENT = {
   methods: ['{{pay1}}', '{{pay2}}', '{{pay3}}'],
   usd: '{{pay_note}}',
   preview: 'You approve a working preview before the final 50% is due. If it does not match the agreed scope, we fix it first.'
+};
+
+// ---- Price-free scope notes (used when SHOW_PRICES = false) ------------------
+// Only notes that quote a figure need a version here; every other note is
+// already number-free and is used unchanged.
+export const NOTES_HIDDEN = {
+  'landing-pages-funnels': 'One focused campaign page with copy, lead capture and conversion tracking. Additional variants are available. Typical delivery 5–7 working days.',
+  'ai-search-visibility': 'AI-answer baseline, answer-ready FAQ content with schema, profile consistency work and monthly tracking of up to 20 buyer questions across ChatGPT, Gemini and Perplexity. 3-month minimum. Combined pricing is available with the SEO Programme.',
+  'paid-ads': 'Management of Google or Meta campaigns (or both), creative, conversion tracking and monthly cost-per-lead reporting. Ad spend is separate and paid directly to the platforms; we recommend a starting budget in your quote.',
+  'content-marketing': 'Three original, SEO-optimised articles or guides a month (800–1,200 words), FAQ schema and internal linking. Single articles are also available.',
+  'email-sms': 'Two campaigns a month, one automated sequence built and maintained, list hygiene and reporting. Platform and SMS credit costs are separate. One-off sequence builds are also available.',
+  'analytics-reporting': 'One-off GA4, Search Console and conversion-tracking setup with a one-page dashboard. Ongoing monthly reporting is also available (weekly reporting is already part of the Growth retainer).',
+  'brand-identity': 'Brand Essentials: logo suite, colour palette, typography and a mini brand guide (2 concepts, 2 revision rounds). A Full Identity System, adding complete guidelines, stationery and a social media kit, is also available.',
+  'photography-video': '{{photo_where}} with up to 40 edited photos. A short-form video add-on (3 edited clips) is available. Travel outside Greater Accra is quoted separately.',
+  'microsoft-365': 'Setup for up to 5 users: domain email, Microsoft 365 apps, Teams and SharePoint basics, mailbox migration and a training session. Additional users can be added. Microsoft licence fees are paid separately to Microsoft.',
+  'whatsapp-ai-assistant': 'Setup of an AI assistant trained on up to 50 FAQs, lead qualification and human hand-off, plus 30 days of tuning. Ongoing monthly care is available; WhatsApp and AI usage fees are passed through at cost.',
+  'business-process-automation': 'A Quick-Win package of up to 3 automated workflows (for example invoice reminders, onboarding and a weekly report), documented and tested. Larger automation programmes and monthly support are also available. Tool subscriptions are separate.',
+  'automation-audit': 'A fixed-fee audit with a prioritised roadmap. The full fee is credited toward any automation build you start with us within 60 days.',
+  'integrations-saas': 'A single integration between two systems, built, tested and monitored. SaaS product builds start with a paid discovery sprint, credited toward the build.'
 };

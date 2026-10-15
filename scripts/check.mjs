@@ -9,6 +9,7 @@
 //    ratings/reviews, BreadcrumbList on every non-home page
 // Exits non-zero on any error so it can gate CI / npm run build.
 // ============================================================================
+import { SHOW_PRICES } from './money.mjs';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -109,16 +110,29 @@ async function main() {
     // shows no cedi amounts; Ghana view (data-gh swapped in) shows no $ amounts.
     if (html.includes('{{')) errors.push(`${rel}: unresolved {{token}} in output`);
     if (!/<html lang="en" data-region="us"/.test(html)) errors.push(`${rel}: <html> must default to data-region="us"`);
-    if (!html.includes('data-set-region="gh"')) errors.push(`${rel}: missing region switcher`);
-    {
-      const usView = html.replace(/ data-gh="[^"]*"/g, '');
-      const m = usView.match(/.{0,40}(GHS\s?[0-9]|GH₵|₵\s?[0-9]).{0,20}/);
-      if (m) errors.push(`${rel}: US view shows a cedi amount: ${m[0]}`);
-      const ghView = html
-        .replace(/(<[a-z]+\b[^>]*?) data-us="[^"]*" data-gh="([^"]*)"([^>]*>)[^<]*/g, (x, a, gh, b) => a + b + gh)
-        .replace(/<script[\s\S]*?<\/script>|<head>[\s\S]*?<\/head>|<[^>]+>/g, ' ');
-      const g = ghView.match(/.{0,40}(\$\s?[0-9]|USD\s?[0-9]).{0,20}/);
-      if (g) errors.push(`${rel}: Ghana view shows a USD amount: ${g[0]}`);
+    if (SHOW_PRICES) {
+      if (!html.includes('data-set-region="gh"')) errors.push(`${rel}: missing region switcher`);
+      {
+        const usView = html.replace(/ data-gh="[^"]*"/g, '');
+        const m = usView.match(/.{0,40}(GHS\s?[0-9]|GH₵|₵\s?[0-9]).{0,20}/);
+        if (m) errors.push(`${rel}: US view shows a cedi amount: ${m[0]}`);
+        const ghView = html
+          .replace(/(<[a-z]+\b[^>]*?) data-us="[^"]*" data-gh="([^"]*)"([^>]*>)[^<]*/g, (x, a, gh, b) => a + b + gh)
+          .replace(/<script[\s\S]*?<\/script>|<head>[\s\S]*?<\/head>|<[^>]+>/g, ' ');
+        const g = ghView.match(/.{0,40}(\$\s?[0-9]|USD\s?[0-9]).{0,20}/);
+        if (g) errors.push(`${rel}: Ghana view shows a USD amount: ${g[0]}`);
+      }
+    } else {
+      // SHOW_PRICES = false: no switcher, no regional variants, and no price
+      // figure anywhere (visible text, attributes, meta/OG, JSON-LD) in either
+      // region. Allowed non-price uses: the currency names "USD", "GHS",
+      // "US dollars", "Ghana cedis" with no amount (terms, FAQ, about page).
+      if (html.includes('data-set-region')) errors.push(`${rel}: region switcher shown while prices are hidden`);
+      if (/ data-(us|gh)="/.test(html)) errors.push(`${rel}: regional price variants present while prices are hidden`);
+      const scan = html.replace(/<script(?![^>]*application\/ld\+json)[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, ' ');
+      const PRICE_RE = /(\$\s?[0-9]|USD\s?[0-9]|[0-9][0-9,.]*\s?(USD|GHS|cedis?\b)|GHS\s?[0-9]|GH₵|₵\s?[0-9]|\bcedis?\s?[0-9])/i;
+      const m = scan.match(new RegExp('.{0,50}' + PRICE_RE.source + '.{0,30}', 'i'));
+      if (m) errors.push(`${rel}: price figure while SHOW_PRICES=false: ${m[0]}`);
     }
     if (!is404 && rel !== '/index.html' && !ldTypes.includes('BreadcrumbList')) errors.push(`${rel}: missing BreadcrumbList JSON-LD`);
 
