@@ -383,10 +383,13 @@ function localize(request, env, url, res) {
   }
   const preview = isPreview(env);
   if (preview) headers.set('X-Robots-Tag', 'noindex, nofollow');
-  if (region === 'us' && !preview) return new Response(res.body, { status: res.status, headers });
-
   let rw = new HTMLRewriter();
-  if (region === 'gh') {
+  if (region === 'us') {
+    // Ghana-only blocks never reach US visitors' HTML (not even inert).
+    rw = rw
+      .on('template[data-gh-block]', { element(el) { el.remove(); } })
+      .on('[data-gh]', { element(el) { el.removeAttribute('data-gh'); } });
+  } else if (region === 'gh') {
     rw = rw
       .on('html', { element(el) { el.setAttribute('data-region', 'gh'); } })
       // data-gh values are built from trusted, entity-encoded build output.

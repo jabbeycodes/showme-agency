@@ -184,6 +184,8 @@ a.card:hover { border-color: var(--accent); box-shadow: var(--shadow); color: va
 .steps-row p { color: var(--muted); font-size: .95rem; margin: 0; }
 .section-dark .steps-row li { border-top-color: #8fd3c9; }
 .section-dark .steps-row li::before { color: #8fd3c9; }
+.section-dark .steps-row p, .section-dark .steps p { color: var(--on-dark-muted); }
+.section-dark .quote-band { color: #fff; }
 
 /* ---- Split / feature blocks ---------------------------------------------- */
 .split { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
