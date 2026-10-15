@@ -252,5 +252,5 @@ export async function handleReport(request, env, url) {
 }
 
 function notFound() {
-  return html('<!doctype html><meta name="robots" content="noindex"><title>Not found</title><link rel="stylesheet" href="/styles.css"><main style="padding:80px 20px;text-align:center"><h1>Report not found</h1><p>This link is not valid or has not been released yet. <a href="/free-audit/">Request a free audit</a>.</p></main>', 404);
+  return html('<!doctype html><meta name="robots" content="noindex"><title>Not found</title><link rel="stylesheet" href="/styles.css"><main style="padding:80px 20px;text-align:center"><h1>Report not found</h1><p>This link is not valid or has not been released yet. <a href="/technology-assessment/">Request a Free Technology Assessment</a>.</p></main>', 404);
 }

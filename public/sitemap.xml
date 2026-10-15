@@ -85,7 +85,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://agency.showmeworld.app/services/seo-programme/</loc>
+    <loc>https://agency.showmeworld.app/services/seo-program/</loc>
     <lastmod>2026-10-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -259,6 +259,30 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://agency.showmeworld.app/industries/home-services-contractors/</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://agency.showmeworld.app/industries/salons-spas/</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://agency.showmeworld.app/industries/auto-services/</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://agency.showmeworld.app/industries/fitness-studios/</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://agency.showmeworld.app/how-we-work/</loc>
     <lastmod>2026-10-15</lastmod>
     <changefreq>yearly</changefreq>
@@ -313,10 +337,10 @@
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://agency.showmeworld.app/free-audit/</loc>
+    <loc>https://agency.showmeworld.app/technology-assessment/</loc>
     <lastmod>2026-10-15</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://agency.showmeworld.app/faq/</loc>

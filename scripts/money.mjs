@@ -21,7 +21,7 @@ export const US_PRICES_STATUS = 'proposed';
 //   JSON-LD) is replaced with "Request pricing" / "Get a quote" CTAs; the
 //   regional wording uses HIDDEN_WORDS (below), still swapped per region.
 // All price data in this file stays intact either way. Rebuild after flipping.
-// An environment override is also honoured for one-off builds:
+// An environment override is also honored for one-off builds:
 //   SHOW_PRICES=true npm run build   /   SHOW_PRICES=false npm run build
 const SHOW_PRICES_DEFAULT = false; // <- flip to true to show prices again
 export const SHOW_PRICES = process.env.SHOW_PRICES ? process.env.SHOW_PRICES === 'true' : SHOW_PRICES_DEFAULT;
@@ -74,7 +74,7 @@ export const MONEY = {
   wa_ai_care: ['GHS 800', '$300', 'Ongoing care per month.'],
   wa_order: ['GHS 6,500', '$2,750', 'Guided ordering/booking flow on WhatsApp. NOTE: WhatsApp ordering is less common in the US than SMS/web ordering — ASSUMPTION that it is still offered as-is.'],
   bpa: ['GHS 4,500', '$2,000', 'Up to 3 workflows; typical US automation (Zapier/Make) consultants roughly $75–$150/hour or $1,500–$5,000 per small project.'],
-  bpa_large: ['GHS 12,000', '$6,000', 'Larger automation programmes.'],
+  bpa_large: ['GHS 12,000', '$6,000', 'Larger automation programs.'],
   bpa_support: ['GHS 1,500', '$600', 'Support per month.'],
   audit: ['GHS 1,500', '$500', 'Fixed-fee automation audit, credited toward a build.'],
   ai_kb: ['GHS 8,000', '$3,500', 'Private internal assistant on up to 200 pages of documents.'],
@@ -102,7 +102,7 @@ export const MONEY = {
 // Region-specific wording (not prices).
 export const WORDS = {
   cur: ['GHS', 'USD'],
-  bill_methods: ['MoMo, bank transfer or card', 'card or bank transfer'],
+  bill_methods: ['MoMo, bank transfer or card', 'card or ACH bank transfer'],
   adspend_paid: ['prepaid in cedis', 'paid directly to the ad platforms'],
   adspend_paid_full: ['separate, prepaid in cedis and paid directly to the ad platforms', 'separate and paid directly to the ad platforms'],
   checkout_row: ['MoMo, card and bank checkout', 'Card and digital-wallet checkout'],
@@ -130,7 +130,7 @@ export const WORDS = {
 // default and must never mention Ghana-specific terms (check.mjs enforces
 // this); the Ghana value goes in data-gh for the edge worker to swap in.
 export const HIDDEN_WORDS = {
-  bill_methods: ['MoMo, bank transfer or card', 'card or bank transfer'],
+  bill_methods: ['MoMo, bank transfer or card', 'card or ACH bank transfer'],
   adspend_paid: ['paid directly to the ad platforms', 'paid directly to the ad platforms'],
   adspend_paid_full: ['separate and paid directly to the ad platforms', 'separate and paid directly to the ad platforms'],
   checkout_row: ['MoMo, card and bank checkout', 'Card and digital-wallet checkout'],
@@ -141,10 +141,10 @@ export const HIDDEN_WORDS = {
   dollar_ads: ['We set up and run the ad accounts in your name &mdash; you keep full ownership', 'We set up and run the ad accounts in your name &mdash; you keep full ownership'],
   dollar_ads_lead: ['creative testing, ad-account management', 'creative testing, ad-account management'],
   pay1: ['Mobile Money (MTN MoMo, Telecel Cash, AT Money)', 'Debit or credit card via a secure payment link'],
-  pay2: ['Bank transfer (GHS or USD)', 'Bank transfer'],
+  pay2: ['Bank transfer (GHS or USD)', 'ACH bank transfer'],
   pay3: ['Debit or credit card via a secure payment link', 'Invoices in US dollars (USD)'],
   faq_usd: ['Clients in Ghana are quoted in Ghana cedis (GHS) and clients elsewhere in US dollars (USD). The exact figure is fixed in your proposal.', 'Yes. Quotes are in US dollars (USD), and the exact figure is fixed in your proposal.'],
-  faq_pay: ['Mobile Money (MTN MoMo, Telecel Cash, AT Money), bank transfer, or debit or credit card via a secure payment link.', 'Debit or credit card via a secure payment link, or bank transfer.']
+  faq_pay: ['Mobile Money (MTN MoMo, Telecel Cash, AT Money), bank transfer, or debit or credit card via a secure payment link.', 'Debit or credit card via a secure payment link, or ACH bank transfer.']
 };
 for (const [k, v] of Object.entries(HIDDEN_WORDS)) {
   if (!WORDS[k]) throw new Error('money.mjs: HIDDEN_WORDS has unknown key ' + k);

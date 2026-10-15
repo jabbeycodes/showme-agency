@@ -1,5 +1,5 @@
 /* ============================================================================
-   ShowMe Digital Agency — shared site behaviour
+   ShowMe Digital Agency — shared site behavior
    Vanilla JS, no dependencies, no inline scripts (CSP: script-src 'self').
    Progressive enhancement: every link works without JS; the region switcher
    is plain ?region= links handled by the edge worker.
@@ -80,17 +80,23 @@
     var submitButton = form.querySelector('[type="submit"]');
     var formStatus = form.querySelector('.form-status');
     var emailAlt = form.querySelector('.email-alternative');
-    var kind = form.getAttribute('data-kind') || 'Enquiry';
+    var kind = form.getAttribute('data-kind') || 'Inquiry';
 
-    // Extra fields are appended into `message` so the worker needs no change.
+    // Extra fields are appended into `message` so the worker needs no change
+    // (the stored lead keeps its existing shape; `need` stays short because
+    // the worker caps it at 80 characters).
     var EXTRA_LABELS = {
+      role: 'Role',
+      industry: 'Industry',
       company_size: 'Company size',
+      office_tools: 'Email and office tools',
       interests: 'Areas of interest',
       it_setup: 'Current IT setup',
       it_setup_notes: 'IT setup notes',
       timeline: 'Timeline',
       services: 'Services of interest',
-      challenge: 'Biggest challenge'
+      challenge: 'Biggest challenge',
+      consent: 'OK to review public website and domain info'
     };
 
     function val(name) {
@@ -115,13 +121,12 @@
     }
 
     function values() {
-      var interests = val('interests');
       return {
         name: val('name'),
         business: val('business'),
         email: val('email'),
         phone: val('phone'),
-        need: val('need') || (interests ? kind + ': ' + interests : kind),
+        need: (val('need') || kind).slice(0, 80),
         message: buildMessage(),
         // Digital-presence-check form only (`website` is a honeypot, so the
         // real URL is `site_url`). Empty values are ignored by the worker.
@@ -160,6 +165,9 @@
       if (name && !name.value.trim()) { setError(name, 'Please enter your name.'); firstInvalid = name; }
       if (email && !email.value.trim()) { setError(email, 'Please enter your email.'); firstInvalid = firstInvalid || email; }
       else if (email && !email.validity.valid) { setError(email, 'Please enter a valid email address.'); firstInvalid = firstInvalid || email; }
+      form.querySelectorAll('input[type="checkbox"][required]').forEach(function (c) {
+        if (!c.checked) { setError(c, 'Please tick this box to continue.'); firstInvalid = firstInvalid || c; }
+      });
       if (firstInvalid) firstInvalid.focus();
       return !firstInvalid;
     }

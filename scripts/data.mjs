@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 // ============================================================================
 // ShowMe Digital Agency — site content data
 // Single source of truth for pages, services and industries. Copy is original.
-// Real facts (prices, guarantee, contacts) are centralised in `site` and the
+// Real facts (prices, guarantee, contacts) are centralized in `site` and the
 // growth-retainer service so they stay consistent and easy to update.
 // ============================================================================
 
@@ -18,6 +18,9 @@ export const site = {
   email: 'info@showmeworld.app',
   whatsappNumber: '13364572361',
   whatsappDisplay: '+1 336 457 2361',
+  // US call/text line (same number). tel:/sms: links use phoneE164.
+  phoneDisplay: '+1 336 457 2361',
+  phoneE164: '+13364572361',
   founder: 'Joshua Abbey',
   founderImage: 'https://agency.showmeworld.app/assets/joshua-abbey.jpg',
   // US-led (founder based in the United States, country level only; no city or
@@ -37,7 +40,6 @@ export const site = {
     enterpriseRetainerPrice: '{{enterprise}}',
     retainerMinimum: '3-month minimum',
     adSpendMin: '{{adspend}}',
-    guarantee: 'Growth retainer: landing page, lead system and reporting live within 7 days of onboarding — or month 1 of the retainer is free.',
     responsePromise: 'within one business day'
   }
 };
@@ -56,13 +58,13 @@ export const bookCallMailto = 'mailto:' + site.email + '?subject=' + encodeURICo
 // ---- Divisions --------------------------------------------------------------
 export const divisions = [
   { slug: 'web-commerce', num: '01', title: 'Web & Commerce', short: 'Web & Commerce',
-    blurb: 'Websites, stores and booking systems that turn visits into enquiries and orders.' },
+    blurb: 'Websites, stores and booking systems that turn visits into inquiries and orders.' },
   { slug: 'growth', num: '02', title: 'Growth', short: 'Growth',
     blurb: 'Get found and get chosen — search, ads, social and content that bring qualified demand.' },
   { slug: 'brand', num: '03', title: 'Brand', short: 'Brand',
     blurb: 'Look credible everywhere: identity, collateral, photography and pitch decks.' },
   { slug: 'business-technology', num: '04', title: 'Business Technology', short: 'Business Tech',
-    blurb: 'The back office — email, files, CRM and IT that keep a growing team organised.' },
+    blurb: 'The back office — email, files, CRM and IT that keep a growing team organized.' },
   { slug: 'ai-automation', num: '05', title: 'AI & Automation', short: 'AI & Automation',
     blurb: 'Put routine work on autopilot with WhatsApp assistants and process automation.' },
   { slug: 'software', num: '06', title: 'Software', short: 'Software',
@@ -87,23 +89,23 @@ export const services = [
   {
     slug: 'business-websites', division: 'web-commerce', title: 'Business Websites',
     metaTitle: 'Business Website Design & Development',
-    summary: 'Fast, mobile-first websites that load on slow networks and turn visitors into enquiries.',
-    metaDescription: 'ShowMe builds fast, mobile-first business websites for growing companies — SEO-ready, easy to update and wired to capture every enquiry.',
-    problem: 'Most business websites are slow, hard to update, and treat the enquiry as an afterthought. Visitors bounce, and the ones who do reach out fall through the cracks.',
+    summary: 'Fast, mobile-first websites that load on slow networks and turn visitors into inquiries.',
+    metaDescription: 'ShowMe builds fast, mobile-first business websites for growing companies — SEO-ready, easy to update and wired to capture every inquiry.',
+    problem: 'Most business websites are slow, hard to update, and treat the inquiry as an afterthought. Visitors bounce, and the ones who do reach out fall through the cracks.',
     deliverables: [
       'A custom, mobile-first design built and tested from 375px up',
       'Fast loading on any network (lazy-loaded images, lean code)',
       'A content structure you can update yourself, with training and handover',
-      'Enquiry capture wired to WhatsApp and email so no lead goes cold',
+      'Inquiry capture wired to email and text (and WhatsApp if you use it) so no lead goes cold',
       'SEO foundations: clean titles, meta descriptions, schema and a sitemap',
       'Google Analytics and Search Console set up at launch'
     ],
     whoFor: ['Established businesses replacing a dated or DIY site', 'New companies that need to look credible from day one', 'Teams that want to update their own content without a developer'],
-    outcomes: ['More enquiries from the same traffic', 'A site you actually control', 'A credible first impression on any device'],
+    outcomes: ['More inquiries from the same traffic', 'A site you actually control', 'A credible first impression on any device'],
     process: [
       { t: 'Discover', d: 'We map your customers, goals and the pages you need.' },
       { t: 'Design', d: 'You approve a real preview before we build a single page.' },
-      { t: 'Build', d: 'We develop, wire up enquiry capture, and add SEO foundations.' },
+      { t: 'Build', d: 'We develop, wire up inquiry capture, and add SEO foundations.' },
       { t: 'Launch', d: 'We go live, train your team and hand over full access.' }
     ],
     pricing: P('business-websites'),
@@ -115,9 +117,9 @@ export const services = [
     related: ['ecommerce', 'landing-pages-funnels', 'website-care']
   },
   {
-    slug: 'ecommerce', division: 'web-commerce', title: 'E-commerce & Online Checkout',
-    metaTitle: 'E-commerce Websites & Secure Online Checkout',
-    summary: 'Online stores with secure checkout, quick reordering and order management your team can run.',
+    slug: 'ecommerce', division: 'web-commerce', title: 'E-commerce & Online Payments',
+    metaTitle: 'E-commerce Websites & Online Payments',
+    summary: 'Online stores with card and digital-wallet checkout through providers such as Stripe, Square, PayPal or Shopify, plus quick reordering and order management your team can run.',
     metaDescription: 'E-commerce stores built to sell: online checkout, quick reordering for repeat customers, inventory and order reporting your team can run.',
     problem: 'Selling through DMs and manual invoices does not scale. Customers abandon when they cannot pay the way they want, and you lose track of orders and stock.',
     deliverables: [
@@ -131,7 +133,7 @@ export const services = [
     whoFor: ['Retailers moving beyond social-media and direct-message sales', 'Food and consumer brands taking repeat orders', 'Anyone who needs reliable online payments'],
     outcomes: ['Fewer abandoned carts', 'Repeat orders without manual admin', 'A single view of orders, stock and revenue'],
     process: [
-      { t: 'Discover', d: 'We scope your catalogue, payment methods and delivery flow.' },
+      { t: 'Discover', d: 'We scope your catalog, payment methods and delivery flow.' },
       { t: 'Design', d: 'You approve the store and checkout experience up front.' },
       { t: 'Build', d: 'We wire in payments, inventory and reordering.' },
       { t: 'Launch', d: 'We test real payments, go live and train your team.' }
@@ -139,7 +141,7 @@ export const services = [
     pricing: P('ecommerce'),
     faqs: [
       { q: 'Which payment methods can you set up?', a: 'We set up the payment providers that suit your customers and market, for example card, digital wallets and bank transfer, and confirm the mix during discovery.' },
-      { q: 'Can customers reorder on WhatsApp?', a: 'Yes. We can add a WhatsApp reordering flow so repeat customers place orders in a couple of taps.' },
+      { q: 'Can customers reorder by text or chat?', a: 'Yes. We can add a quick reorder flow by text message, email or WhatsApp so repeat customers order in a couple of taps.' },
       { q: 'Do you handle delivery logistics?', a: 'We build the ordering and payment side and can integrate with your delivery partner or capture delivery details for your team.' }
     ],
     related: ['business-websites', 'booking-online-ordering', 'website-care']
@@ -147,29 +149,29 @@ export const services = [
   {
     slug: 'landing-pages-funnels', division: 'web-commerce', title: 'Landing Pages & Funnels',
     metaTitle: 'Conversion-Focused Landing Pages & Funnels',
-    summary: 'Focused pages built to convert ad and campaign traffic into qualified enquiries.',
+    summary: 'Focused pages built to convert ad and campaign traffic into qualified inquiries.',
     metaDescription: 'Campaign landing pages and funnels designed to convert paid and social traffic into qualified leads, with fast load times and clear calls to action.',
     problem: 'Sending ad traffic to a busy homepage wastes budget. Without a focused page and clear next step, clicks do not become customers.',
     deliverables: [
       'A single-goal landing page matched to your offer and audience',
-      'A clear call to action wired to WhatsApp, a form or a booking link',
+      'A clear call to action wired to a phone call, a form or a booking link',
       'Fast load times so you do not pay for people who bounce',
       'Conversion tracking so you can see what the spend returns',
       'A/B-ready structure for testing headlines and offers'
     ],
     whoFor: ['Businesses running Google or Meta ads', 'Launches and limited-time offers', 'Teams tired of paying for clicks that go nowhere'],
-    outcomes: ['A higher share of clicks turning into enquiries', 'Clear numbers on cost per lead', 'Pages you can reuse for the next campaign'],
+    outcomes: ['A higher share of clicks turning into inquiries', 'Clear numbers on cost per lead', 'Pages you can reuse for the next campaign'],
     process: [
       { t: 'Offer', d: 'We sharpen the offer and the single action you want.' },
       { t: 'Design', d: 'We design a focused page around that one goal.' },
       { t: 'Build', d: 'We build, add tracking and connect your lead capture.' },
-      { t: 'Optimise', d: 'We watch conversions and refine headlines and layout.' }
+      { t: 'Optimize', d: 'We watch conversions and refine headlines and layout.' }
     ],
     pricing: P('landing-pages-funnels'),
     faqs: [
       { q: 'Do I need a full website first?', a: 'No. A landing page can stand alone for a campaign, though it works best alongside your main site.' },
       { q: 'Can you run the ads too?', a: 'Yes — see our Paid Ads service, or bundle both inside the ShowMe Growth retainer.' },
-      { q: 'How do you measure results?', a: 'We set up conversion tracking so you can see clicks, enquiries and cost per lead, not just visits.' }
+      { q: 'How do you measure results?', a: 'We set up conversion tracking so you can see clicks, inquiries and cost per lead, not just visits.' }
     ],
     related: ['paid-ads', 'growth-retainer', 'business-websites']
   },
@@ -197,7 +199,7 @@ export const services = [
     pricing: P('booking-online-ordering'),
     faqs: [
       { q: 'Can it take deposits?', a: 'Yes. We can require a deposit or full payment via {{deposit_methods}} to reduce no-shows.' },
-      { q: 'Will it send reminders?', a: 'Yes — automatic confirmations and reminders by WhatsApp, SMS or email, depending on your setup.' },
+      { q: 'Will it send reminders?', a: 'Yes — automatic confirmations and reminders by text message, email or WhatsApp, depending on your setup.' },
       { q: 'Does it work on a phone?', a: 'Everything is mobile-first, so customers can book or order from any device.' }
     ],
     related: ['whatsapp-ordering-booking', 'business-websites', 'business-process-automation']
@@ -236,22 +238,22 @@ export const services = [
   {
     slug: 'growth-retainer', division: 'growth', title: 'ShowMe Growth Retainer',
     metaTitle: 'ShowMe Growth Retainer — Managed Demand & Lead System',
-    summary: 'Our core offer: managed ads, a landing page and a WhatsApp lead system with weekly reporting.',
-    metaDescription: pr('The ShowMe Growth retainer: managed ads, a conversion-focused landing page, a WhatsApp lead system and weekly reporting for {{retainer}}/month, 3-month minimum.', 'The ShowMe Growth retainer: managed ads, a conversion-focused landing page, a WhatsApp lead system and weekly reporting, with a 3-month minimum. Request pricing.'),
+    summary: 'Our core offer: managed ads, a landing page and a lead follow-up system with weekly reporting.',
+    metaDescription: pr('The ShowMe Growth retainer: managed ads, a conversion-focused landing page, a lead follow-up system and weekly reporting for {{retainer}}/month, 3-month minimum.', 'The ShowMe Growth retainer: managed ads, a conversion-focused landing page, a lead follow-up system and weekly reporting, with a 3-month minimum. Request pricing.'),
     problem: 'Running your own ads and follow-up part-time means wasted spend and leads that go cold. You need one accountable partner running demand end to end.',
     deliverables: [
       'Managed advertising and a conversion-focused landing page',
-      'A WhatsApp lead system that captures and routes every enquiry',
+      'A lead system that captures and routes every inquiry from forms, calls, texts and chat',
       'Weekly reporting so you always know what the spend returns',
-      'Ongoing optimisation of targeting, offers and follow-up',
+      'Ongoing optimization of targeting, offers and follow-up',
       'A 3-month minimum engagement to give results time to compound'
     ],
     whoFor: ['Businesses ready to run demand consistently', 'Owners who want one partner, not five freelancers', 'Teams that need every lead followed up fast'],
-    outcomes: ['A steady, measured flow of enquiries', 'Faster follow-up so fewer leads go cold', 'Clear weekly numbers you can act on'],
+    outcomes: ['A steady, measured flow of inquiries', 'Faster follow-up so fewer leads go cold', 'Clear weekly numbers you can act on'],
     process: [
       { t: 'Free audit', d: 'We review your site, visibility and systems and hand you three priorities.' },
       { t: 'Growth plan', d: 'You get a plain-English plan: what we run, what it costs, what changes first.' },
-      { t: 'Launch in 7 days', d: 'Your landing page, lead system and reporting go live within 7 days of onboarding — or month 1 of the retainer is free.' },
+      { t: 'Launch', d: 'Your landing page, lead system and reporting go live on a launch date agreed in writing during onboarding.' },
       { t: 'Grow monthly', d: 'We run demand, follow up every lead and report weekly.' }
     ],
     // Real pricing — do not change without founder input.
@@ -263,9 +265,9 @@ export const services = [
     faqs: [
       { q: 'What does the retainer cost?', a: pr(site.facts.retainerPrice + ' per month with a ' + site.facts.retainerMinimum + ', billed monthly in advance by {{bill_methods}}. Ad spend is separate and {{adspend_paid}}; we recommend at least ' + site.facts.adSpendMin + '/month.', 'You get a fixed monthly price in your quote after a short call. The retainer has a ' + site.facts.retainerMinimum + ' and is billed monthly in advance by {{bill_methods}}. Ad spend is separate and {{adspend_paid}}.') },
       { q: 'Is ad spend included?', a: 'No. The retainer covers our management, landing page and lead system. Ad spend is paid separately and goes directly to the ad platforms.' },
-      { q: 'Is there a plan for larger companies or in-house teams?', a: 'Yes — the ShowMe Enterprise retainer (' + pr(site.facts.enterpriseRetainerPrice + '/month, ', '') + site.facts.retainerMinimum + ') adds a named senior strategist led by our founder, multi-outlet and multi-brand reporting, quarterly business reviews and priority response within 4 business hours. You own the ad accounts, data and creative outright on both tiers.' },
-      { q: 'What is the guarantee?', a: site.facts.guarantee + ' We guarantee our speed and execution, not inflated lead promises.' },
-      { q: 'How quickly will we see work happening?', a: 'Fast. Our team follows a documented onboarding process: once we have your first payment and access, your landing page, lead system and reporting go live within 7 days, or month 1 of the retainer is free.' }
+      { q: 'Is there a plan for larger companies or in-house teams?', a: 'Yes — the ShowMe Enterprise retainer (' + pr(site.facts.enterpriseRetainerPrice + '/month, ', '') + site.facts.retainerMinimum + ') adds a named senior strategist led by our founder, multi-outlet and multi-brand reporting, quarterly business reviews and priority handling of requests. You own the ad accounts, data and creative outright on both tiers.' },
+      { q: 'What do you commit to?', a: 'A written scope, a launch date agreed during onboarding, and weekly reporting on what the spend returns. We commit to the work and to transparency, not to inflated lead numbers.' },
+      { q: 'How quickly will we see work happening?', a: 'Our team follows a documented onboarding process. Once we have your first payment and access, we set a launch date for your landing page, lead system and reporting and keep you updated against it.' }
     ],
     related: ['paid-ads', 'landing-pages-funnels', 'analytics-reporting']
   },
@@ -273,10 +275,10 @@ export const services = [
     slug: 'local-seo-gbp', division: 'growth', title: 'Local SEO & Google Business Profile',
     metaTitle: 'Local SEO & Google Business Profile Management',
     summary: 'Show up in the map pack and local searches when nearby customers are ready to buy.',
-    metaDescription: 'Local SEO and Google Business Profile management: optimise your profile, win reviews, fix citations and rank in the map pack for nearby searches.',
-    problem: 'When someone nearby searches for what you sell, a competitor with a better-managed profile gets the call. An unclaimed or thin profile costs you walk-ins and enquiries.',
+    metaDescription: 'Local SEO and Google Business Profile management: optimize your profile, win reviews, fix citations and rank in the map pack for nearby searches.',
+    problem: 'When someone nearby searches for what you sell, a competitor with a better-managed profile gets the call. An unclaimed or thin profile costs you walk-ins and inquiries.',
     deliverables: [
-      'Google Business Profile setup and optimisation',
+      'Google Business Profile setup and optimization',
       'Local keyword and competitor research for your area',
       'Review generation strategy and response management',
       'Consistent name, address and phone details across directories',
@@ -287,7 +289,7 @@ export const services = [
     outcomes: ['More visibility in the local map pack', 'More calls, directions and walk-ins', 'A steady flow of fresh reviews'],
     process: [
       { t: 'Audit', d: 'We review your profile, reviews and local rankings.' },
-      { t: 'Optimise', d: 'We complete and sharpen your profile and citations.' },
+      { t: 'Optimize', d: 'We complete and sharpen your profile and citations.' },
       { t: 'Grow', d: 'We build reviews and keep the profile active.' },
       { t: 'Report', d: 'You see rankings, calls and directions each month.' }
     ],
@@ -297,35 +299,35 @@ export const services = [
       { q: 'Can you get me more reviews?', a: 'Yes — we set up an ethical review-generation flow that makes it easy for happy customers to leave honest reviews.' },
       { q: 'Do you manage responses?', a: 'We can respond to reviews and questions on your behalf, in your voice, as part of the service.' }
     ],
-    related: ['seo-programme', 'ai-search-visibility', 'business-websites']
+    related: ['seo-program', 'ai-search-visibility', 'business-websites']
   },
   {
-    slug: 'seo-programme', division: 'growth', title: 'SEO Programme',
-    metaTitle: 'SEO Programme — Technical, On-Page, Content & Links',
-    summary: 'A full search programme: technical fixes, on-page work, content and links with monthly reporting.',
-    metaDescription: 'A complete SEO programme for growing businesses: technical audits, on-page optimisation, content, ethical link building and clear monthly reporting.',
-    problem: 'One-off SEO tweaks fade. Ranking for the terms that bring buyers takes an ongoing programme across your site, content and reputation.',
+    slug: 'seo-program', division: 'growth', title: 'SEO Program',
+    metaTitle: 'SEO Program — Technical, On-Page, Content & Links',
+    summary: 'A full search program: technical fixes, on-page work, content and links with monthly reporting.',
+    metaDescription: 'A complete SEO program for growing businesses: technical audits, on-page optimization, content, ethical link building and clear monthly reporting.',
+    problem: 'One-off SEO tweaks fade. Ranking for the terms that bring buyers takes an ongoing program across your site, content and reputation.',
     deliverables: [
       'Technical SEO audit and fixes (speed, crawlability, structure)',
       'Keyword and intent research focused on buyers',
-      'On-page optimisation of key pages',
+      'On-page optimization of key pages',
       'A content plan that answers real customer questions',
       'Ethical, relevant link building',
-      'Monthly reporting on rankings, traffic and enquiries'
+      'Monthly reporting on rankings, traffic and inquiries'
     ],
     whoFor: ['Businesses that want compounding organic traffic', 'Companies in competitive niches', 'Anyone over-reliant on paid ads'],
     outcomes: ['Higher rankings for terms that convert', 'Organic traffic that grows over time', 'Less dependence on ad spend'],
     process: [
       { t: 'Audit', d: 'We assess technical health, content and competitors.' },
-      { t: 'Fix', d: 'We resolve technical issues and optimise key pages.' },
+      { t: 'Fix', d: 'We resolve technical issues and optimize key pages.' },
       { t: 'Grow', d: 'We publish content and build relevant links.' },
-      { t: 'Report', d: 'You get monthly rankings, traffic and enquiry data.' }
+      { t: 'Report', d: 'You get monthly rankings, traffic and inquiry data.' }
     ],
-    pricing: P('seo-programme'),
+    pricing: P('seo-program'),
     faqs: [
-      { q: 'How is this different from Local SEO?', a: 'Local SEO focuses on your map presence and nearby searches. The SEO programme covers your whole site and content to rank more broadly.' },
+      { q: 'How is this different from Local SEO?', a: 'Local SEO focuses on your map presence and nearby searches. The SEO program covers your whole site and content to rank more broadly.' },
       { q: 'How long does SEO take?', a: 'SEO compounds over months, not days. We focus on quick technical wins first, then build momentum with content and links.' },
-      { q: 'Do you guarantee rankings?', a: 'No honest agency can guarantee a specific ranking. We guarantee the work, transparency and monthly reporting.' }
+      { q: 'Can you promise a specific ranking?', a: 'No honest agency can promise a specific ranking. We commit to the agreed work, transparency and monthly reporting.' }
     ],
     related: ['content-marketing', 'ai-search-visibility', 'local-seo-gbp']
   },
@@ -333,7 +335,7 @@ export const services = [
     slug: 'ai-search-visibility', division: 'growth', title: 'AI Search Visibility',
     metaTitle: 'AI Search Visibility — Get Recommended by ChatGPT, Gemini & Perplexity',
     summary: 'Get your business recommended when customers ask AI assistants, with monthly AI-answer tracking.',
-    metaDescription: 'AI search visibility (answer optimisation): structure your content and profiles so ChatGPT, Gemini and Perplexity recommend your business, tracked monthly.',
+    metaDescription: 'AI search visibility (answer optimization): structure your content and profiles so ChatGPT, Gemini and Perplexity recommend your business, tracked monthly.',
     problem: 'More customers now ask AI assistants for recommendations instead of scrolling search results. If those answers never mention you, you are invisible to a fast-growing channel.',
     deliverables: [
       'An audit of how AI assistants currently answer questions in your niche',
@@ -352,32 +354,32 @@ export const services = [
     ],
     pricing: P('ai-search-visibility'),
     faqs: [
-      { q: 'Can you guarantee an AI assistant will recommend me?', a: 'No. AI answers change constantly and no one controls them. We improve the signals that make a recommendation more likely and track the results honestly.' },
+      { q: 'Can you make sure an AI assistant recommends me?', a: 'No. AI answers change constantly and no one controls them. We improve the signals that make a recommendation more likely and track the results honestly.' },
       { q: 'Is this the same as SEO?', a: 'It overlaps but is not identical. Good SEO helps, but AI visibility also depends on structured answers, profiles and reputation across sources AI tools trust.' },
       { q: 'Which assistants do you track?', a: 'Typically ChatGPT, Gemini and Perplexity. We agree the exact set and questions during setup.' }
     ],
-    related: ['seo-programme', 'content-marketing', 'ai-knowledge-base']
+    related: ['seo-program', 'content-marketing', 'ai-knowledge-base']
   },
   {
     slug: 'paid-ads', division: 'growth', title: 'Paid Ads (Google & Meta)',
     metaTitle: 'Google & Meta Ads Management',
-    summary: 'Managed Google and Meta campaigns aimed at qualified enquiries, not vanity clicks.',
-    metaDescription: 'Google and Meta (Facebook & Instagram) ads management for growing businesses — campaigns built around enquiries and sales, with transparent monthly reporting.',
+    summary: 'Managed Google and Meta campaigns aimed at qualified inquiries, not vanity clicks.',
+    metaDescription: 'Google and Meta (Facebook & Instagram) ads management for growing businesses — campaigns built around inquiries and sales, with transparent monthly reporting.',
     problem: 'Boosting posts and guessing at targeting burns budget. Without proper structure, tracking and follow-up, ad spend rarely turns into real customers.',
     deliverables: [
       'Campaign strategy tied to a clear business goal',
       'Google Search, Meta or both, based on where your buyers are',
       'Audience, keyword and creative setup',
       'Conversion tracking so results are measurable',
-      'Ongoing optimisation and budget management',
+      'Ongoing optimization and budget management',
       'Transparent monthly reporting on cost per lead'
     ],
-    whoFor: ['Businesses that need enquiries now', 'Companies scaling an offer that already sells', 'Anyone tired of boosting with nothing to show'],
+    whoFor: ['Businesses that need inquiries now', 'Companies scaling an offer that already sells', 'Anyone tired of boosting with nothing to show'],
     outcomes: ['Lower cost per qualified lead over time', 'Spend focused on what works', 'Clear reporting you can trust'],
     process: [
       { t: 'Plan', d: 'We set the goal, audience and budget.' },
       { t: 'Build', d: 'We create campaigns, creative and tracking.' },
-      { t: 'Optimise', d: 'We cut what fails and scale what works.' },
+      { t: 'Optimize', d: 'We cut what fails and scale what works.' },
       { t: 'Report', d: 'You see spend, leads and cost per lead monthly.' }
     ],
     pricing: P('paid-ads'),
@@ -403,7 +405,7 @@ export const services = [
       'A monthly summary of reach, engagement and growth'
     ],
     whoFor: ['Brands that want a consistent presence', 'Owners with no time to post', 'Businesses whose DMs drive sales'],
-    outcomes: ['A steady, professional presence', 'Faster replies to customers', 'Content that supports enquiries and sales'],
+    outcomes: ['A steady, professional presence', 'Faster replies to customers', 'Content that supports inquiries and sales'],
     process: [
       { t: 'Plan', d: 'We agree themes, tone and a monthly calendar.' },
       { t: 'Create', d: 'We design and write on-brand content.' },
@@ -436,7 +438,7 @@ export const services = [
     process: [
       { t: 'Plan', d: 'We research questions and map topics to intent.' },
       { t: 'Write', d: 'We produce original, helpful content.' },
-      { t: 'Optimise', d: 'We add SEO, schema and internal links.' },
+      { t: 'Optimize', d: 'We add SEO, schema and internal links.' },
       { t: 'Measure', d: 'We track rankings and traffic over time.' }
     ],
     pricing: P('content-marketing'),
@@ -445,7 +447,7 @@ export const services = [
       { q: 'How often will you publish?', a: 'We agree a cadence that fits your goals and budget — often a set number of pieces per month.' },
       { q: 'Is this just for SEO?', a: 'It supports SEO and AI search visibility, and gives you material to share on social and email.' }
     ],
-    related: ['seo-programme', 'ai-search-visibility', 'social-media']
+    related: ['seo-program', 'ai-search-visibility', 'social-media']
   },
   {
     slug: 'email-sms', division: 'growth', title: 'Email & SMS Campaigns',
@@ -460,10 +462,10 @@ export const services = [
       'SMS for time-sensitive offers and reminders',
       'Reporting on opens, clicks and conversions'
     ],
-    whoFor: ['Businesses with a customer or enquiry list', 'Retail, hospitality and services with repeat custom', 'Anyone running promotions or events'],
+    whoFor: ['Businesses with a customer or inquiry list', 'Retail, hospitality and services with repeat custom', 'Anyone running promotions or events'],
     outcomes: ['More repeat purchases', 'Fewer forgotten leads', 'A channel you own, not rented from a platform'],
     process: [
-      { t: 'Set up', d: 'We organise your list and opt-in capture.' },
+      { t: 'Set up', d: 'We organize your list and opt-in capture.' },
       { t: 'Design', d: 'We create campaigns and automated sequences.' },
       { t: 'Send', d: 'We schedule and send at the right times.' },
       { t: 'Report', d: 'You see opens, clicks and conversions.' }
@@ -484,37 +486,37 @@ export const services = [
     problem: 'Without proper tracking, marketing is guesswork. You cannot tell which channel brings customers, so you either overspend or cut the wrong thing.',
     deliverables: [
       'Google Analytics (GA4) and Search Console setup',
-      'Conversion and enquiry tracking configured correctly',
+      'Conversion and inquiry tracking configured correctly',
       'A simple dashboard focused on the numbers that matter',
       'Monthly reporting in plain English',
       'Recommendations on what to do next'
     ],
     whoFor: ['Businesses spending on marketing', 'Owners who want clarity, not vanity metrics', 'Teams making budget decisions'],
-    outcomes: ['Clear view of what drives enquiries', 'Confident budget decisions', 'No more flying blind'],
+    outcomes: ['Clear view of what drives inquiries', 'Confident budget decisions', 'No more flying blind'],
     process: [
       { t: 'Audit', d: 'We check what is currently tracked (and what is not).' },
       { t: 'Set up', d: 'We configure analytics and conversion tracking.' },
-      { t: 'Visualise', d: 'We build a dashboard around your key numbers.' },
+      { t: 'Visualize', d: 'We build a dashboard around your key numbers.' },
       { t: 'Advise', d: 'We report monthly and recommend next steps.' }
     ],
     pricing: P('analytics-reporting'),
     faqs: [
       { q: 'Can you fix tracking that is already broken?', a: 'Yes. A common first step is auditing and repairing existing analytics and conversion tracking.' },
-      { q: 'Will I understand the reports?', a: 'That is the point. Reports are in plain English and focus on enquiries and revenue, not vanity metrics.' },
+      { q: 'Will I understand the reports?', a: 'That is the point. Reports are in plain English and focus on inquiries and revenue, not vanity metrics.' },
       { q: 'Do you offer this on its own?', a: 'Yes, or as part of the Growth retainer where reporting is included.' }
     ],
-    related: ['growth-retainer', 'paid-ads', 'seo-programme']
+    related: ['growth-retainer', 'paid-ads', 'seo-program']
   },
 
   // ===== Brand =====
   {
     slug: 'brand-identity', division: 'brand', title: 'Brand Identity',
     metaTitle: 'Brand Identity & Logo Design',
-    summary: 'A distinctive identity — logo, colours, type and guidelines — from essentials to a full system.',
-    metaDescription: 'Brand identity design for growing businesses: logo, colour palette, typography and guidelines. Choose Essentials or a full identity system. You own the assets.',
+    summary: 'A distinctive identity — logo, colors, type and guidelines — from essentials to a full system.',
+    metaDescription: 'Brand identity design for growing businesses: logo, color palette, typography and guidelines. Choose Essentials or a full identity system. You own the assets.',
     problem: 'An inconsistent, DIY look makes even good businesses seem small and untrustworthy. Customers judge credibility in seconds, and your brand is the first thing they see.',
     deliverables: [
-      'Essentials: logo, colour palette, fonts and a mini guide',
+      'Essentials: logo, color palette, fonts and a mini guide',
       'Full system: complete guidelines, stationery and a social kit',
       'Multiple logo formats for web, print and social',
       'Clear usage rules so your brand stays consistent',
@@ -524,13 +526,13 @@ export const services = [
     outcomes: ['A credible, memorable first impression', 'Consistency everywhere you appear', 'Assets you fully own'],
     process: [
       { t: 'Discover', d: 'We learn your audience, values and competitors.' },
-      { t: 'Design', d: 'We present directions and refine your favourite.' },
+      { t: 'Design', d: 'We present directions and refine your favorite.' },
       { t: 'System', d: 'We build the guidelines and assets you need.' },
       { t: 'Handover', d: 'You receive all files and usage rules.' }
     ],
     pricing: P('brand-identity'),
     faqs: [
-      { q: "What's the difference between Essentials and the full system?", a: 'Essentials covers your logo, colours, fonts and a mini guide. The full system adds complete guidelines, stationery and a social kit for larger or fast-growing brands.' },
+      { q: "What's the difference between Essentials and the full system?", a: 'Essentials covers your logo, colors, fonts and a mini guide. The full system adds complete guidelines, stationery and a social kit for larger or fast-growing brands.' },
       { q: 'Do I own the logo and files?', a: 'Yes. You receive all source files and full ownership at handover.' },
       { q: 'Can you refresh an existing brand?', a: 'Yes — we can evolve your current identity rather than start from scratch when that makes sense.' }
     ],
@@ -554,7 +556,7 @@ export const services = [
     process: [
       { t: 'Scope', d: 'We list the materials you actually need.' },
       { t: 'Design', d: 'We design on-brand documents and templates.' },
-      { t: 'Refine', d: 'You review and we finalise.' },
+      { t: 'Refine', d: 'You review and we finalize.' },
       { t: 'Handover', d: 'You get print-ready and editable files.' }
     ],
     pricing: P('marketing-collateral'),
@@ -584,7 +586,7 @@ export const services = [
       { t: 'Plan', d: 'We agree the shots and story you need.' },
       { t: 'Shoot', d: 'We capture your business, products and team.' },
       { t: 'Edit', d: 'We deliver polished, web-ready files.' },
-      { t: 'Deliver', d: 'You receive an organised image and video library.' }
+      { t: 'Deliver', d: 'You receive an organized image and video library.' }
     ],
     pricing: P('photography-video'),
     faqs: [
@@ -633,12 +635,12 @@ export const services = [
     problem: 'Running a business from a free personal email address looks unprofessional and scatters your files. Growing teams need proper email, shared files and collaboration.',
     deliverables: [
       'Professional email on your own domain',
-      'Microsoft 365 licences and app setup',
+      'Microsoft 365 licenses and app setup',
       'SharePoint and Teams configured for your team',
       'Migration from your current email or files',
       'User accounts, security basics and training'
     ],
-    whoFor: ['Businesses on free or personal email', 'Growing teams that need to collaborate', 'Companies wanting files organised and secure'],
+    whoFor: ['Businesses on free or personal email', 'Growing teams that need to collaborate', 'Companies wanting files organized and secure'],
     outcomes: ['A professional email address', 'Files and collaboration in one place', 'A team set up to work together'],
     process: [
       { t: 'Assess', d: 'We review your current email and files.' },
@@ -648,18 +650,18 @@ export const services = [
     ],
     pricing: P('microsoft-365'),
     faqs: [
-      { q: 'Do the Microsoft licences cost extra?', a: 'Yes. Our fee covers setup, migration and training; the monthly Microsoft licence fees are paid to Microsoft based on how many users you have.' },
+      { q: 'Do the Microsoft licenses cost extra?', a: 'Yes. Our fee covers setup, migration and training; the monthly Microsoft license fees are paid to Microsoft based on how many users you have.' },
       { q: 'Can you move my old emails?', a: 'Yes, migration from most common providers is part of the service.' },
-      { q: 'Is my current work interrupted?', a: 'We plan migrations to minimise downtime, usually outside working hours where possible.' }
+      { q: 'Is my current work interrupted?', a: 'We plan migrations to minimize downtime, usually outside working hours where possible.' }
     ],
     related: ['cloud-document-management', 'crm-setup', 'technology-consulting']
   },
   {
     slug: 'cloud-document-management', division: 'business-technology', title: 'Cloud Storage & Document Management',
     metaTitle: 'Cloud Storage & Document Management',
-    summary: 'Get your files off scattered laptops and WhatsApp into a secure, organised, shared system.',
-    metaDescription: 'Cloud storage and document management for growing businesses: organised, secure, shared files with permissions and backups so your team stops losing documents.',
-    problem: 'Critical files live on one person\u2019s laptop, in WhatsApp, or in inboxes. When that person is away or a device fails, work stops and documents disappear.',
+    summary: 'Get your files off scattered laptops and chat apps into an organized, shared system.',
+    metaDescription: 'Cloud storage and document management for growing businesses: organized, secure, shared files with permissions and backups so your team stops losing documents.',
+    problem: 'Critical files live on one person\u2019s laptop, in chat apps, or in inboxes. When that person is away or a device fails, work stops and documents disappear.',
     deliverables: [
       'A cloud storage structure that fits how you work',
       'Clear folders, naming and access permissions',
@@ -667,8 +669,8 @@ export const services = [
       'Backups so nothing is lost with a lost device',
       'Team training on the new way of working'
     ],
-    whoFor: ['Teams sharing files over WhatsApp and email', 'Businesses worried about lost documents', 'Companies preparing to scale'],
-    outcomes: ['One organised home for your files', 'Access control and backups', 'Less time hunting for documents'],
+    whoFor: ['Teams sharing files over chat apps and email', 'Businesses worried about lost documents', 'Companies preparing to scale'],
+    outcomes: ['One organized home for your files', 'Access control and backups', 'Less time hunting for documents'],
     process: [
       { t: 'Review', d: 'We map your current files and pain points.' },
       { t: 'Design', d: 'We design a folder and permission structure.' },
@@ -691,7 +693,7 @@ export const services = [
     problem: 'Leads and customers tracked in heads, notebooks and chats get forgotten. Follow-ups slip, and you never see the full picture of your pipeline.',
     deliverables: [
       'A CRM chosen and configured for your business',
-      'Lead capture connected to your website and WhatsApp',
+      'Lead capture connected to your website, phone and messaging channels',
       'Pipeline stages that match how you sell',
       'Follow-up reminders so leads are not forgotten',
       'Team training and simple reporting'
@@ -701,13 +703,13 @@ export const services = [
     process: [
       { t: 'Map', d: 'We map your sales process and stages.' },
       { t: 'Configure', d: 'We set up the CRM and lead capture.' },
-      { t: 'Connect', d: 'We link your website, WhatsApp and email.' },
+      { t: 'Connect', d: 'We link your website, email and messaging channels.' },
       { t: 'Train', d: 'We train your team and set up reporting.' }
     ],
     pricing: P('crm-setup'),
     faqs: [
       { q: 'Which CRM do you recommend?', a: 'We match the tool to your size and budget rather than forcing one platform — from lightweight options to full CRMs.' },
-      { q: 'Can it capture WhatsApp leads?', a: 'Yes. We connect your website and WhatsApp so enquiries land in the CRM automatically where possible.' },
+      { q: 'Can it capture leads from texts and chat?', a: 'Yes. We connect your website forms and messaging channels, including SMS and WhatsApp, so inquiries land in the CRM automatically where possible.' },
       { q: 'Will my team actually use it?', a: 'We keep it simple and train your team, because a CRM only works if people use it.' }
     ],
     related: ['business-process-automation', 'ai-assistants-chatbots', 'microsoft-365']
@@ -720,7 +722,7 @@ export const services = [
     problem: 'Businesses waste money on tools they do not use and skip the basics that keep them safe. Meanwhile, staff never get trained on what they already have.',
     deliverables: [
       'A review of your current systems, tools and gaps',
-      'A prioritised technology roadmap with clear next steps',
+      'A prioritized technology roadmap with clear next steps',
       'Security basics: accounts, passwords and access',
       'Hands-on staff training sessions',
       'Simple documentation your team can follow'
@@ -747,28 +749,28 @@ export const services = [
     slug: 'ai-assistants-chatbots', division: 'ai-automation', title: 'AI Assistants & Chatbots',
     metaTitle: 'AI Assistants & Chatbots for Customer Service',
     summary: 'AI assistants for your website, messaging channels or internal tools that answer questions, qualify leads and hand off to a person.',
-    metaDescription: 'AI assistants and chatbots for your website, WhatsApp and internal tools: answer common questions instantly, qualify leads and hand off to a person when needed.',
+    metaDescription: 'AI assistants and chatbots for website chat, text messaging and internal tools: answer common questions instantly, qualify leads and hand off to a person when needed.',
     problem: 'Customers and staff ask the same questions all day, across website chat, email and messaging apps. Slow answers lose sales, and your team drowns in repetitive work.',
     deliverables: [
       'An AI assistant trained on your business, FAQs and documents',
       'Instant replies to common questions, at any hour',
       'Lead qualification that captures what you need',
       'Smooth hand-off to a human when it matters',
-      'Deployment on your website, WhatsApp or internal tools',
+      'Deployment on your website chat, text messaging, WhatsApp or internal tools',
       'A knowledge source you can update as you grow'
     ],
-    whoFor: ['Businesses flooded with repetitive enquiries', 'Teams losing sales to slow replies', 'Operations teams answering the same internal questions'],
+    whoFor: ['Businesses flooded with repetitive inquiries', 'Teams losing sales to slow replies', 'Operations teams answering the same internal questions'],
     outcomes: ['Instant replies, day and night', 'Qualified leads, not just messages', 'Time back for your team'],
     process: [
       { t: 'Train', d: 'We build a knowledge base from your FAQs and info.' },
       { t: 'Design', d: 'We design conversation and qualification flows.' },
-      { t: 'Connect', d: 'We connect it to your website, WhatsApp or internal tools, with human hand-off.' },
+      { t: 'Connect', d: 'We connect it to your website, messaging channels or internal tools, with human hand-off.' },
       { t: 'Improve', d: 'We refine answers as real questions come in.' }
     ],
     pricing: P('ai-assistants-chatbots'),
     faqs: [
       { q: 'Will it replace my team?', a: 'No — it handles repetitive questions and qualifies leads, then hands off to a human for anything that needs a person.' },
-      { q: 'Which channels can it run on?', a: 'Website chat, WhatsApp (through the official WhatsApp Business Platform where appropriate) and internal tools. We recommend the right setup for your volume and budget.' },
+      { q: 'Which channels can it run on?', a: 'Website chat, text messaging (SMS), WhatsApp (through the official WhatsApp Business Platform where appropriate) and internal tools. We recommend the right setup for your volume and budget.' },
       { q: 'Can it take orders or bookings?', a: 'Yes. It can connect to your booking or ordering system so customers finish the request in the same conversation.' }
     ],
     related: ['ai-knowledge-base', 'business-process-automation', 'crm-setup']
@@ -811,7 +813,7 @@ export const services = [
     deliverables: [
       'Automated invoice and payment reminders',
       'Client and staff onboarding sequences',
-      'Scheduled reports delivered to your inbox or WhatsApp',
+      'Scheduled reports delivered to your inbox or team chat',
       'Appointment and booking reminders',
       'Inventory and low-stock alerts',
       'Built on reliable tools such as Make or n8n'
@@ -837,20 +839,20 @@ export const services = [
     metaTitle: 'Automation Audit — Find What to Automate First',
     summary: 'A focused paid audit that finds your biggest time-wasters and the automations worth building.',
     metaDescription: 'An automation audit for growing businesses: we map your repetitive workflows, estimate the time and cost they waste, and recommend what to automate first.',
-    problem: 'Everyone says "automate," but which tasks actually pay off? Guessing leads to over-engineered tools nobody uses. You need a clear, prioritised plan.',
+    problem: 'Everyone says "automate," but which tasks actually pay off? Guessing leads to over-engineered tools nobody uses. You need a clear, prioritized plan.',
     deliverables: [
       'A review of your day-to-day workflows',
       'A shortlist of high-value automation opportunities',
       'An estimate of the time and cost each one wastes today',
-      'A prioritised, practical roadmap',
+      'A prioritized, practical roadmap',
       'A clear recommendation on where to start'
     ],
     whoFor: ['Businesses new to automation', 'Teams unsure what to automate first', 'Owners who want a plan before spending'],
-    outcomes: ['A clear, prioritised roadmap', 'Confidence in where to invest', 'A concrete starting point'],
+    outcomes: ['A clear, prioritized roadmap', 'Confidence in where to invest', 'A concrete starting point'],
     process: [
       { t: 'Intake', d: 'You share how your team works day to day.' },
       { t: 'Discover', d: 'We map processes and spot the leaks.' },
-      { t: 'Prioritise', d: 'We rank opportunities by value and effort.' },
+      { t: 'Prioritize', d: 'We rank opportunities by value and effort.' },
       { t: 'Recommend', d: 'You get a roadmap and a place to start.' }
     ],
     pricing: P('automation-audit'),
@@ -858,7 +860,7 @@ export const services = [
       { q: 'Why is the audit paid?', a: 'It is real, focused work: interviews, process mapping and a written roadmap you keep even if you build nothing with us. If you do build, the full fee is credited back.' },
       { q: 'How long does it take?', a: 'Usually 5–7 working days: a 60–90 minute discovery session, our analysis, then a walkthrough of your roadmap.' },
       { q: 'How much does it cost?', a: pr('A fixed {{audit}}.', 'A fixed fee, confirmed in writing before we start.') + ' The full fee is credited toward any automation build you start with us within 60 days, so if you go ahead, the audit is effectively free.' },
-      { q: 'What do I get at the end?', a: 'A prioritised roadmap of what to automate first, with time and cost estimates and a clear starting point.' }
+      { q: 'What do I get at the end?', a: 'A prioritized roadmap of what to automate first, with time and cost estimates and a clear starting point.' }
     ],
     related: ['business-process-automation', 'ai-assistants-chatbots', 'ai-knowledge-base']
   },
@@ -869,7 +871,7 @@ export const services = [
     metaDescription: 'Turn company documents and SOPs into an internal AI assistant. Staff ask questions in plain language and get accurate answers from your own knowledge base.',
     problem: 'Your know-how is trapped in scattered documents, chats and a few people\u2019s heads. New staff take months to get up to speed and keep asking the same questions.',
     deliverables: [
-      'Your documents and SOPs organised and cleaned up',
+      'Your documents and SOPs organized and cleaned up',
       'An internal AI assistant trained on your knowledge',
       'Plain-language answers with sources',
       'Access control so only your team can use it',
@@ -878,7 +880,7 @@ export const services = [
     whoFor: ['Businesses with lots of internal know-how', 'Teams onboarding new staff often', 'Companies losing knowledge when people leave'],
     outcomes: ['Faster onboarding', 'Fewer repeated questions', 'Knowledge that stays in the business'],
     process: [
-      { t: 'Gather', d: 'We collect and organise your documents.' },
+      { t: 'Gather', d: 'We collect and organize your documents.' },
       { t: 'Build', d: 'We train an assistant on your knowledge.' },
       { t: 'Secure', d: 'We restrict access to your team.' },
       { t: 'Maintain', d: 'We set up a way to keep it current.' }
@@ -887,7 +889,7 @@ export const services = [
     faqs: [
       { q: 'Is my data kept private?', a: 'Yes. We design the setup so your knowledge base is restricted to your team and handled responsibly.' },
       { q: 'What documents can it use?', a: 'SOPs, policies, product info, FAQs and most common document formats.' },
-      { q: 'Can customers use it too?', a: 'This service is for internal use; for customer-facing AI, see the WhatsApp AI Assistant.' }
+      { q: 'Can customers use it too?', a: 'This service is for internal use; for customer-facing AI, see AI Assistants & Chatbots.' }
     ],
     related: ['ai-assistants-chatbots', 'business-process-automation', 'cloud-document-management']
   },
@@ -1018,19 +1020,19 @@ export function servicesByDivision(slug) { return services.filter(s => s.divisio
 export const industries = [
   {
     slug: 'real-estate', title: 'Real Estate & Developers',
-    metaDescription: 'Digital marketing and websites for Ghanaian real estate developers and agents — qualified property enquiries, listings sites and fast WhatsApp follow-up.',
-    summary: 'Turn property interest into qualified, followed-up enquiries — not just clicks.',
-    problems: ['Portals and social bring browsers, not serious buyers', 'Enquiries come in on WhatsApp and go cold before follow-up', 'No clear view of which listings and channels actually convert'],
-    whatWeBuild: ['A listings site that showcases properties and captures enquiries', 'A WhatsApp lead system so no serious buyer is missed', 'Targeted Google and Meta ads for real demand', 'Reporting on enquiries, viewings and cost per lead'],
+    metaDescription: 'Digital marketing and websites for Ghanaian real estate developers and agents — qualified property inquiries, listings sites and fast WhatsApp follow-up.',
+    summary: 'Turn property interest into qualified, followed-up inquiries — not just clicks.',
+    problems: ['Portals and social bring browsers, not serious buyers', 'Inquiries come in on WhatsApp and go cold before follow-up', 'No clear view of which listings and channels actually convert'],
+    whatWeBuild: ['A listings site that showcases properties and captures inquiries', 'A WhatsApp lead system so no serious buyer is missed', 'Targeted Google and Meta ads for real demand', 'Reporting on inquiries, viewings and cost per lead'],
     starter: 'A listings website plus the ShowMe Growth retainer, so demand and fast follow-up run together from day one.',
     relatedServices: ['business-websites', 'growth-retainer', 'paid-ads', 'ai-assistants-chatbots']
   },
   {
     slug: 'diaspora-property', title: 'Diaspora Property Buyers',
-    metaDescription: 'Reach diaspora property buyers in the UK, US and Canada: trust-building websites, USD-friendly enquiries and reliable follow-up across time zones.',
+    metaDescription: 'Reach diaspora property buyers in the UK, US and Canada: trust-building websites, USD-friendly inquiries and reliable follow-up across time zones.',
     summary: 'Win trust with buyers abroad and follow up reliably across time zones.',
-    problems: ['Buyers abroad need extra trust before committing from a distance', 'Time-zone gaps mean enquiries wait too long for a reply', 'Pricing and payment in a foreign currency raise doubts'],
-    whatWeBuild: ['A trust-building site aimed at diaspora buyers', 'Enquiry capture that works across time zones', 'Clear presentation of pricing (USD quotes as needed)', 'Automated first responses so no lead waits'],
+    problems: ['Buyers abroad need extra trust before committing from a distance', 'Time-zone gaps mean inquiries wait too long for a reply', 'Pricing and payment in a foreign currency raise doubts'],
+    whatWeBuild: ['A trust-building site aimed at diaspora buyers', 'Inquiry capture that works across time zones', 'Clear presentation of pricing (USD quotes as needed)', 'Automated first responses so no lead waits'],
     starter: 'A diaspora-focused landing page and lead system, paired with ads targeting key markets abroad.',
     relatedServices: ['landing-pages-funnels', 'growth-retainer', 'ai-assistants-chatbots', 'business-websites'],
     note: 'We focus on buyers in the US, UK and Canada. Developers and agents can be quoted in cedis; diaspora-facing businesses abroad can be quoted and invoiced in USD and pay by card or international transfer.'
@@ -1046,11 +1048,11 @@ export const industries = [
   },
   {
     slug: 'private-schools', title: 'Private Schools & Tutoring',
-    metaDescription: 'Websites and admissions marketing for private schools and tutoring centres in Ghana — a steady enrolment pipeline with clear follow-up and reporting.',
+    metaDescription: 'Websites and admissions marketing for private schools and tutoring centers in Ghana — a steady enrollment pipeline with clear follow-up and reporting.',
     summary: 'Build a steady admissions pipeline with clear follow-up and reporting.',
-    problems: ['Enrolment enquiries scatter across calls, DMs and forms', 'Parents get slow or inconsistent follow-up', 'No clear view of the admissions pipeline'],
-    whatWeBuild: ['A school website with a clear admissions journey', 'An enquiry-to-enrolment lead system', 'Seasonal ad campaigns around admissions windows', 'Reporting on enquiries and enrolments'],
-    starter: 'A school website with an admissions enquiry system, plus the Growth retainer during enrolment season.',
+    problems: ['Enrollment inquiries scatter across calls, DMs and forms', 'Parents get slow or inconsistent follow-up', 'No clear view of the admissions pipeline'],
+    whatWeBuild: ['A school website with a clear admissions journey', 'An inquiry-to-enrollment lead system', 'Seasonal ad campaigns around admissions windows', 'Reporting on inquiries and enrollments'],
+    starter: 'A school website with an admissions inquiry system, plus the Growth retainer during enrollment season.',
     relatedServices: ['business-websites', 'growth-retainer', 'crm-setup', 'social-media']
   },
   {
@@ -1066,7 +1068,7 @@ export const industries = [
     slug: 'hospitality-tourism', title: 'Hospitality & Tourism',
     metaDescription: 'Websites and direct-booking tools for Ghanaian hotels, guesthouses and tour operators — win direct bookings and reduce dependence on third-party platforms.',
     summary: 'Win direct bookings and depend less on third-party platforms.',
-    problems: ['Third-party platforms take a cut of every booking', 'Guests cannot easily book direct', 'Slow replies to enquiries lose bookings'],
+    problems: ['Third-party platforms take a cut of every booking', 'Guests cannot easily book direct', 'Slow replies to inquiries lose bookings'],
     whatWeBuild: ['A direct-booking website that reduces platform fees', 'A concierge-style WhatsApp assistant for guests', 'Local SEO and AI visibility so you get found', 'Photography that shows off your property'],
     starter: 'A direct-booking site with a guest WhatsApp assistant, backed by Local SEO.',
     relatedServices: ['booking-online-ordering', 'business-websites', 'local-seo-gbp', 'photography-video']
@@ -1091,62 +1093,27 @@ export const industries = [
   },
   {
     slug: 'events-weddings', title: 'Events & Weddings',
-    metaDescription: 'Websites, portfolios and booking tools for Ghanaian event planners and wedding vendors — showcase your work and turn enquiries into booked dates.',
-    summary: 'Showcase your work and turn enquiries into booked dates.',
-    problems: ['A stunning portfolio trapped only on social media', 'Enquiries come in but bookings slip through', 'No easy way for clients to enquire and pay a deposit'],
-    whatWeBuild: ['A portfolio website that shows off your work', 'A booking and enquiry flow with deposits', 'Targeted ads and social for your ideal clients', 'Automated follow-up so no enquiry goes cold'],
+    metaDescription: 'Websites, portfolios and booking tools for Ghanaian event planners and wedding vendors — showcase your work and turn inquiries into booked dates.',
+    summary: 'Showcase your work and turn inquiries into booked dates.',
+    problems: ['A stunning portfolio trapped only on social media', 'Inquiries come in but bookings slip through', 'No easy way for clients to inquire and pay a deposit'],
+    whatWeBuild: ['A portfolio website that shows off your work', 'A booking and inquiry flow with deposits', 'Targeted ads and social for your ideal clients', 'Automated follow-up so no inquiry goes cold'],
     starter: 'A portfolio website with a booking flow, plus social and ads to reach couples and hosts.',
     relatedServices: ['business-websites', 'booking-online-ordering', 'social-media', 'photography-video']
   },
   {
     slug: 'professional-services', title: 'Professional Services',
-    metaDescription: 'Digital marketing and systems for Ghanaian law firms, accountants and consultants — a credible website, steady enquiries and organised client management.',
-    summary: 'Look credible, win the right clients and keep your practice organised.',
+    metaDescription: 'Digital marketing and systems for Ghanaian law firms, accountants and consultants — a credible website, steady inquiries and organized client management.',
+    summary: 'Look credible, win the right clients and keep your practice organized.',
     problems: ['A dated site undercuts a serious practice', 'Referrals are great but inconsistent', 'Client information and follow-up are scattered'],
-    whatWeBuild: ['A credible website that reflects your expertise', 'SEO and content that win the right clients', 'A CRM to organise clients and follow-up', 'Microsoft 365 and secure document management'],
+    whatWeBuild: ['A credible website that reflects your expertise', 'SEO and content that win the right clients', 'A CRM to organize clients and follow-up', 'Microsoft 365 and secure document management'],
     starter: 'A professional website with SEO, plus a CRM and Microsoft 365 to run the practice.',
-    relatedServices: ['business-websites', 'seo-programme', 'crm-setup', 'microsoft-365']
+    relatedServices: ['business-websites', 'seo-program', 'crm-setup', 'microsoft-365']
   }
 ];
 
 export const industryBySlug = Object.fromEntries(industries.map(i => [i.slug, i]));
 
-// ---- Grouped FAQ (for /faq/) ------------------------------------------------
-export const faqGroups = [
-  { title: 'General', items: [
-    { q: 'Where is ShowMe based and who do you work with?', a: 'ShowMe is US-led, with our team on the ground in Accra, Ghana. Our founder, ' + site.founder + ', is based in the United States, and our delivery team works from Accra. Ghana is our core market: we help ambitious businesses across the country, from small teams getting online to established companies modernising how they operate. We also work with diaspora and international clients in the US, UK and Canada.' },
-    { q: 'What makes ShowMe different?', a: 'We are one accountable partner across six divisions — web, growth, brand, business technology, AI and software — so you are not juggling freelancers. Our team brings ' + site.facts.experience + ' of experience and has helped ' + site.facts.businessesHelped + ' businesses across Ghana and abroad with their digital needs, and we lead with proof, not promises: we guarantee our speed and execution, not inflated lead numbers.' },
-    { q: 'Do we need to meet in person?', a: 'No. Everything is delivered remotely over WhatsApp, video calls and shared workspaces, for businesses anywhere in Ghana and for diaspora and international clients in the US, UK and Canada, who can be quoted in USD. When you would like to meet, or a project needs on-site work such as a photo or video shoot, our team in Accra can meet you in person; travel outside Greater Accra is quoted separately.' }
-  ]},
-  { title: 'Pricing & payment', items: [
-    { q: 'How much is the ShowMe Growth retainer?', a: pr(site.facts.retainerPrice + ' per month with a ' + site.facts.retainerMinimum + ', billed monthly in advance by {{bill_methods}}. Ad spend is separate and {{adspend_paid}}; we recommend at least ' + site.facts.adSpendMin + '/month.', 'You get a fixed monthly price in your quote after a short call. The retainer has a ' + site.facts.retainerMinimum + ' and is billed monthly in advance by {{bill_methods}}. Ad spend is separate and {{adspend_paid}}.') },
-    { q: 'How is everything else priced?', a: pr('Every service has a published "from" price on our pricing page, so you know the starting point before we talk. Your fixed quote follows a short discovery call, based on exactly what you need.', 'Every service has a clear, written scope. Your fixed quote follows a short discovery call, based on exactly what you need, and you see the full price before you commit.') },
-    { q: 'What payment methods do you accept?', a: '{{faq_pay}}' },
-    { q: 'What are your payment terms?', a: 'Projects are 50% deposit to start and 50% on launch, and you approve a working preview before that final payment is due. Retainers and monthly plans are billed monthly in advance.' },
-    { q: 'Do you quote in US dollars?', a: '{{faq_usd}}' }
-  ]},
-  { title: 'Timelines', items: [
-    { q: 'How fast can you launch?', a: 'For the Growth retainer, your landing page, lead system and reporting go live within 7 days of onboarding — or month 1 of the retainer is free. A business website typically takes 3–5 weeks, an online store 5–8 weeks and a custom web app first version 6–10 weeks.' },
-    { q: 'What do you need from me to hit those timelines?', a: 'Timely content, approvals and access. We tell you exactly what we need up front so nothing stalls.' }
-  ]},
-  { title: 'Websites & e-commerce', items: [
-    { q: 'Can I update my own website?', a: 'Yes. We build with content you can edit and train your team at handover, so you are never dependent on a developer for small changes.' },
-    { q: 'Which payment methods can my store accept?', a: 'MTN MoMo, Telecel Cash, card and bank transfer via providers such as Paystack. We confirm the right mix during discovery.' }
-  ]},
-  { title: 'Growth, SEO & ads', items: [
-    { q: 'Do you guarantee rankings or a number of leads?', a: 'No honest agency can. We guarantee the work, transparency and reporting. Rankings and lead volume depend on your market, offer and budget.' },
-    { q: 'Is ad spend included in your fees?', a: 'No. Our fees cover management, landing pages, lead systems and reporting. Ad spend is separate and goes directly to the ad platforms.' },
-    { q: 'What is AI search visibility?', a: 'It is optimising your content, profiles and reputation so AI assistants like ChatGPT, Gemini and Perplexity are more likely to recommend you — tracked monthly. No one can guarantee an AI recommendation, but we improve the signals that make it more likely.' }
-  ]},
-  { title: 'AI & automation', items: [
-    { q: 'Will an AI assistant replace my staff?', a: 'No. It handles repetitive questions and qualifies leads 24/7, then hands off to a human for anything that needs a person.' },
-    { q: 'Where should I start with automation?', a: 'Usually with an Automation Audit, so we target the workflows that save the most time and money first.' }
-  ]},
-  { title: 'Ownership & support', items: [
-    { q: 'Do I own what you build?', a: 'Yes. You own your domain, content, brand assets and, for software, your code. We hand over full access at the end of an engagement.' },
-    { q: 'What happens after launch?', a: 'We offer Website Care plans and ongoing growth, automation and support so your investment keeps working. There is no lock-in beyond any agreed minimum term.' }
-  ]}
-];
+// (The old grouped FAQ was retired; /faq/ content lives in pages.mjs FAQ_GROUPS.)
 
 // ---- Insights (blog) --------------------------------------------------------
 // Full article bodies live in scripts/articles/*.html (original copy).
@@ -1178,8 +1145,8 @@ const insightList = [
   },
   {
     slug: 'follow-up-every-whatsapp-lead', file: 'followup.html', topic: 'Lead follow-up',
-    title: 'Never lose another WhatsApp lead: a simple follow-up system',
-    excerpt: 'Most businesses lose sales to slow replies. Here is a simple system, part automation and part discipline, to make sure every WhatsApp enquiry gets followed up.'
+    title: 'Never lose another lead: a simple follow-up system',
+    excerpt: 'Most businesses lose sales to slow replies. Here is a simple system, part automation and part discipline, so every inquiry gets followed up.'
   },
   {
     slug: 'whatsapp-automation-for-ghana-businesses', file: 'whatsapp-automation.html', topic: 'Automation',

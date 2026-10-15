@@ -6,7 +6,7 @@
 // =============================================================================
 import { timedFetch, readCapped, withTimeout, normaliseUrl, baseDomain, FREE_MAIL, emailDomain, isSelfHost } from './util.js';
 
-const UA = 'Mozilla/5.0 (compatible; ShowMeAuditBot/1.0; +https://agency.showmeworld.app/free-audit/)';
+const UA = 'Mozilla/5.0 (compatible; ShowMeAuditBot/1.0; +https://agency.showmeworld.app/technology-assessment/)';
 const HTML_HEADERS = { 'User-Agent': UA, Accept: 'text/html,application/xhtml+xml;q=0.9,*/*;q=0.8', 'Accept-Language': 'en' };
 
 // ---- HTML helpers (regex-based; no DOM in Workers) --------------------------

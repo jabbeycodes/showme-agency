@@ -67,6 +67,10 @@ const ICON_PATHS = {
   nonprofits: '<path d="M12 20s-7-4.4-7-10a4 4 0 017-2.6A4 4 0 0119 10c0 5.6-7 10-7 10z"/>',
   retail: '<path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6a3 3 0 016 0v2"/>',
   startups: '<path d="M12 2c3 2 5 5.5 5 10l-2.5 4h-5L7 12c0-4.5 2-8 5-10z"/><circle cx="12" cy="9" r="1.8"/><path d="M9.5 16l-2 4M14.5 16l2 4"/>',
+  homeservices: '<path d="M14.5 4.5a4 4 0 00-5 5L4 15l2 2 2 2 5.5-5.5a4 4 0 005-5l-2.5 2.5-2-2 2.5-2.5z"/>',
+  salon: '<circle cx="6" cy="17" r="3"/><circle cx="18" cy="17" r="3"/><path d="M8.2 15L19 4M15.8 15L5 4"/>',
+  auto: '<path d="M4 15l1.5-5A2 2 0 017.4 8.5h9.2a2 2 0 011.9 1.5L20 15"/><rect x="3" y="15" width="18" height="4" rx="1.5"/><circle cx="7.5" cy="19" r="1.5"/><circle cx="16.5" cy="19" r="1.5"/>',
+  fitness: '<path d="M6 8v8M18 8v8M3 10v4M21 10v4M6 12h12"/>',
   realestate: '<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-5h4v5"/>',
   assess: '<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>',
   roadmap: '<path d="M4 6h10M4 12h16M4 18h7"/><circle cx="17" cy="6" r="2"/><circle cx="14" cy="18" r="2"/>',
@@ -220,6 +224,7 @@ export function header() {
       ${menu('menuIndustries', 'Industries', inds, `<div class="menu-foot">${ghInds ? `<ul>${ghInds}</ul>` : ''}<a href="/industries/">All industries</a></div>`)}
       <li><a href="/how-we-work/">How we work</a></li>
       <li><a href="/insights/">Insights</a></li>
+      <li><a href="/technology-assessment/">Free Assessment</a></li>
       ${menu('menuCompany', 'Company', [
         { href: '/about/', label: 'About us' },
         { href: '/about/#leadership', label: 'Leadership' },
@@ -250,7 +255,7 @@ export function footer() {
       <div class="footer-brand">
         <a class="brand" href="/">${BRAND_MARK}<span>ShowMe <small>Digital Agency</small></span></a>
         <p>Managed IT, AI and automation, software and digital marketing from one accountable technology partner. ${esc(site.facts.experience)} of experience and ${esc(site.facts.businessesHelped)} businesses helped.</p>
-        ${ghOnly(`<p>${esc(site.locationLine)}.</p>`)}
+        ${byRegion(`<p>Founded by ${esc(site.founder)} · ${tbc('city, state')}</p>`, `<p>${esc(site.locationLine)}.</p>`)}
         ${regionSwitch()}
       </div>
       ${col('Solutions', [{ href: '/managed-it-services/', label: 'Managed IT Services' }, ...PILLARS.map(p => ({ href: '/solutions/' + p.slug + '/', label: p.short }))], ghServices)}
@@ -266,9 +271,11 @@ export function footer() {
       ])}
       ${col('Contact', [
         { href: '/contact/', label: 'Book a Technology Consultation' },
-        { href: '/free-audit/', label: 'Free digital presence check' },
+        { href: '/technology-assessment/', label: 'Free Technology Assessment' },
+        { href: 'tel:' + site.phoneE164, label: 'Call ' + site.phoneDisplay },
+        { href: 'sms:' + site.phoneE164, label: 'Text ' + site.phoneDisplay },
         { href: 'mailto:' + site.email, label: site.email },
-        { href: 'https://wa.me/' + site.whatsappNumber, label: 'WhatsApp ' + site.whatsappDisplay, ext: true }
+        { href: 'https://wa.me/' + site.whatsappNumber, label: 'WhatsApp', ext: true }
       ])}
     </div>
     <div class="footer-bottom">
@@ -296,6 +303,7 @@ export function ctaBand(opts = {}) {
       <div>
         <h2 id="cta-heading">${esc(heading)}</h2>
         <p>${esc(text)}</p>
+        <p class="cta-alt">Or start with a <a href="/technology-assessment/">Free Technology Assessment</a>, or call or text <a href="tel:${site.phoneE164}">${esc(site.phoneDisplay)}</a>.</p>
       </div>
       <div class="btn-row">
         <a class="btn on-dark" href="/contact/">Book a Technology Consultation</a>

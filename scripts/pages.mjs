@@ -6,7 +6,7 @@
 import { site, serviceBySlug, insights as ALL_INSIGHTS } from './data.mjs';
 import { BUNDLES, PAYMENT } from './prices.mjs';
 import {
-  PILLARS, TIERS, TIER_MATRIX, BOUNDARIES, ADDONS, CLIENT_RESPONSIBILITIES, RESPONSE_ROWS,
+  PILLARS, TIERS, TIER_MATRIX, BOUNDARIES, ADDONS, CLIENT_RESPONSIBILITIES, RESPONSE_ROWS, ONBOARDING,
   INDUSTRIES, GH_INDUSTRIES, JOURNEY, ENGAGEMENTS, INSIGHTS_US, INSIGHTS_GH
 } from './content.mjs';
 import {
@@ -21,7 +21,7 @@ export const HERO = {
   h1: 'Technology That Runs Your Business. Solutions That Power Its Growth.',
   sub: 'From managed IT and cloud infrastructure to AI automation, software development, and digital marketing, ShowMe Digital Agency helps ambitious businesses operate efficiently, reliably, and competitively.',
   positioning: 'Your Business. Our Technology Expertise. Unlimited Possibilities.',
-  supporting: 'From running your everyday systems to accelerating your growth, ShowMe Digital Agency brings your technology, digital marketing, and business automation together under one trusted partner.'
+  supporting: 'From running your systems day to day to accelerating your growth, ShowMe Digital Agency brings your IT, digital marketing, AI automation, and software together under one trusted partner.'
 };
 
 function pageHero({ crumbs, eyebrow, h1, lead, ctas = true, iconName }) {
@@ -93,7 +93,7 @@ function formShell({ id, kind, fields, submit }) {
       </div>
       <div class="form-actions"><button class="btn" type="submit">${esc(submit)}</button></div>
       <p class="form-status" role="alert"></p>
-      <p class="form-alt">Prefer email? <a class="email-alternative" href="mailto:${site.email}">Send your request to ${esc(site.email)}</a>. You can also <a class="whatsapp-alternative" href="${WA}" target="_blank" rel="noopener">message us on WhatsApp</a>.</p>
+      <p class="form-alt">Prefer to talk? Call or text <a href="tel:${site.phoneE164}">${esc(site.phoneDisplay)}</a>, or <a class="email-alternative" href="mailto:${site.email}">email ${esc(site.email)}</a>. WhatsApp also works: <a class="whatsapp-alternative" href="${WA}" target="_blank" rel="noopener">message us on WhatsApp</a>.</p>
       <p class="form-note">We use your details only to reply to this request. See our <a href="/privacy/">privacy policy</a>.</p>
     </form>`;
 }
@@ -113,19 +113,33 @@ function consultationForm() {
   ].join('\n        ');
   return formShell({ id, kind: 'Technology consultation request', fields, submit: 'Request a consultation' });
 }
-function presenceForm() {
-  const id = 'check';
+// Free Technology Assessment intake (repositioning/assessment-offers.md §1.1,
+// shortened). Field names map onto the existing /api/lead record: site_url ->
+// website (runs the existing website scan when given), found_via, time_waster
+// (= biggest technology headache); everything else is folded into `message`.
+function fieldChecks(id, name, legend, options) {
+  return `<fieldset class="field full"><legend class="legend">${esc(legend)} <span class="hint">(optional, choose any)</span></legend><div class="checks">${options.map((t, i) => `<label class="check" for="${id}${i}"><input type="checkbox" id="${id}${i}" name="${name}" value="${esc(t)}"> ${esc(t)}</label>`).join('')}</div></fieldset>`;
+}
+function assessmentForm() {
+  const id = 'assess';
   const fields = [
-    fieldText(id + 'Name', 'name', 'Your name', { required: true, auto: 'name', full: true }),
-    fieldText(id + 'Business', 'business', 'Company', { auto: 'organization', full: true }),
-    fieldText(id + 'Email', 'email', 'Work email', { type: 'email', required: true, auto: 'email', full: true }),
-    fieldText(id + 'Phone', 'phone', 'Phone', { type: 'tel', auto: 'tel', full: true }),
-    fieldText(id + 'SiteUrl', 'site_url', 'Your website', { auto: 'url', full: true, extra: ' inputmode="url" spellcheck="false" autocapitalize="off" placeholder="yourcompany.com"' }),
-    fieldSelect(id + 'Found', 'found_via', 'Where do most customers find you?', ['Google search', 'Google Maps', 'Social media', 'Referrals', 'Advertising', 'Other'], { full: true }),
-    fieldText(id + 'Waste', 'time_waster', 'Biggest time-waster in your week', { full: true }),
-    `<div class="field full"><label for="${id}Message">Anything else? <span class="hint">(optional)</span></label><textarea id="${id}Message" name="message"></textarea></div>`
+    fieldText(id + 'Name', 'name', 'Your name', { required: true, auto: 'name' }),
+    fieldText(id + 'Role', 'role', 'Your role', { auto: 'organization-title' }),
+    fieldText(id + 'Business', 'business', 'Business name', { auto: 'organization' }),
+    fieldText(id + 'Email', 'email', 'Work email', { type: 'email', required: true, auto: 'email' }),
+    fieldText(id + 'Phone', 'phone', 'Phone', { type: 'tel', auto: 'tel' }),
+    fieldText(id + 'SiteUrl', 'site_url', 'Your website', { auto: 'url', extra: ' inputmode="url" spellcheck="false" autocapitalize="off" placeholder="yourcompany.com"' }),
+    fieldSelect(id + 'Industry', 'industry', 'Industry', ['Medical or dental clinic', 'Professional services', 'Home services or contractor', 'Salon, barber or spa', 'Auto services', 'Fitness', 'Restaurant, retail or hospitality', 'School or education', 'Nonprofit', 'Startup or small business', 'Other']),
+    fieldSelect(id + 'Staff', 'company_size', 'Staff who use a computer or company email', ['1–2', '3–10', '11–25', '26–50', '51–100', '100+']),
+    fieldSelect(id + 'ItToday', 'it_setup', 'Who looks after your IT today?', ['Nobody in particular', 'A staff member', 'A freelancer', 'An IT company', 'Other']),
+    fieldSelect(id + 'Tools', 'office_tools', 'Email and office tools', ['Microsoft 365', 'Google Workspace', 'Other', 'Not sure']),
+    fieldChecks(id + 'Int', 'interests', 'What should we look at?', ['IT support, devices, email and backups', 'Website, search and marketing', 'AI, automation and reporting', 'Software, integrations and a technology roadmap']),
+    fieldSelect(id + 'Found', 'found_via', 'How do most new customers find you?', ['Google search', 'Google Maps', 'Social media', 'Referrals', 'Walk-ins', 'Advertising', 'Other'], { full: true }),
+    fieldText(id + 'Headache', 'time_waster', 'Biggest technology headache right now', { full: true }),
+    `<div class="field full"><label for="${id}Message">Anything else we should know? <span class="hint">(optional)</span></label><textarea id="${id}Message" name="message" placeholder="Upcoming changes, important systems, what you would like technology to do better"></textarea></div>`,
+    `<div class="field full"><label class="check" for="${id}Consent"><input type="checkbox" id="${id}Consent" name="consent" value="yes" required aria-describedby="${id}ConsentErr"> I am happy for ShowMe to look at our public website and domain information.</label><p class="field-error" id="${id}ConsentErr" aria-live="polite"></p></div>`
   ].join('\n        ');
-  return formShell({ id, kind: 'Digital presence check request', fields, submit: 'Request my check' });
+  return formShell({ id, kind: 'Free Technology Assessment', fields, submit: 'Request my free assessment' });
 }
 
 // ---- Home ----------------------------------------------------------------------
@@ -133,9 +147,11 @@ export function home() {
   const flagshipPoints = ['Help desk and user support for your team', 'Microsoft 365 or Google Workspace administration', 'Device inventory, updates and backup monitoring', 'Onboarding and offboarding, vendor coordination and regular reviews'];
   const commitments = [
     ['A written proposal before any work', 'Scope, deliverables, exclusions, timeline and price are agreed in writing before we start.'],
-    ['You own your accounts and assets', 'Domains, licences, accounts, content and code we create for you are set up in your name.'],
+    ['You own your accounts and assets', 'Domains, licenses, accounts, content and code we create for you are set up in your name.'],
     ['Preview before final payment', 'On projects you approve a working preview before the final payment is due.'],
-    ['Plain-English reporting', 'Regular summaries of what we did, what we found and what we recommend next.']
+    ['Plain-English reporting', 'Regular summaries of what we did, what we found and what we recommend next.'],
+    ['A reply within one business day', 'Send a request or a question and we will reply within one business day.'],
+    ['30 days of launch support', 'Every project includes 30 days of support after launch to fix defects in what we delivered.']
   ];
   const main = `    <section class="hero">
       <div class="wrap hero-grid">
@@ -147,6 +163,7 @@ export function home() {
             <a class="btn" href="/contact/">Book a Technology Consultation</a>
             <a class="btn secondary" href="/solutions/">Explore Our Solutions</a>
           </div>
+          <p class="hero-alt">Not sure where to start? <a class="text-link" href="/technology-assessment/">Get a Free Technology Assessment</a></p>
           <div class="hero-facts">
             <div><strong>${esc(site.facts.experience)}</strong><span>of experience</span></div>
             <div><strong>${esc(site.facts.businessesHelped)}</strong><span>businesses helped</span></div>
@@ -253,8 +270,8 @@ export function solutionsHub() {
 
     <section class="section-alt">
       <div class="wrap split center-y">
-        <div><p class="eyebrow">Not sure where to start?</p><h2>Start with a consultation.</h2><p>We review your current setup and priorities, then recommend the smallest useful next step. You receive the recommendations in writing.</p></div>
-        <div class="btn-row"><a class="btn" href="/contact/">Book a Technology Consultation</a><a class="btn secondary" href="/how-we-work/">How we work</a></div>
+        <div><p class="eyebrow">Not sure where to start?</p><h2>Start with a Free Technology Assessment.</h2><p>We look at how your business runs its computers, email, files and tools, then give you a written summary of your top priorities, whether or not you work with us.</p></div>
+        <div class="btn-row"><a class="btn" href="/technology-assessment/">Get a Free Technology Assessment</a><a class="btn secondary" href="/contact/">Book a Technology Consultation</a></div>
       </div>
     </section>
 
@@ -266,7 +283,7 @@ export function solutionsHub() {
   });
 }
 
-// Digital marketing pillar extra: packages without prices, de-emphasised.
+// Digital marketing pillar extra: packages without prices, de-emphasized.
 export function marketingPackages() {
   const retainer = serviceBySlug['growth-retainer'];
   return `
@@ -283,23 +300,19 @@ export function marketingPackages() {
 }
 
 // ---- Flagship: managed IT ----------------------------------------------------------
+// Plans follow repositioning/managed-it-packages.md; [CONFIRM WITH JOSH] /
+// [PRICE TBD] items there are shown as placeholders here.
+const tbcText = v => (v && typeof v === 'object') ? (v.t ? `${esc(v.t)} ${tbc(v.tbc)}` : tbc(v.tbc)) : esc(v);
 export function managedIt() {
   const path = '/managed-it-services/';
   const crumbs = [{ name: 'Home', path: '/' }, { name: 'Solutions', path: '/solutions/' }, { name: 'Managed IT Services', path }];
-  const cell = v => `<td class="${v}"></td>`;
   const faqs = [
-    { q: 'Who is this for?', a: 'Organisations without a full IT department, or with an IT lead who needs support. It suits teams that want day-to-day IT handled reliably and planned properly.' },
+    { q: 'Who is this for?', a: 'Businesses with roughly 3 to 100 staff and no full-time IT person, or with an IT lead who needs support. It suits teams that want day-to-day IT handled properly and planned ahead.' },
+    { q: 'How do we start?', a: 'With a Free Technology Assessment. We learn how your business uses technology today, give you a written summary of priorities, and only then recommend a plan, or tell you if you do not need one.' },
     { q: 'Do you replace our current IT provider?', a: 'Only if you want us to. We can take over fully, work alongside an internal IT person, or start with an assessment and a handover plan.' },
-    { q: 'How is it priced?', a: 'As a monthly fee based on the package and the size of your team, quoted in writing after an assessment. Hardware, software and licences are separate.' },
-    { q: 'Is there a minimum term?', a: 'Any minimum term is stated in your proposal before you sign.' },
-    { q: 'What happens during onboarding?', a: 'We document your current setup, agree access and contacts, fix urgent issues and set up reporting before the steady monthly service begins.' }
-  ];
-  const onboarding = [
-    { t: 'Assessment', d: 'Users, devices, accounts, network and backups reviewed and documented.' },
-    { t: 'Proposal', d: 'Package, scope, exclusions and price agreed in writing.' },
-    { t: 'Access & handover', d: 'Admin access transferred properly and recorded, including a handover from any previous provider.' },
-    { t: 'Quick fixes', d: 'Urgent issues found in the assessment are addressed first.' },
-    { t: 'Steady service', d: 'Support, administration and reporting begin on the agreed schedule.' }
+    { q: 'How is it priced?', a: 'As a monthly fee for the plan and the size of your team, plus a one-time onboarding fee, quoted in writing after the assessment. Hardware, software licenses and third-party tools are billed separately.' },
+    { q: 'Is there a minimum term?', a: 'Any minimum term and notice period are stated in your proposal before you sign.' },
+    { q: 'Is this a security service?', a: 'No. The plans cover IT support and administration, including routine settings such as backups, updates and multi-factor sign-in inside Microsoft 365 or Google Workspace. Security assessments, testing, training and compliance work are not offered at present.' }
   ];
   const main = `    <section class="page-hero">
       <div class="wrap page-hero-grid">
@@ -307,8 +320,9 @@ export function managedIt() {
           ${breadcrumb(crumbs)}
           <p class="eyebrow">Managed IT Services</p>
           <h1>Your Complete IT Department. Without the Cost of Building One.</h1>
-          <p class="lead">A managed monthly service for your people, accounts, devices and systems: day-to-day support, proper administration, regular reporting and a plan for what comes next.</p>
-          <div class="btn-row"><a class="btn" href="/contact/">Book a Technology Consultation</a><a class="btn secondary" href="#packages">Compare packages</a></div>
+          <p class="lead">A monthly plan for your people, accounts, devices and systems: help desk support, Microsoft 365 or Google Workspace administration, device management, backups and a technology advisor, for a predictable monthly fee instead of a full-time hire.</p>
+          <div class="btn-row"><a class="btn" href="/contact/">Book a Technology Consultation</a><a class="btn secondary" href="/technology-assessment/">Get a Free Technology Assessment</a></div>
+          <p class="hero-alt"><a class="text-link" href="#plans">Compare the plans</a></p>
         </div>
         ${icon('flagship', 'page-hero-icon')}
       </div>
@@ -318,57 +332,65 @@ export function managedIt() {
       <div class="wrap split">
         <div>
           <p class="eyebrow">The problem</p>
-          <h2>IT that depends on whoever is least busy</h2>
-          <p>In many growing organisations, IT is handled by a capable person who has another job. Accounts are created by hand, devices drift out of date, nobody is quite sure the backups work, and every new hire waits for equipment.</p>
-          <p>Hiring a full IT team is expensive. A managed service covers the routine work, with documentation and planning, for a predictable monthly fee.</p>
+          <h2>Stop being your own IT department</h2>
+          <p>In many small and mid-sized businesses, the technology is spread across several people: whoever set up the email, a freelancer who built the website, a vendor for the network, and the owner filling the gaps at night. When something breaks, nobody owns it.</p>
+          <p>A managed plan makes one partner responsible for the routine work, with documentation, reporting and planning, for a predictable monthly fee.</p>
         </div>
         <div class="panel">
-          <h3>What changes</h3>
-          ${list(['One place for your team to get IT help', 'Accounts, licences and devices kept tidy and documented', 'Backups monitored and test-restored', 'New starters ready on day one; leavers removed properly', 'A roadmap and budget for upcoming changes'])}
+          <h3>Every plan includes</h3>
+          ${list(['A written scope that says what is included and what is not', 'One point of contact who answers for the work', 'A regular plain-English report of what we did and what we recommend'])}
         </div>
       </div>
     </section>
 
-    <section class="section-alt" id="packages">
+    <section class="section-alt" id="plans">
       <div class="wrap">
-        <div class="section-head"><p class="eyebrow">Packages</p><h2>Three monthly packages</h2><p>Package names and inclusions are working drafts ${tbc('package names and final inclusions per package')}. Every package is quoted for your team size after an assessment.</p></div>
+        <div class="section-head"><p class="eyebrow">Plans</p><h2>Three monthly plans</h2><p>Every plan starts with a <a href="/technology-assessment/">Free Technology Assessment</a> and is quoted for your team after it. Pricing ${tbc('pricing unit (per user, per device or per site), minimum users, onboarding fee and prices')}. Who delivers each item and which tools we use ${tbc('delivery model and tools per plan')}.</p></div>
         <div class="tiers">
-          ${TIERS.map(t => `<div class="tier${t.featured ? ' featured' : ''}" data-reveal>${t.featured ? '<span class="tier-badge">A common starting point</span>' : ''}<h3>${esc(t.name)}</h3><p class="tier-for">${esc(t.forWho)}</p>${list(t.items)}<a class="btn${t.featured ? '' : ' secondary'}" href="/contact/">Request pricing</a></div>`).join('')}
+          ${TIERS.map(t => `<div class="tier${t.featured ? ' featured' : ''}" data-reveal>${t.featured ? '<span class="tier-badge">A common starting point</span>' : ''}<h3>${esc(t.name)}</h3><p class="tier-tagline">${esc(t.tagline)}</p><p class="tier-for">${esc(t.forWho)}</p><ul class="ticklist">${t.items.map(x => `<li>${tbcText(x)}</li>`).join('')}</ul><a class="btn${t.featured ? '' : ' secondary'}" href="/contact/">Request pricing</a></div>`).join('')}
         </div>
-        <h3 style="margin-top:48px">Compare packages</h3>
-        <div class="table-wrap"><table>
-          <caption class="visually-hidden">What each managed IT package includes</caption>
-          <thead><tr><th scope="col">Service</th>${TIERS.map(t => `<th scope="col">${esc(t.name)}</th>`).join('')}</tr></thead>
-          <tbody>${TIER_MATRIX.map(r => `<tr><th scope="row">${esc(r[0])}</th>${r.slice(1).map(cell).join('')}</tr>`).join('')}</tbody>
+        <h3 style="margin-top:48px">Compare plans</h3>
+        <div class="table-wrap"><table class="compare">
+          <caption class="visually-hidden">What each managed IT plan includes</caption>
+          <thead><tr><th scope="col">Area</th>${TIERS.map(t => `<th scope="col">${esc(t.name)}</th>`).join('')}</tr></thead>
+          <tbody>${TIER_MATRIX.map(r => `<tr><th scope="row">${esc(r[0])}</th>${r.slice(1).map(v => `<td>${tbcText(v)}</td>`).join('')}</tr>`).join('')}</tbody>
         </table></div>
+        <p class="hint" style="margin-top:14px">Backup tool and retention period ${tbc('backup tool and retention')}. Hardware, software licenses and third-party tools are billed separately ${tbc('pass-through at cost or with a markup')}.</p>
       </div>
     </section>
 
     <section>
       <div class="wrap">
-        <div class="section-head"><p class="eyebrow">How support works</p><h2>Response commitments</h2><p>Requests are logged, prioritised and tracked to resolution. We will only publish targets we can consistently meet.</p></div>
-        ${tbcBlock('response targets: support hours and time zone, support channels, and target first response by priority. No out-of-hours cover is offered unless confirmed.')}
+        <div class="section-head"><p class="eyebrow">How support works</p><h2>Priorities and response</h2><p>Requests are logged, given a priority and tracked to resolution. Response targets are for first response (a person acknowledges the request, starts work and gives you an update time), not fix times. We will only publish targets we can consistently meet.</p></div>
+        ${tbcBlock('support hours and time zone, how to log a request, and first-response targets per priority and plan. No out-of-hours cover is offered unless confirmed.')}
         <div class="table-wrap" style="margin-top:18px"><table>
           <caption class="visually-hidden">Request priorities and response targets</caption>
-          <thead><tr><th scope="col">Priority</th><th scope="col">Target first response</th><th scope="col">Progress updates</th></tr></thead>
-          <tbody>${RESPONSE_ROWS.map(r => `<tr><th scope="row">${esc(r[0])}</th><td>${tbc(r[1])}</td><td>${tbc(r[2])}</td></tr>`).join('')}</tbody>
+          <thead><tr><th scope="col">Priority</th><th scope="col">Example</th><th scope="col">Target first response</th></tr></thead>
+          <tbody>${RESPONSE_ROWS.map(r => `<tr><th scope="row">${esc(r[0])}</th><td>${esc(r[1])}</td><td>${tbc('response target')}</td></tr>`).join('')}</tbody>
         </table></div>
+        <p class="hint" style="margin-top:14px">Escalation: your named contact, then our founder. Response performance is included in your monthly report.</p>
       </div>
     </section>
 
     <section class="section-alt">
       <div class="wrap grid grid-2">
-        <div class="panel"><h2 style="font-size:1.35rem">Not included</h2><p class="hint">Clear boundaries keep the service predictable. These are quoted separately or passed through at cost.</p>${list(BOUNDARIES, 'crosslist')}</div>
-        <div class="panel"><h2 style="font-size:1.35rem">Optional add-ons</h2>${list(ADDONS)}<p class="hint">On-site coverage ${tbc('whether on-site visits are offered, and where')}</p></div>
-        <div class="panel"><h2 style="font-size:1.35rem">What we need from you</h2>${list(CLIENT_RESPONSIBILITIES)}</div>
-        <div class="panel"><h2 style="font-size:1.35rem">Service agreement</h2><p>Each engagement is covered by a written agreement setting out scope, exclusions, response targets, reporting and how either side can end the service. ${tbc('managed-services agreement template and minimum term')}</p></div>
+        <div class="panel"><h2 style="font-size:1.35rem">Not included</h2><p class="hint">Clear boundaries keep the service predictable.</p>${list(BOUNDARIES, 'crosslist')}</div>
+        <div class="panel"><h2 style="font-size:1.35rem">What we need from you</h2>${list(CLIENT_RESPONSIBILITIES)}<h2 style="font-size:1.35rem;margin-top:26px">Service agreement</h2><p>Each plan is covered by a written agreement setting out scope, exclusions, response targets, reporting and how either side can end the service. Term and notice ${tbc('month-to-month, 3, 6 or 12 months, and notice period')}</p></div>
+      </div>
+      <div class="wrap" style="margin-top:28px">
+        <h2 style="font-size:1.35rem">Optional add-ons (any plan)</h2>
+        <div class="table-wrap"><table>
+          <caption class="visually-hidden">Optional add-ons</caption>
+          <thead><tr><th scope="col">Add-on</th><th scope="col">What you get</th><th scope="col">Notes</th></tr></thead>
+          <tbody>${ADDONS.map(a => `<tr><th scope="row">${esc(a[0])}</th><td>${esc(a[1])}</td><td>${tbcText(a[2])}</td></tr>`).join('')}</tbody>
+        </table></div>
       </div>
     </section>
 
     <section>
       <div class="wrap">
         <div class="section-head"><p class="eyebrow">Onboarding</p><h2>How we take over your IT</h2></div>
-        ${stepsRow(onboarding)}
+        <ol class="steps steps-grid">${ONBOARDING.map(s => `<li><h3>${esc(s.t)}</h3><p>${esc(s.d)}</p></li>`).join('')}</ol>
       </div>
     </section>
 
@@ -376,12 +398,12 @@ export function managedIt() {
       <div class="wrap-narrow"><h2>Frequently asked questions</h2>${faqList(faqs)}</div>
     </section>
 
-    ${ctaBand({ heading: 'Find out what your IT really needs.', text: 'Book a technology consultation. We will review your current setup and recommend the right package, or tell you if you do not need one.', secondaryHref: '/solutions/managed-it/', secondaryLabel: 'Managed IT & Infrastructure' })}`;
+    ${ctaBand({ heading: 'Find out what your IT really needs.', text: 'Start with a Free Technology Assessment or book a technology consultation. We will recommend the right plan, or tell you if you do not need one.', secondaryHref: '/technology-assessment/', secondaryLabel: 'Free Technology Assessment' })}`;
   return page({
     title: 'Managed IT Services: Your Complete IT Department | ' + site.name,
-    description: 'Managed IT services as a monthly package: help desk, Microsoft 365 and Google Workspace administration, device management, backups and IT planning. Request pricing.',
+    description: 'Managed IT plans (Essentials, Business, Complete IT Department): help desk, Microsoft 365 and Google Workspace admin, devices, backups and IT planning.',
     path,
-    jsonLd: [orgLd(), serviceLd({ name: 'Managed IT Services', description: 'Monthly managed IT service: help desk, workspace administration, device management, backup monitoring and IT planning.', path, serviceType: 'Managed IT services' }), breadcrumbLd(crumbs), faqLd(faqs)],
+    jsonLd: [orgLd(), serviceLd({ name: 'Managed IT Services', description: 'Monthly managed IT plans: help desk, workspace administration, device management, backup and IT planning.', path, serviceType: 'Managed IT services' }), breadcrumbLd(crumbs), faqLd(faqs)],
     main
   });
 }
@@ -396,13 +418,13 @@ export function industriesHub() {
       <div class="wrap">
         <div class="grid grid-3">${industryCards()}</div>
         ${gh}
-        <p style="margin-top:28px">Do not see your sector? Most of what we do applies across industries. <a href="/contact/">Tell us about your organisation</a>.</p>
+        <p style="margin-top:28px">Do not see your sector? Most of what we do applies across industries. <a href="/contact/">Tell us about your organization</a>.</p>
       </div>
     </section>
     ${ctaBand()}`;
   return page({
     title: 'Industries We Serve | ' + site.name,
-    description: 'Managed IT, automation, software and digital marketing for healthcare clinics, professional services, schools, nonprofits, retail and hospitality, startups and SMEs.',
+    description: 'IT, automation, software and marketing for clinics, professional services, contractors, salons, auto services, fitness, restaurants, retail, schools and nonprofits.',
     path, jsonLd: [orgLd(), breadcrumbLd(crumbs)], main
   });
 }
@@ -447,10 +469,10 @@ export function pricing() {
   const path = '/pricing/';
   const crumbs = [{ name: 'Home', path: '/' }, { name: 'How pricing works', path }];
   const faqs = [
-    { q: 'Why are prices not listed?', a: 'Because scope drives cost. A five-person office and a fifty-person organisation need different things, so we quote a fixed price for your agreed scope after a short assessment.' },
+    { q: 'Why are prices not listed?', a: 'Because scope drives cost. A five-person office and a fifty-person organization need different things, so we quote a fixed price for your agreed scope after a short assessment.' },
     { q: 'Which currency do you quote in?', a: '{{faq_usd}}' },
     { q: 'How can I pay?', a: '{{faq_pay}}' },
-    { q: 'Are there hidden costs?', a: 'No. Third-party costs such as licences, hardware, ad spend or hosting are listed in your proposal and passed through or paid by you directly.' }
+    { q: 'Are there hidden costs?', a: 'No. Third-party costs such as licenses, hardware, ad spend or hosting are listed in your proposal and passed through or paid by you directly.' }
   ];
   const main = `${pageHero({ crumbs, eyebrow: 'Pricing', h1: 'How pricing works.', lead: 'Every engagement is quoted in writing for your agreed scope. No surprises, and nothing starts until you approve the proposal.', ctas: false })}
 
@@ -485,14 +507,14 @@ export function about() {
   const principles = [
     ['One accountable partner', 'Technology, automation and marketing decisions affect each other. One team looking at all of them avoids gaps and finger-pointing.'],
     ['Plain English', 'Recommendations, proposals and reports you can read without a glossary.'],
-    ['You stay in control', 'Accounts, licences, domains and code are set up in your name. You can leave with everything.'],
+    ['You stay in control', 'Accounts, licenses, domains and code are set up in your name. You can leave with everything.'],
     ['Honest scope', 'We say what is included, what is not, and when something is not worth doing.']
   ];
-  const main = `${pageHero({ crumbs, eyebrow: 'About', h1: 'One partner for the technology you run on and the digital work that grows you.', lead: `ShowMe Digital Agency brings ${esc(site.facts.experience)} of experience and ${esc(site.facts.businessesHelped)} businesses helped across websites, marketing, automation and software. We are building on that to give growing organisations a complete technology partner.`, ctas: false })}
+  const main = `${pageHero({ crumbs, eyebrow: 'About', h1: 'One partner for the technology you run on and the digital work that grows you.', lead: `ShowMe Digital Agency brings ${esc(site.facts.experience)} of experience and ${esc(site.facts.businessesHelped)} businesses helped across websites, marketing, automation and software. We are building on that to give growing organizations a complete technology partner.`, ctas: false })}
 
     <section>
       <div class="wrap split">
-        <div><p class="eyebrow">Our approach</p><h2>What we believe</h2><p>Growing organisations should not have to coordinate an IT provider, a marketing agency, a developer and an automation consultant who never speak to each other.</p>${ghOnly(`<p>${esc(site.locationLine)}.</p>`)}</div>
+        <div><p class="eyebrow">Our approach</p><h2>What we believe</h2><p>Growing organizations should not have to coordinate an IT provider, a marketing agency, a developer and an automation consultant who never speak to each other.</p>${byRegion(`<p>Our founder, ${esc(site.founder)}, is based in the United States and leads every engagement, with delivery by our team.</p>`, `<p>${esc(site.locationLine)}.</p>`)}</div>
         <div class="grid grid-2">${principles.map(p => `<div class="panel" data-reveal><h3>${esc(p[0])}</h3><p class="hint">${esc(p[1])}</p></div>`).join('')}</div>
       </div>
     </section>
@@ -516,7 +538,7 @@ export function about() {
     <section>
       <div class="wrap split">
         <div><p class="eyebrow">Delivery</p><h2>How our services are delivered</h2><p>${tbc('who delivers managed IT services: in-house team, contractors or partners, and their experience')}</p></div>
-        <div class="panel"><h3>Get in touch</h3><p>Email <a href="mailto:${site.email}">${esc(site.email)}</a> or <a href="${WA}" target="_blank" rel="noopener">message us on WhatsApp ${esc(site.whatsappDisplay)}</a>.</p><a class="btn" href="/contact/">Book a Technology Consultation</a></div>
+        <div class="panel"><h3>Get in touch</h3><p>Call or text <a href="tel:${site.phoneE164}">${esc(site.phoneDisplay)}</a>, or email <a href="mailto:${site.email}">${esc(site.email)}</a>.</p><a class="btn" href="/contact/">Book a Technology Consultation</a></div>
       </div>
     </section>
 
@@ -533,14 +555,14 @@ export function capabilities() {
   const path = '/capabilities/';
   const crumbs = [{ name: 'Home', path: '/' }, { name: 'Capabilities', path }];
   const caps = PILLARS.map(p => `<div class="panel" data-reveal>${icon(p.icon)}<h2 style="font-size:1.3rem">${esc(p.title)}</h2>${list(p.items.map(i => i.t))}<a class="text-link" href="/solutions/${p.slug}/">Details</a></div>`).join('');
-  const main = `${pageHero({ crumbs, eyebrow: 'Capabilities', h1: 'What we build, and how.', lead: 'An overview of what our team delivers. Case studies will be published here only with client permission and verified results.' })}
+  const main = `${pageHero({ crumbs, eyebrow: 'Capabilities', h1: 'What we build, and how.', lead: 'An overview of what our team delivers. Client examples will be published here only with written client permission.' })}
     <section>
       <div class="wrap grid grid-2">${caps}</div>
     </section>
     <section class="section-alt">
       <div class="wrap split">
-        <div><p class="eyebrow">See it working</p><h2>Demonstrations on request</h2><p>During a consultation we can walk you through working examples of automations, AI assistants and dashboards, using clearly labelled demo data rather than client data.</p><p>${tbc('which demonstrations are ready to show')}</p></div>
-        <div class="panel"><h3>Case studies</h3><p>${tbc('case studies with client consent: problem, what we did, measured outcome and date')}</p><p class="hint">We do not publish client names, logos or testimonials without written permission.</p></div>
+        <div><p class="eyebrow">See it working</p><h2>Demonstrations on request</h2><p>During a consultation we can walk you through working examples of automations, AI assistants and dashboards, using clearly labeled demo data rather than client data.</p><p>${tbc('which demonstrations are ready to show')}</p></div>
+        <div class="panel"><h3>Client examples</h3><p>${tbc('client examples with written consent: the problem, what we did, the outcome and the date')}</p><p class="hint">We do not publish client names, logos or quotes without written permission.</p></div>
       </div>
     </section>
     ${ctaBand()}`;
@@ -559,7 +581,7 @@ export function trust() {
   const main = `${pageHero({ crumbs, eyebrow: 'Trust & data handling', h1: 'How we work with your data.', lead: 'What we ask for, how we handle access to your systems and what you can expect from us. This page describes what we do today; items still being confirmed are marked.', ctas: false })}
     <section>
       <div class="wrap grid grid-2">
-        ${card('Your accounts stay yours', '<p>Domains, licences, workspace tenants, ad accounts, app-store listings and code repositories are set up in your name wherever possible. When an engagement ends, you keep everything.</p>')}
+        ${card('Your accounts stay yours', '<p>Domains, licenses, workspace tenants, ad accounts, app-store listings and code repositories are set up in your name wherever possible. When an engagement ends, you keep everything.</p>')}
         ${card('Access on a need-to-know basis', `<p>Access to client data and systems is limited to the people who need it to deliver your work, and we use strong authentication on our own accounts.</p><p class="hint">${tbc('written access policy, password manager and staff confidentiality agreements')}</p>`)}
         ${card('Confidentiality', '<p>Both parties keep each other\'s confidential information private and use it only for the engagement, during and after it. This is part of our <a href="/terms/">terms</a>.</p>')}
         ${card('Where data is handled', `<p>We use reputable cloud providers. ${tbc('where client systems are accessed from and where client data is stored')}</p>`)}
@@ -631,6 +653,14 @@ ${a.body}
 }
 
 // ---- Contact (consultation request) ---------------------------------------------
+// US-friendly order: form first, then booking (placeholder), then call or
+// text, email, and WhatsApp last.
+function contactOptions() {
+  return `<div class="side-card"><h2 style="font-size:1.1rem">Book a time</h2><p class="hint">Online scheduling ${tbc('booking calendar link (for example a 20-minute call)')}</p></div>
+          <div class="side-card"><h2 style="font-size:1.1rem">Call or text</h2><p><a class="btn small" href="tel:${site.phoneE164}">Call ${esc(site.phoneDisplay)}</a> <a class="btn small secondary" href="sms:${site.phoneE164}">Text us</a></p><p class="hint">Hours ${tbc('phone and text hours and time zone')}</p></div>
+          <div class="side-card"><h2 style="font-size:1.1rem">Email</h2><p><a href="mailto:${site.email}">${esc(site.email)}</a></p></div>
+          <div class="side-card"><h2 style="font-size:1.1rem">WhatsApp</h2><p><a href="${WA}" target="_blank" rel="noopener">Message us on WhatsApp</a></p></div>`;
+}
 export function contact() {
   const path = '/contact/';
   const crumbs = [{ name: 'Home', path: '/' }, { name: 'Book a Technology Consultation', path }];
@@ -639,46 +669,76 @@ export function contact() {
         ${breadcrumb(crumbs)}
         <p class="eyebrow">Contact</p>
         <h1>Book a Technology Consultation.</h1>
-        <p class="lead">Tell us a little about your organisation and what you want to improve. We reply ${esc(site.facts.responsePromise)} to arrange a time to talk.</p>
+        <p class="lead">Tell us a little about your business and what you want to improve. We reply ${esc(site.facts.responsePromise)} to arrange a time to talk.</p>
       </div>
     </section>
     <section>
       <div class="wrap detail-grid">
-        <div>${consultationForm()}</div>
-        <aside class="detail-side" aria-label="What to expect">
-          <div class="side-card"><h2 style="font-size:1.1rem">What happens next</h2><ol class="steps">${JOURNEY.slice(0, 3).map(s => `<li><h3>${esc(s.t)}</h3><p>${esc(s.d)}</p></li>`).join('')}</ol></div>
-          <div class="side-card"><h2 style="font-size:1.1rem">Other ways to reach us</h2><p>Email <a href="mailto:${site.email}">${esc(site.email)}</a></p><p>WhatsApp <a href="${WA}" target="_blank" rel="noopener">${esc(site.whatsappDisplay)}</a></p><p class="hint">Online scheduling ${tbc('booking tool')}</p></div>
+        <div>${consultationForm()}
+          <div class="panel" style="margin-top:28px"><h2 style="font-size:1.1rem">What happens next</h2><ol class="steps">${JOURNEY.slice(0, 3).map(s => `<li><h3>${esc(s.t)}</h3><p>${esc(s.d)}</p></li>`).join('')}</ol></div>
+        </div>
+        <aside class="detail-side" aria-label="Other ways to reach us">
+          ${contactOptions()}
+          <div class="side-card"><h2 style="font-size:1.1rem">Prefer a written review first?</h2><p>Request a <a href="/technology-assessment/">Free Technology Assessment</a>.</p></div>
         </aside>
       </div>
     </section>`;
   return page({
     title: 'Book a Technology Consultation | ' + site.name,
-    description: 'Request a technology consultation with ShowMe Digital Agency. Tell us about your organisation, current IT setup and priorities; we reply within one business day.',
+    description: 'Request a technology consultation with ShowMe Digital Agency, or call or text ' + site.phoneDisplay + '. Tell us your priorities; we reply within one business day.',
     path, jsonLd: [orgLd(), breadcrumbLd(crumbs)], main
   });
 }
 
-// ---- Digital presence check (former free audit) ---------------------------------
-export function freeAudit() {
-  const path = '/free-audit/';
-  const crumbs = [{ name: 'Home', path: '/' }, { name: 'Digital Marketing & Brand', path: '/solutions/digital-marketing/' }, { name: 'Digital presence check', path }];
-  const points = [['Website', 'Speed, mobile experience and how well it captures enquiries.'], ['Search visibility', 'How you appear in search, maps and AI answers.'], ['Social presence', 'Consistency, and whether it drives enquiries.'], ['Brand', 'Whether you look credible everywhere customers see you.'], ['Follow-up', 'How quickly and reliably enquiries get a response.'], ['Automation', 'Repetitive marketing and admin work that could be automated.']];
-  const main = `${pageHero({ crumbs, eyebrow: 'Free digital presence check', h1: 'See how your business looks online, and what to fix first.', lead: 'A no-obligation review of your website, search visibility and marketing basics, with three practical priorities you keep whether or not you hire us.', ctas: false })}
+// ---- Free Technology Assessment (canonical; /free-audit/ redirects here) ----------
+export function technologyAssessment() {
+  const path = '/technology-assessment/';
+  const crumbs = [{ name: 'Home', path: '/' }, { name: 'Free Technology Assessment', path }];
+  const areas = [
+    ['Email & office tools', 'Microsoft 365 or Google Workspace: accounts, sharing and email delivery settings.'],
+    ['Devices & updates', 'What you have, how old it is and whether it is kept up to date.'],
+    ['Files & backup', 'Where important files live and what you would lose if a laptop died today.'],
+    ['Internet & Wi-Fi', 'How reliable your connection and office network are.'],
+    ['Staff setup & accounts', 'How long it takes to get a new person working, and to close accounts when someone leaves.'],
+    ['Software & subscriptions', 'What you pay for, who tracks renewals and what overlaps.'],
+    ['Website & online presence', 'How customers find you and what your website does for you.'],
+    ['Processes & automation', 'The repetitive tasks that take your team the most time.']
+  ];
+  const steps = [
+    { t: 'Short intake form', d: 'About 5 to 7 minutes, below.' },
+    { t: 'Public checks', d: 'Website status, domain renewal date and whether your email delivery settings are in place. We never ask for passwords.' },
+    { t: 'A 45-minute call', d: 'With our founder, by video or phone, about how your business uses technology day to day.' },
+    { t: 'Written report', d: 'Top priorities by area, quick wins you can do yourself and a 30/90/180-day roadmap.' },
+    { t: 'Optional review call', d: '20 minutes to go through the report and answer questions.' }
+  ];
+  const faqs = [
+    { q: 'Is it really free?', a: 'Yes. There is no obligation, and the report is yours to keep whether or not you work with us.' },
+    { q: 'How long does it take?', a: 'The intake form takes about 5 to 7 minutes and the call about 45 minutes. Report turnaround is confirmed when we book your call.' },
+    { q: 'Do you need access to our systems?', a: 'No. We only look at public information such as your website and domain records unless you invite us to look at more. We never ask for passwords; if you want us to see an admin screen, you share your screen.' },
+    { q: 'Is this a security audit?', a: 'No. It is a point-in-time review of how your technology is set up and used, not a security audit or compliance review.' }
+  ];
+  const main = `${pageHero({ crumbs, eyebrow: 'Free Technology Assessment', h1: 'See your whole technology setup on one page, and what to fix first.', lead: 'A free, no-obligation review of how your business runs its computers, email, files and tools, across IT, marketing, automation and software. You get a written report in plain English with your top priorities, whether or not you work with us.', ctas: false })}
     <section>
       <div class="wrap detail-grid">
         <div>
-          <h2>What we check</h2>
-          <div class="grid grid-2" style="margin:20px 0 36px">${points.map(p => `<div class="panel"><h3>${esc(p[0])}</h3><p class="hint">${esc(p[1])}</p></div>`).join('')}</div>
-          <p class="note">This check covers your digital presence only. For your IT environment, <a href="/contact/">book a technology consultation</a>.</p>
+          <h2>What we look at</h2>
+          <div class="grid grid-2" style="margin:20px 0 36px">${areas.map(p => `<div class="panel"><h3>${esc(p[0])}</h3><p class="hint">${esc(p[1])}</p></div>`).join('')}</div>
+          <h2>How it works</h2>
+          <ol class="steps" style="margin-top:20px">${steps.map(x => `<li><h3>${esc(x.t)}</h3><p>${esc(x.d)}</p></li>`).join('')}</ol>
+          <p class="hint">Report turnaround ${tbc('report turnaround, for example within 5 business days')}. In-person assessments ${tbc('whether in-person assessments are offered, and where')}</p>
+          <div style="margin-top:32px">${faqList(faqs)}</div>
         </div>
-        <aside class="detail-side" aria-label="Request a check">${presenceForm()}</aside>
+        <aside class="detail-side" aria-label="Request your assessment">
+          <h2 style="font-size:1.25rem;margin-bottom:14px">Request your free assessment</h2>
+          ${assessmentForm()}
+        </aside>
       </div>
     </section>
     ${ctaBand()}`;
   return page({
-    title: 'Free Digital Presence Check | ' + site.name,
-    description: 'A free, no-obligation check of your website, search visibility, social presence, brand and follow-up, with three practical priorities to act on.',
-    path, jsonLd: [orgLd(), breadcrumbLd(crumbs)], main
+    title: 'Free Technology Assessment | ' + site.name,
+    description: 'A free, no-obligation review of your IT, email, files, devices, website and processes, with a plain-English report of your top priorities. No passwords needed.',
+    path, jsonLd: [orgLd(), breadcrumbLd(crumbs), faqLd(faqs)], main
   });
 }
 
@@ -688,21 +748,25 @@ export const FAQ_GROUPS = [
     { q: 'What does ShowMe Digital Agency do?', a: 'We are a technology and digital transformation partner. We provide managed IT services and infrastructure, digital marketing and brand growth, AI and automation, and software development and technology consulting.' },
     { q: 'How do engagements start?', a: 'With a technology consultation, followed by a short assessment and a written proposal. Nothing starts until you approve the proposal.' },
     { q: 'Do I have to buy everything from you?', a: 'No. Many clients start with one area. Because one team understands all four, it is easier to add more later.' },
-    { q: 'Do I own what you build?', a: 'Yes. Accounts, domains, licences, content, brand assets and the code written for you are yours once paid for.' }
+    { q: 'Do I own what you build?', a: 'Yes. Accounts, domains, licenses, content, brand assets and the code written for you are yours once paid for.' },
+    { q: 'Where is ShowMe based?', a: 'Our founder, Joshua Abbey, is based in the United States and leads every engagement. We work with clients by video, phone and shared workspaces.' },
+    { q: 'What time zone do you work in?', a: 'We schedule calls in your local time zone, including US Central and Eastern time. Support hours for managed IT are set out in your service agreement.', aHtml: 'We schedule calls in your local time zone, including US Central and Eastern time. Support hours for managed IT are set out in your service agreement. ' + tbc('standard support hours and time zone') },
+    { q: 'Do you require long contracts?', a: 'Projects are fixed-scope, with no ongoing commitment. Any minimum term and notice period for a monthly service are stated in your proposal before you sign.' },
+    { q: 'How does the Free Technology Assessment work?', a: 'You fill in a short intake form, we check public basics such as your website and domain, and then we have a 45-minute call about how your business uses technology. You receive a written report with your top priorities. It is free and there is no obligation.' }
   ] },
   { title: 'Managed IT', items: [
     { q: 'What is included in managed IT?', a: 'Day-to-day user support, Microsoft 365 or Google Workspace administration, device inventory and updates, backup monitoring and regular reporting. Higher packages add onboarding and offboarding, network management, vendor coordination and planning.' },
-    { q: 'What are your support hours and response times?', a: 'These are being finalised and will be set out in your service agreement. We only publish targets we can consistently meet.' },
+    { q: 'What are your support hours and response times?', a: 'These are being finalized and will be set out in your service agreement. We only publish targets we can consistently meet.' },
     { q: 'Can you work with our existing IT person or provider?', a: 'Yes. We can support an internal IT lead, take over from a previous provider with a documented handover, or start with an assessment.' }
   ] },
   { title: 'Projects and pricing', items: [
     { q: 'How is pricing set?', a: 'Projects get a fixed quote for the agreed scope; monthly services have a predictable monthly fee; advisory work is a fixed fee.' },
     { q: 'Which currency do you quote in?', a: '{{faq_usd}}' },
     { q: 'How can I pay?', a: '{{faq_pay}}' },
-    { q: 'Do you guarantee rankings or a number of leads?', a: 'No honest agency can. We commit to the agreed work, transparency and clear reporting.' }
+    { q: 'Can you promise rankings or a number of leads?', a: 'No honest agency can. We commit to the agreed work, transparency and clear reporting.' }
   ] },
   { title: 'AI and automation', items: [
-    { q: 'Will an AI assistant replace my staff?', a: 'No. It handles repetitive questions and routine steps, then hands off to a person for anything that needs judgement.' },
+    { q: 'Will an AI assistant replace my staff?', a: 'No. It handles repetitive questions and routine steps, then hands off to a person for anything that needs judgment.' },
     { q: 'Where should we start with automation?', a: 'Usually with an automation review that identifies the workflows that waste the most time, so the first build pays off quickly.' }
   ] }
 ];
@@ -729,7 +793,7 @@ function usPrivacyBody(mail) {
         <h2>2. The information we collect</h2>
         <h3>Information you give us</h3>
         <ul>
-          <li><strong>Consultation and contact requests:</strong> your name, company, email address, phone number, company size, areas of interest, current IT setup, timeline and message.</li>
+          <li><strong>Consultation, assessment and contact requests:</strong> your name, role, company, email address, phone number, website, industry, company size, areas of interest, current IT setup and tools, timeline, how customers find you and your message.</li>
           <li><strong>Conversations:</strong> emails, messages and notes from calls with you.</li>
           <li><strong>Client information:</strong> if you become a client, contact and billing details, materials you provide and the access we need to deliver the agreed services.</li>
         </ul>
@@ -748,7 +812,7 @@ function usPrivacyBody(mail) {
           <li>To keep our website working properly and understand overall usage.</li>
           <li>To meet legal and accounting obligations.</li>
         </ul>
-        <p>We only send marketing emails if you have agreed to receive them, and every message explains how to opt out.</p>
+        <p>We only send marketing emails if you have agreed to receive them. Every marketing email identifies us, includes our postal address and a working unsubscribe link, as required by the CAN-SPAM Act, and we honor opt-out requests promptly. Postal address ${tbc('business postal address')}</p>
         <h2>4. Who we share information with</h2>
         <p>We do not sell your personal information, and we do not share it for cross-context behavioral advertising. We share it only with service providers that help us run the business, such as website hosting, email and messaging providers, payment processors and the productivity tools we use to deliver your work, under appropriate confidentiality terms. We may also disclose information where required by law.</p>
         <h2>5. Where information is processed</h2>
@@ -783,7 +847,7 @@ function usTermsBody(mail) {
         <h2>3. Prices and quotes</h2>
         <ul>
           <li>Prices are given in your quote or proposal, which fixes the price for the scope described. Quotes are valid for 30 days and are in US dollars (USD) unless your proposal states otherwise.</li>
-          <li>Third-party costs such as hardware, software licences, ad spend, domains, hosting, payment-processing fees, usage fees and travel are not included unless stated, and are listed in your proposal.</li>
+          <li>Third-party costs such as hardware, software licenses, ad spend, domains, hosting, payment-processing fees, usage fees and travel are not included unless stated, and are listed in your proposal.</li>
         </ul>
         <h2>4. Payment terms</h2>
         <ul>
@@ -797,11 +861,11 @@ function usTermsBody(mail) {
         <h2>6. Managed monthly services</h2>
         <ul>
           <li>Your service agreement sets out what is included and excluded, support channels, response targets, reporting and any minimum term.</li>
-          <li>We work to restore and maintain service promptly, but we do not guarantee that systems will be uninterrupted or error-free, and we are not responsible for faults in third-party products or services outside our control.</li>
-          <li>You remain responsible for your licences and for approving changes that affect how your team works.</li>
+          <li>We work to restore and maintain service promptly, but we do not warrant that systems will be uninterrupted or error-free, and we are not responsible for faults in third-party products or services outside our control.</li>
+          <li>You remain responsible for your licenses and for approving changes that affect how your team works.</li>
         </ul>
-        <h2>7. The Growth retainer launch commitment</h2>
-        <p>${esc(site.facts.guarantee)} Onboarding is complete when we have your first payment and the access, information and approvals in your onboarding checklist. Delays caused by late information, approvals or third-party reviews are excluded. Ad spend is paid to the platforms and is never refunded under this commitment.</p>
+        <h2>7. Launch dates</h2>
+        <p>Launch dates are agreed in your proposal or onboarding plan. They depend on receiving your first payment and the access, information and approvals in your onboarding checklist; delays caused by late information, approvals or third-party reviews move the date. Ad spend is paid directly to the platforms.</p>
         <h2>8. Your responsibilities</h2>
         <ul>
           <li>Provide accurate information, access and approvals on time.</li>
@@ -812,13 +876,13 @@ function usTermsBody(mail) {
         <ul>
           <li>Once paid in full, you own the final deliverables created for you, including code written specifically for you.</li>
           <li>Accounts are set up in your name wherever possible.</li>
-          <li>We keep our pre-existing tools, templates and know-how, and grant you a permanent licence to use them as part of your deliverables.</li>
-          <li>We only publish your project as a case study with your written permission.</li>
+          <li>We keep our pre-existing tools, templates and know-how, and grant you a permanent license to use them as part of your deliverables.</li>
+          <li>We only publish a write-up of your project with your written permission.</li>
         </ul>
         <h2>10. Confidentiality</h2>
         <p>Both parties keep the other's confidential information private and use it only for the engagement, during and after it.</p>
         <h2>11. Third-party platforms and results</h2>
-        <p>Much of our work relies on platforms we do not control. We do not guarantee specific rankings, approvals, lead volumes or sales.</p>
+        <p>Much of our work relies on platforms we do not control. We cannot promise specific rankings, approvals, lead volumes or sales.</p>
         <h2>12. Support after launch</h2>
         <p>Every project includes 30 days of post-launch support to fix defects in what we delivered. After that, support is available through a monthly plan or quoted per request.</p>
         <h2>13. Cancellation</h2>
@@ -834,7 +898,7 @@ function usTermsBody(mail) {
         <h2>16. Using this website</h2>
         <p>Content on this website is general information, not legal, financial or tax advice. Please do not misuse the site or its forms.</p>
         <h2>17. Governing law and disputes</h2>
-        <p>The governing law and jurisdiction for an engagement are stated in your proposal or service agreement. We will first try to resolve any dispute in good faith.</p>
+        <p>The governing law and jurisdiction for an engagement are stated in your proposal or service agreement; otherwise these terms are governed by the laws of the state named here ${tbc('governing-law state')}. We will first try to resolve any dispute in good faith.</p>
         <h2>18. Changes and contact</h2>
         <p>We may update these terms; the version in force when you approve a proposal applies to that engagement. Questions: ${mail}.</p>`;
 }

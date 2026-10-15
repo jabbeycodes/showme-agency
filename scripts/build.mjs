@@ -47,7 +47,7 @@ reg('/trust/', pages.trust(), 0.5, 'yearly');
 reg('/insights/', pages.insightsIndex(), 0.6, 'weekly');
 for (const a of insights) reg('/insights/' + a.slug + '/', pages.insightArticle(a), 0.4);
 reg('/contact/', pages.contact(), 0.9, 'yearly');
-reg('/free-audit/', pages.freeAudit(), 0.6);
+reg('/technology-assessment/', pages.technologyAssessment(), 0.9);
 reg('/faq/', pages.faqPage(), 0.5);
 reg('/privacy/', pages.privacy(), 0.3, 'yearly');
 reg('/terms/', pages.terms(), 0.3, 'yearly');
@@ -158,10 +158,12 @@ async function writePlaceholders() {
     'Nothing here may be filled in with invented facts. Regenerated on each build.', '',
     '| # | Placeholder | Pages |', '|---|---|---|'];
   let n = 0;
-  for (const [t, paths] of found) lines.push(`| ${++n} | ${t} | ${[...paths].join(', ')} |`);
+  for (const [t, paths] of found) lines.push(`| ${++n} | ${t} | ${paths.size > 20 ? `every page (${paths.size}; site footer, US view)` : [...paths].join(', ')} |`);
   lines.push('', '## Also open (not shown as on-page labels)', '',
     '- Legal review of the US-default privacy policy and terms (see the PENDING LEGAL REVIEW comment in scripts/pages.mjs).',
-    '- Managed IT package names (Essentials / Business / Complete are working names).',
+    '- Managed IT plan names: Essentials / Business / Complete IT Department, taken from repositioning/managed-it-packages.md (Josh may still rename them).',
+    '- Proposed managed IT response figures in managed-it-packages.md are deliberately NOT published until Josh confirms them.',
+    '- Hero and supporting line (from gtm-strategy.md section 2.1) await Josh\'s approval.',
     '- Whether Ghana-only pages stay (real estate, diaspora property, WhatsApp ordering, photography, 4 Ghana guides).', '');
   await fs.writeFile(path.join(ROOT, 'repositioning/placeholders.md'), lines.join('\n'), 'utf8');
   console.log(`  - repositioning/placeholders.md (${n} placeholders)`);

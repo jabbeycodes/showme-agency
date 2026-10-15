@@ -7,11 +7,15 @@
 //   Ghana view         : [data-us-only] elements removed, templates unwrapped,
 //                        data-gh values swapped in
 // and checks:
-//  - US view contains no Ghana/Accra/Africa/cedi/MoMo/... terms and no
-//    "cybersecurity" (allow-list: the Ghana-only pages in content.mjs GH_ONLY,
-//    and the "Region: United States | Ghana" switcher itself)
-//  - no banned claims in either view (certified, SOC, 24/7, guaranteed
-//    response, proven, high-converting); no josh@ address
+//  - US view contains no Africa/Ghana/Accra/cedi/MoMo/... terms and no
+//    "cybersecurity" in text, meta, OG, alt, JSON-LD, nav or footer
+//    (allow-list: the Ghana-only pages in content.mjs GH_ONLY, and the
+//    "Region: United States | Ghana" switcher itself); every hit is reported
+//  - no banned claims in either view: any "guarantee" wording, "month 1 is
+//    free", "Proof, not promises", "Work & results", proven, high-converting,
+//    testimonial, case study, certified, SOC, 24/7; no josh@ address
+//  - US spelling in both views (programme, organise, optimise, colour,
+//    centre, enrolment, licence, enquiry, ...): see scripts/terms.mjs
 //  - internal links resolve in both views; US view never links to a
 //    Ghana-only page or to a retired (redirected) URL; redirect targets exist
 //  - one <h1>, <title>, meta description, canonical, OG tags, lang, skip link
@@ -36,10 +40,8 @@ const ORIGIN = 'https://agency.showmeworld.app';
 const errors = [];
 const warnings = [];
 
-export const GHANA_TERMS = /\b(Ghana|Ghanaian|Accra|Africa|African|cedis?|GHS|MoMo|Mobile Money|Telecel|MTN|AT Money|Kumasi|Takoradi|Tamale|Tema|Legon|diaspora|Act 843|Paystack)\b|GH₵|₵|\+233/i;
-const US_ONLY_BANNED = /\bcyber ?security\b|\bcyber\b/i;
-const BANNED_CLAIMS = /\bcertified\b|\bSOC\b|24\/7|24x7|round-the-clock|guaranteed response|\bproven\b|high-converting|josh@showmeworld/i;
-
+import { AFRICA_TERMS, CYBER_TERMS, BANNED_CLAIMS, UK_SPELLING, hits, usView as usViewOf, ghView as ghViewOf, scanable } from './terms.mjs';
+export const GHANA_TERMS = AFRICA_TERMS;
 async function walk(dir) {
   const out = [];
   for (const entry of await fs.readdir(dir, { withFileTypes: true })) {
@@ -58,41 +60,8 @@ function resolveLink(link) {
   return [path.join(OUT, rel), path.join(OUT, rel, 'index.html')];
 }
 
-// Remove every element carrying `attr`, including nested same-name children.
-function removeElementsWithAttr(html, attr) {
-  const open = new RegExp(`<([a-z][a-z0-9]*)\\b[^>]*\\s${attr}(?:[\\s=>/])`, 'i');
-  let guard = 0;
-  for (;;) {
-    const m = open.exec(html);
-    if (!m || ++guard > 5000) break;
-    const tag = m[1].toLowerCase();
-    const re = new RegExp(`<(/?)${tag}\\b[^>]*>`, 'gi');
-    re.lastIndex = m.index;
-    let depth = 0, end = -1, t;
-    while ((t = re.exec(html))) {
-      depth += t[1] ? -1 : 1;
-      if (depth === 0) { end = re.lastIndex; break; }
-    }
-    if (end < 0) { errors.push('unbalanced element with ' + attr); break; }
-    html = html.slice(0, m.index) + html.slice(end);
-  }
-  return html;
-}
-function usView(html) {
-  return html
-    .replace(/<template data-gh-block>[\s\S]*?<\/template>/g, '')
-    .replace(/ data-gh="[^"]*"/g, '');
-}
-function ghView(html) {
-  let h = removeElementsWithAttr(html, 'data-us-only');
-  h = h.replace(/<template data-gh-block>([\s\S]*?)<\/template>/g, '$1');
-  h = h.replace(/(<(span|option)\b[^>]*?) data-us="[^"]*" data-gh="([^"]*)"([^>]*>)[^<]*/g, (x, a, tag, gh, b) => a + b + gh);
-  return h;
-}
-const scanable = h => h
-  .replace(/<!--[\s\S]*?-->/g, ' ')
-  .replace(/<nav class="region"[\s\S]*?<\/nav>/g, ' ')   // the region switcher may name Ghana
-  .replace(/<script src="[^"]*"[^>]*><\/script>/g, ' ');
+const usView = h => usViewOf(h);
+const ghView = h => ghViewOf(h, e => errors.push(e));
 const context = (s, m) => s.slice(Math.max(0, m.index - 50), m.index + 40).replace(/\s+/g, ' ');
 
 function linksIn(html) {
@@ -129,18 +98,18 @@ async function main() {
     const GH = ghView(raw);
     tbcCount += (raw.match(/\[TO CONFIRM:/g) || []).length;
 
-    // ---- Region & claims
+    // ---- Region, claims and spelling (every hit is reported)
+    const report = (re, text, label) => { for (const m of hits(re, text)) errors.push(`${rel}: ${label} "${m[0]}": …${context(text, m)}…`); };
     if (!ghOnlyPage) {
       const s = scanable(US);
-      const m = GHANA_TERMS.exec(s);
-      if (m) errors.push(`${rel}: Ghana term in US view "${m[0]}": …${context(s, m)}…`);
-      const c = US_ONLY_BANNED.exec(s);
-      if (c) errors.push(`${rel}: cybersecurity wording in US view: …${context(s, c)}…`);
+      report(AFRICA_TERMS, s, 'Africa/Ghana term in US view');
+      report(CYBER_TERMS, s, 'cybersecurity wording in US view');
     }
     for (const [name, view] of [['US', US], ['Ghana', GH]]) {
+      if (name === 'US' && ghOnlyPage) continue;
       const s = scanable(view);
-      const b = BANNED_CLAIMS.exec(s);
-      if (b) errors.push(`${rel}: banned claim "${b[0]}" in ${name} view: …${context(s, b)}…`);
+      report(BANNED_CLAIMS, s, `banned claim in ${name} view`);
+      report(UK_SPELLING, s, `UK spelling in ${name} view`);
     }
     if (raw.includes('{{')) errors.push(`${rel}: unresolved {{token}}`);
     if (!/<html lang="en" data-region="us"/.test(raw)) errors.push(`${rel}: <html> must default to data-region="us"`);
@@ -244,13 +213,19 @@ async function main() {
   for (const f of ['robots.txt', 'styles.css', 'site.js', '.well-known/security.txt', 'og-image.png']) {
     if (!await exists(path.join(OUT, f))) errors.push(f + ' missing');
   }
-  for (const f of ['site.webmanifest', 'robots.txt', '.well-known/security.txt', 'site.js', 'styles.css']) {
+  for (const f of ['site.webmanifest', 'robots.txt', 'sitemap.xml', '.well-known/security.txt', 'site.js', 'styles.css']) {
     const t = await fs.readFile(path.join(OUT, f), 'utf8').catch(() => '');
-    const m = GHANA_TERMS.exec(t) || US_ONLY_BANNED.exec(t);
-    if (m) errors.push(`${f}: Ghana/cyber term "${m[0]}"`);
+    for (const re of [AFRICA_TERMS, CYBER_TERMS, BANNED_CLAIMS, UK_SPELLING]) for (const m of hits(re, t)) errors.push(`${f}: banned term "${m[0]}"`);
   }
   const js = await fs.readFile(path.join(OUT, 'site.js'), 'utf8');
   if (/josh@/.test(js) || !/info@showmeworld\.app/.test(js)) errors.push('site.js must use info@showmeworld.app');
+  // info@ everywhere: no josh@ address in the built site or the worker source.
+  for (const dir of [OUT, path.join(ROOT, 'worker', 'src'), path.join(ROOT, 'static')]) {
+    for (const f of await walk(dir)) {
+      if (!/\.(html|js|mjs|txt|xml|json|webmanifest|css)$/.test(f)) continue;
+      if (/josh@showmeworld/i.test(await fs.readFile(f, 'utf8'))) errors.push(`${path.relative(ROOT, f)}: uses josh@ (use info@showmeworld.app)`);
+    }
+  }
 
   console.log(`Checked ${files.length} HTML pages in US and Ghana views (${tbcCount} TO CONFIRM placeholders rendered).`);
   if (warnings.length) { console.log(`\nWarnings (${warnings.length}):`); warnings.forEach(w => console.log('  ! ' + w)); }

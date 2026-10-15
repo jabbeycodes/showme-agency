@@ -1,10 +1,10 @@
 # =============================================================================
-# PREVIEW worker for the US-pricing branch — NOT production.
+# PREVIEW worker (repositioning branch) — NOT production.
 #
 #   npx wrangler deploy --config wrangler.preview.toml
 #
 # Serves the same built site on showme-agency-preview.<subdomain>.workers.dev
-# with PREVIEW = "1": a "PREVIEW — proposed prices" banner, noindex, and
+# with PREVIEW = "1": a "PREVIEW: not live" banner, noindex, and
 # /api/lead + /api/event return a harmless 200 without storing anything.
 # Deliberately: NO KV (leads), NO AI, NO cron triggers, NO custom domain/routes,
 # NO secrets (so no email can ever be sent from here).

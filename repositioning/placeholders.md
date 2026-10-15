@@ -5,27 +5,47 @@ Nothing here may be filled in with invented facts. Regenerated on each build.
 
 | # | Placeholder | Pages |
 |---|---|---|
-| 1 | package names and final inclusions per package | /managed-it-services/ |
-| 2 | response targets: support hours and time zone, support channels, and target first response by priority. No out-of-hours cover is offered unless confirmed. | /managed-it-services/ |
-| 3 | response target | /managed-it-services/ |
-| 4 | update cadence | /managed-it-services/ |
-| 5 | whether on-site visits are offered, and where | /managed-it-services/ |
-| 6 | managed-services agreement template and minimum term | /managed-it-services/ |
-| 7 | standard reporting cadence and communication channels | /how-we-work/ |
-| 8 | per user, per device or per package | /pricing/ |
-| 9 | full bio and LinkedIn link | /about/ |
-| 10 | additional leadership profiles | /about/ |
-| 11 | who delivers managed IT services: in-house team, contractors or partners, and their experience | /about/ |
-| 12 | which demonstrations are ready to show | /capabilities/ |
-| 13 | case studies with client consent: problem, what we did, measured outcome and date | /capabilities/ |
-| 14 | written access policy, password manager and staff confidentiality agreements | /trust/ |
-| 15 | where client systems are accessed from and where client data is stored | /trust/ |
-| 16 | notification timeframe and contact process | /trust/ |
-| 17 | booking tool | /contact/ |
-| 18 | legal entity name and state | /terms/ |
+| 1 | city, state | every page (68; site footer, US view) |
+| 2 | pricing unit (per user, per device or per site), minimum users, onboarding fee and prices | /managed-it-services/ |
+| 3 | delivery model and tools per plan | /managed-it-services/ |
+| 4 | help desk hours included per month | /managed-it-services/ |
+| 5 | fair-use policy | /managed-it-services/ |
+| 6 | who the named lead is | /managed-it-services/ |
+| 7 | extended-hours option | /managed-it-services/ |
+| 8 | on-site visits | /managed-it-services/ |
+| 9 | included visits per month or quarter | /managed-it-services/ |
+| 10 | backup tool and retention | /managed-it-services/ |
+| 11 | pass-through at cost or with a markup | /managed-it-services/ |
+| 12 | support hours and time zone, how to log a request, and first-response targets per priority and plan. No out-of-hours cover is offered unless confirmed. | /managed-it-services/ |
+| 13 | response target | /managed-it-services/ |
+| 14 | month-to-month, 3, 6 or 12 months, and notice period | /managed-it-services/ |
+| 15 | travel area per city | /managed-it-services/ |
+| 16 | availability | /managed-it-services/ |
+| 17 | attendees per session | /managed-it-services/ |
+| 18 | whether we sign HIPAA Business Associate Agreements | /industries/healthcare-clinics/ |
+| 19 | standard reporting cadence and communication channels | /how-we-work/ |
+| 20 | per user, per device or per package | /pricing/ |
+| 21 | full bio and LinkedIn link | /about/ |
+| 22 | additional leadership profiles | /about/ |
+| 23 | who delivers managed IT services: in-house team, contractors or partners, and their experience | /about/ |
+| 24 | which demonstrations are ready to show | /capabilities/ |
+| 25 | client examples with written consent: the problem, what we did, the outcome and the date | /capabilities/ |
+| 26 | written access policy, password manager and staff confidentiality agreements | /trust/ |
+| 27 | where client systems are accessed from and where client data is stored | /trust/ |
+| 28 | notification timeframe and contact process | /trust/ |
+| 29 | booking calendar link (for example a 20-minute call) | /contact/ |
+| 30 | phone and text hours and time zone | /contact/ |
+| 31 | report turnaround, for example within 5 business days | /technology-assessment/ |
+| 32 | whether in-person assessments are offered, and where | /technology-assessment/ |
+| 33 | standard support hours and time zone | /faq/ |
+| 34 | business postal address | /privacy/ |
+| 35 | legal entity name and state | /terms/ |
+| 36 | governing-law state | /terms/ |
 
 ## Also open (not shown as on-page labels)
 
 - Legal review of the US-default privacy policy and terms (see the PENDING LEGAL REVIEW comment in scripts/pages.mjs).
-- Managed IT package names (Essentials / Business / Complete are working names).
+- Managed IT plan names: Essentials / Business / Complete IT Department, taken from repositioning/managed-it-packages.md (Josh may still rename them).
+- Proposed managed IT response figures in managed-it-packages.md are deliberately NOT published until Josh confirms them.
+- Hero and supporting line (from gtm-strategy.md section 2.1) await Josh's approval.
 - Whether Ghana-only pages stay (real estate, diaspora property, WhatsApp ordering, photography, 4 Ghana guides).

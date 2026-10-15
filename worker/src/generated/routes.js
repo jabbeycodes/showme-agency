@@ -22,6 +22,8 @@ export const REDIRECTS = {
   "/industries/hospitality-tourism/": "/industries/retail-hospitality/",
   "/industries/fashion-retail/": "/industries/retail-hospitality/",
   "/industries/events-weddings/": "/industries/retail-hospitality/",
-  "/industries/churches-ministries/": "/industries/nonprofits/"
+  "/industries/churches-ministries/": "/industries/nonprofits/",
+  "/free-audit/": "/technology-assessment/",
+  "/services/seo-programme/": "/services/seo-program/"
 };
 export const SECURITY_TXT = "Contact: mailto:info@showmeworld.app\nExpires: 2027-09-10T00:00:00.000Z\nPreferred-Languages: en\nCanonical: https://agency.showmeworld.app/.well-known/security.txt\n";

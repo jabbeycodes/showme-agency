@@ -5,7 +5,7 @@ import { site, serviceBySlug } from './data.mjs';
 import { SHOW_PRICES } from './money.mjs';
 import { PILLARS, pillarBySlug, SERVICE_PILLAR, GH_SERVICES, INDUSTRIES } from './content.mjs';
 import {
-  esc, page, breadcrumb, ctaBand, faqList, icon, ghOnly, usOnly,
+  esc, page, breadcrumb, ctaBand, faqList, icon, ghOnly, usOnly, tbc,
   breadcrumbLd, serviceLd, faqLd, orgLd
 } from './render.mjs';
 
@@ -185,11 +185,11 @@ export function industryPage(i) {
           <p class="eyebrow">Common challenges</p>
           <h2>What we often hear</h2>
           ${list(i.challenges, 'crosslist')}
-          ${i.note ? `<p class="note">${esc(i.note)}</p>` : ''}
+          ${i.note ? `<p class="note">${esc(i.note)}${i.noteTbc ? ' ' + tbc(i.noteTbc) : ''}</p>` : ''}
         </div>
         <div class="panel">
           <h3>Where to start</h3>
-          <p>A technology consultation and short assessment of your current setup. You get a prioritised list of recommendations and a fixed proposal for anything you want us to take on.</p>
+          <p>A technology consultation and short assessment of your current setup. You get a prioritized list of recommendations and a fixed proposal for anything you want us to take on.</p>
           <h3 style="margin-top:22px">Relevant services</h3>
           <ul class="related-list">${svc.map(svcLink).join('')}</ul>
         </div>

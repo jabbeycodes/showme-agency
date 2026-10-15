@@ -14,14 +14,14 @@ export function ghPrivacyBody(mail) {
         <h2>2. The data we collect</h2>
         <h3>Information you give us</h3>
         <ul>
-          <li><span><strong>Enquiries and audit requests:</strong> your name, business name, email address, phone or WhatsApp number, the services you're interested in, your challenge, budget band, timeline and message.</span></li>
+          <li><span><strong>Inquiries and audit requests:</strong> your name, business name, email address, phone or WhatsApp number, the services you're interested in, your challenge, budget band, timeline and message.</span></li>
           <li><span><strong>Conversations:</strong> messages you send us by WhatsApp, email or phone, and notes from calls.</span></li>
           <li><span><strong>Client information:</strong> if you become a client, contact and billing details, the content and materials you provide, and access details for accounts we manage on your behalf.</span></li>
         </ul>
         <h3>Information collected automatically</h3>
         <ul>
           <li><span><strong>Anonymous usage counts:</strong> our site records simple totals (page views, form submissions and WhatsApp button clicks) without cookies and without identifying you.</span></li>
-          <li><span><strong>Form metadata:</strong> when you submit a form, we store the time and your browser type (user-agent) with your enquiry to help prevent spam.</span></li>
+          <li><span><strong>Form metadata:</strong> when you submit a form, we store the time and your browser type (user-agent) with your inquiry to help prevent spam.</span></li>
           <li><span><strong>Security logs:</strong> our hosting provider processes technical data such as IP addresses to deliver the site and protect it from abuse.</span></li>
         </ul>
         <h3>Cookies</h3>
@@ -30,7 +30,7 @@ export function ghPrivacyBody(mail) {
         <h2>3. How and why we use your data</h2>
         <p>Act 843 requires a lawful basis for processing personal data. We rely on:</p>
         <ul>
-          <li><span><strong>Your consent</strong>, when you submit a form or message us, to reply to your enquiry and send the audit or information you asked for.</span></li>
+          <li><span><strong>Your consent</strong>, when you submit a form or message us, to reply to your inquiry and send the audit or information you asked for.</span></li>
           <li><span><strong>Performance of a contract</strong>, to scope, deliver, bill for and support the services you buy.</span></li>
           <li><span><strong>Our legitimate interests</strong>, to keep our website secure, understand overall usage and improve our services, in ways that don't override your rights.</span></li>
           <li><span><strong>Legal obligations</strong>, such as keeping accounting and tax records.</span></li>
@@ -52,7 +52,7 @@ export function ghPrivacyBody(mail) {
 
         <h2>6. How long we keep data</h2>
         <ul>
-          <li><span><strong>Enquiries that don't become projects:</strong> up to 24 months, then deleted.</span></li>
+          <li><span><strong>Inquiries that don't become projects:</strong> up to 24 months, then deleted.</span></li>
           <li><span><strong>Client records:</strong> for the length of our engagement and up to 6 years afterwards, to meet accounting, tax and legal requirements.</span></li>
           <li><span><strong>Anonymous usage counts:</strong> kept as totals, which contain no personal data.</span></li>
         </ul>
@@ -102,7 +102,7 @@ export function ghTermsBody(mail) {
 ${pr(`          <li>Prices on our website are starting ("from") prices for the scope described. Your proposal gives a fixed price for your specific project.</li>
           <li>Quotes are valid for 30 days. Prices are shown in US dollars (USD) by default and in Ghana cedis (GHS) for clients in Ghana; your proposal states the currency you will be invoiced in.</li>`, `          <li>Prices are given in your quote or proposal, which sets a fixed price for the scope described.</li>
           <li>Quotes are valid for 30 days and are in US dollars (USD) or, for clients in Ghana, Ghana cedis (GHS); your proposal states the currency you will be invoiced in.</li>`)}
-          <li>Third-party costs are not included unless stated: for example ad spend, software and Microsoft licences, domain names, payment-provider fees, WhatsApp and AI usage fees, printing, and travel outside Greater Accra. We list any that apply in your proposal.</li>
+          <li>Third-party costs are not included unless stated: for example ad spend, software and Microsoft licenses, domain names, payment-provider fees, WhatsApp and AI usage fees, printing, and travel outside Greater Accra. We list any that apply in your proposal.</li>
         </ul>
 
         <h2>4. Payment terms</h2>
@@ -124,8 +124,8 @@ ${pr(`          <li>The Growth retainer costs ${esc(site.facts.retainerPrice)} p
           <li>After the minimum term, the retainer continues month to month. To cancel, give written notice (email or WhatsApp) at least 14 days before your next billing date.</li>
         </ul>
 
-        <h2>7. The 7-day launch guarantee</h2>
-        <p>For the Growth retainer, your landing page, lead system and reporting will be live within 7 days of onboarding, or your month 1 retainer fee is waived (or refunded if already paid). Onboarding is complete when we have received your first payment and the access, information and approvals listed in your onboarding checklist. The guarantee does not apply to delays caused by late information or approvals on your side, or by third-party reviews outside our control, such as ad-account or WhatsApp Business verification. Ad spend is never refunded under the guarantee because it is paid to the platforms.</p>
+        <h2>7. The 7-day launch commitment</h2>
+        <p>For the Growth retainer, your landing page, lead system and reporting will be live within 7 days of onboarding, or your month 1 retainer fee is waived (or refunded if already paid). Onboarding is complete when we have received your first payment and the access, information and approvals listed in your onboarding checklist. The commitment does not apply to delays caused by late information or approvals on your side, or by third-party reviews outside our control, such as ad-account or WhatsApp Business verification. Ad spend is never refunded under the commitment because it is paid to the platforms.</p>
 
         <h2>8. Your responsibilities</h2>
         <ul>
@@ -138,16 +138,16 @@ ${pr(`          <li>The Growth retainer costs ${esc(site.facts.retainerPrice)} p
         <ul>
           <li>Once you have paid in full, you own the final deliverables we create for you: website content and design, brand assets, documents and, for custom software, the code written specifically for you.</li>
           <li>Domains, ad accounts, app-store listings and similar accounts are set up in your name wherever possible.</li>
-          <li>We keep ownership of our pre-existing tools, templates, know-how and general-purpose code, and give you a permanent licence to use them as part of your deliverables.</li>
-          <li>Third-party components (such as themes, plugins, fonts, stock images or platforms) remain subject to their own licences.</li>
-          <li>We will only show your project in our portfolio or publish a case study with your written permission.</li>
+          <li>We keep ownership of our pre-existing tools, templates, know-how and general-purpose code, and give you a permanent license to use them as part of your deliverables.</li>
+          <li>Third-party components (such as themes, plugins, fonts, stock images or platforms) remain subject to their own licenses.</li>
+          <li>We will only show your project in our portfolio or publish a project write-up with your written permission.</li>
         </ul>
 
         <h2>10. Confidentiality</h2>
         <p>Both of us will keep the other's confidential information private and use it only for the engagement. This continues after the engagement ends.</p>
 
         <h2>11. Third-party platforms and results</h2>
-        <p>Much of our work relies on platforms we don't control, including Google, Meta (Facebook, Instagram and WhatsApp), AI assistants, payment providers and hosting services. Their rules, fees, approvals and algorithms can change at any time. We guarantee our work, speed and transparency, but we do not guarantee specific rankings, AI recommendations, ad approvals, lead volumes or sales.</p>
+        <p>Much of our work relies on platforms we don't control, including Google, Meta (Facebook, Instagram and WhatsApp), AI assistants, payment providers and hosting services. Their rules, fees, approvals and algorithms can change at any time. We stand behind our work, speed and transparency, but we cannot promise specific rankings, AI recommendations, ad approvals, lead volumes or sales.</p>
 
         <h2>12. Support and fixes</h2>
         <p>Every project includes 30 days of post-launch support to fix defects in what we delivered. After that, support is available through a Website Care plan or a monthly plan, or quoted per request.</p>
@@ -155,7 +155,7 @@ ${pr(`          <li>The Growth retainer costs ${esc(site.facts.retainerPrice)} p
         <h2>13. Cancellation and refunds</h2>
         <ul>
           <li><span><strong>Projects:</strong> you may cancel at any time by written notice. You pay for work completed up to that point; if your deposit exceeds the value of that work, we refund the difference.</span></li>
-          <li><span><strong>Monthly services:</strong> fees for a month that has started are not refundable, except under the 7-day launch guarantee.</span></li>
+          <li><span><strong>Monthly services:</strong> fees for a month that has started are not refundable, except under the 7-day launch commitment.</span></li>
           <li><span><strong>Automation Audit:</strong> the fee is non-refundable once the audit has started, and is credited in full toward an automation build started with us within 60 days.</span></li>
           <li>We may end an engagement if you seriously breach these terms and do not fix the breach within 14 days of notice.</li>
         </ul>

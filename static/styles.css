@@ -295,6 +295,15 @@ fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
 .cta-band h2 { color: #fff; margin-bottom: 12px; }
 .cta-band p { color: var(--on-dark-muted); margin: 0; }
 .cta-band .btn-row { justify-content: flex-end; }
+.cta-band .cta-alt { margin-top: 12px; font-size: .95rem; }
+.cta-band .cta-alt a { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+.hero-alt { margin: 16px 0 0; font-size: .98rem; color: var(--muted); }
+.tier .tier-tagline { font-weight: 650; color: var(--ink); margin: 2px 0 6px; }
+table.compare td { font-size: .92rem; color: var(--text); vertical-align: top; }
+.steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px 28px; }
+.steps-grid li::after { display: none; }
+.field .check { font-weight: 500; }
+
 
 /* ---- Footer -------------------------------------------------------------- */
 .site-footer { background: #071326; color: var(--on-dark-muted); padding: 64px 0 28px; font-size: .95rem; }

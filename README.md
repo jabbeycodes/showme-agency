@@ -83,7 +83,7 @@ missing its single `<h1>`, title, meta description, canonical, skip link or
   needs (`site.facts.experience`) and has helped **50+ businesses**
   (`site.facts.businessesHelped`). Founder-confirmed; no other numbers,
   client names, testimonials or awards are claimed.
-- Contacts: **josh@showmeworld.app**, WhatsApp **+1 336 457 2361**.
+- Contacts: **info@showmeworld.app**, call/text or WhatsApp **+1 336 457 2361**.
 - Location framing: **US-led, with our team on the ground in Accra, Ghana.**
   Founder **Joshua (Josh) Abbey** is based in the **United States** (country
   level only; no US city or street address is published); the delivery team
