@@ -212,7 +212,7 @@ export function header() {
   return `<a class="skip-link" href="#main">Skip to content</a>
 <header class="topbar">
   <nav class="wrap nav" aria-label="Primary">
-    <a class="brand" href="/" aria-label="${esc(site.name)} home">${BRAND_MARK}<span>ShowMe<small>Digital Agency</small></span></a>
+    <a class="brand" href="/">${BRAND_MARK}<span>ShowMe <small>Digital Agency</small></span></a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="navPanel" aria-label="Menu"><span></span></button>
     <div class="nav-panel" id="navPanel">
       <ul class="nav-links">
@@ -248,7 +248,7 @@ export function footer() {
   <div class="wrap">
     <div class="footer-grid">
       <div class="footer-brand">
-        <a class="brand" href="/">${BRAND_MARK}<span>ShowMe<small>Digital Agency</small></span></a>
+        <a class="brand" href="/">${BRAND_MARK}<span>ShowMe <small>Digital Agency</small></span></a>
         <p>Managed IT, AI and automation, software and digital marketing from one accountable technology partner. ${esc(site.facts.experience)} of experience and ${esc(site.facts.businessesHelped)} businesses helped.</p>
         ${ghOnly(`<p>${esc(site.locationLine)}.</p>`)}
         ${regionSwitch()}
