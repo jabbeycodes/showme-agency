@@ -47,5 +47,5 @@ Nothing here may be filled in with invented facts. Regenerated on each build.
 - Legal review of the US-default privacy policy and terms (see the PENDING LEGAL REVIEW comment in scripts/pages.mjs).
 - Managed IT plan names: Essentials / Business / Complete IT Department, taken from repositioning/managed-it-packages.md (Josh may still rename them).
 - Proposed managed IT response figures in managed-it-packages.md are deliberately NOT published until Josh confirms them.
-- Hero and supporting line (from gtm-strategy.md section 2.1) await Josh's approval.
+- Hero headline and supporting line are set from the 2026-10-15 marketing input (confirmed wording).
 - Whether Ghana-only pages stay (real estate, diaspora property, WhatsApp ordering, photography, 4 Ghana guides).
