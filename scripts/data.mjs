@@ -15,7 +15,7 @@ export const site = {
   tagline: 'Build. Grow. Automate.',
   strapline: 'Your digital business partner',
   origin: 'https://agency.showmeworld.app',
-  email: 'josh@showmeworld.app',
+  email: 'info@showmeworld.app',
   whatsappNumber: '13364572361',
   whatsappDisplay: '+1 336 457 2361',
   founder: 'Joshua Abbey',
@@ -37,7 +37,7 @@ export const site = {
     enterpriseRetainerPrice: '{{enterprise}}',
     retainerMinimum: '3-month minimum',
     adSpendMin: '{{adspend}}',
-    guarantee: 'Live within 7 days of onboarding — or month 1 is free.',
+    guarantee: 'Growth retainer: landing page, lead system and reporting live within 7 days of onboarding — or month 1 of the retainer is free.',
     responsePromise: 'within one business day'
   }
 };
@@ -86,13 +86,13 @@ export const services = [
   // ===== Web & Commerce =====
   {
     slug: 'business-websites', division: 'web-commerce', title: 'Business Websites',
-    metaTitle: 'Business Website Design in Accra, Ghana',
+    metaTitle: 'Business Website Design & Development',
     summary: 'Fast, mobile-first websites that load on slow networks and turn visitors into enquiries.',
-    metaDescription: 'ShowMe builds fast, mobile-first business websites for Ghanaian companies — SEO-ready, easy to update and wired to capture every enquiry.',
+    metaDescription: 'ShowMe builds fast, mobile-first business websites for growing companies — SEO-ready, easy to update and wired to capture every enquiry.',
     problem: 'Most business websites are slow, hard to update, and treat the enquiry as an afterthought. Visitors bounce, and the ones who do reach out fall through the cracks.',
     deliverables: [
       'A custom, mobile-first design built and tested from 375px up',
-      'Fast loading on Ghanaian mobile networks (lazy-loaded images, lean code)',
+      'Fast loading on any network (lazy-loaded images, lean code)',
       'A content structure you can update yourself, with training and handover',
       'Enquiry capture wired to WhatsApp and email so no lead goes cold',
       'SEO foundations: clean titles, meta descriptions, schema and a sitemap',
@@ -112,41 +112,41 @@ export const services = [
       { q: 'Can I update it myself?', a: 'Yes. We build with content you can edit and train your team at handover, so you are never locked into a developer for small changes.' },
       { q: 'Do I own the website?', a: 'You own your domain, content and assets. We hand over full access at launch.' }
     ],
-    related: ['ecommerce-momo', 'landing-pages-funnels', 'website-care']
+    related: ['ecommerce', 'landing-pages-funnels', 'website-care']
   },
   {
-    slug: 'ecommerce-momo', division: 'web-commerce', title: 'E-commerce & Mobile Money Checkout',
-    metaTitle: 'E-commerce Websites with Mobile Money & Card Checkout',
-    summary: 'Online stores that accept MoMo, Paystack and card, with WhatsApp reordering built in.',
-    metaDescription: 'Sell online in Ghana with a mobile-first store: MTN MoMo, Telecel Cash, Paystack and card checkout, WhatsApp reordering, inventory and order reporting.',
+    slug: 'ecommerce', division: 'web-commerce', title: 'E-commerce & Online Checkout',
+    metaTitle: 'E-commerce Websites & Secure Online Checkout',
+    summary: 'Online stores with secure checkout, quick reordering and order management your team can run.',
+    metaDescription: 'E-commerce stores built to sell: online checkout, quick reordering for repeat customers, inventory and order reporting your team can run.',
     problem: 'Selling through DMs and manual invoices does not scale. Customers abandon when they cannot pay the way they want, and you lose track of orders and stock.',
     deliverables: [
       'A mobile-first store designed to convert on phones',
-      'Checkout with MTN MoMo, Telecel Cash, Paystack and card',
-      'WhatsApp reordering so repeat customers buy in a tap',
+      'Secure {{checkout_methods}}',
+      'Quick reordering so repeat customers buy in a few taps',
       'Product, inventory and order management you can run yourself',
       'Order confirmations and simple sales reporting',
       'SEO foundations so products can be found in search'
     ],
-    whoFor: ['Retailers and boutiques moving beyond DM sales', 'Food and FMCG brands taking repeat orders', 'Anyone who needs reliable MoMo and card payments'],
+    whoFor: ['Retailers moving beyond social-media and direct-message sales', 'Food and consumer brands taking repeat orders', 'Anyone who needs reliable online payments'],
     outcomes: ['Fewer abandoned carts', 'Repeat orders without manual admin', 'A single view of orders, stock and revenue'],
     process: [
       { t: 'Discover', d: 'We scope your catalogue, payment methods and delivery flow.' },
       { t: 'Design', d: 'You approve the store and checkout experience up front.' },
-      { t: 'Build', d: 'We wire in payments, inventory and WhatsApp reordering.' },
+      { t: 'Build', d: 'We wire in payments, inventory and reordering.' },
       { t: 'Launch', d: 'We test real payments, go live and train your team.' }
     ],
-    pricing: P('ecommerce-momo'),
+    pricing: P('ecommerce'),
     faqs: [
-      { q: 'Which payment methods can you set up?', a: 'MTN MoMo, Telecel Cash, card and bank transfer via providers such as Paystack. We confirm the right mix for your customers during discovery.' },
+      { q: 'Which payment methods can you set up?', a: 'We set up the payment providers that suit your customers and market, for example card, digital wallets and bank transfer, and confirm the mix during discovery.' },
       { q: 'Can customers reorder on WhatsApp?', a: 'Yes. We can add a WhatsApp reordering flow so repeat customers place orders in a couple of taps.' },
       { q: 'Do you handle delivery logistics?', a: 'We build the ordering and payment side and can integrate with your delivery partner or capture delivery details for your team.' }
     ],
-    related: ['business-websites', 'whatsapp-ordering-booking', 'website-care']
+    related: ['business-websites', 'booking-online-ordering', 'website-care']
   },
   {
     slug: 'landing-pages-funnels', division: 'web-commerce', title: 'Landing Pages & Funnels',
-    metaTitle: 'High-Converting Landing Pages & Funnels',
+    metaTitle: 'Conversion-Focused Landing Pages & Funnels',
     summary: 'Focused pages built to convert ad and campaign traffic into qualified enquiries.',
     metaDescription: 'Campaign landing pages and funnels designed to convert paid and social traffic into qualified leads, with fast load times and clear calls to action.',
     problem: 'Sending ad traffic to a busy homepage wastes budget. Without a focused page and clear next step, clicks do not become customers.',
@@ -177,13 +177,13 @@ export const services = [
     slug: 'booking-online-ordering', division: 'web-commerce', title: 'Booking & Online Ordering Systems',
     metaTitle: 'Online Booking & Ordering Systems',
     summary: 'Let customers book appointments or place orders around the clock, without the back-and-forth.',
-    metaDescription: 'Online booking and ordering systems for clinics, salons, restaurants and services — take appointments and orders 24/7 with reminders and MoMo payments.',
+    metaDescription: 'Online booking and ordering systems for clinics, salons, restaurants and services — take appointments and orders at any hour, with reminders and online payments.',
     problem: 'Booking by phone and DM means missed calls, double-bookings and no-shows. Your team spends the day coordinating instead of serving customers.',
     deliverables: [
       'A booking or ordering flow customers can use any time',
       'Availability, services and pricing you control',
       'Automatic confirmations and reminders to cut no-shows',
-      'Optional deposits or payment via MoMo and card',
+      'Optional deposits or payment via {{deposit_methods}}',
       'A simple dashboard of upcoming bookings or orders'
     ],
     whoFor: ['Clinics, salons and service providers', 'Restaurants and caterers taking orders', 'Any team losing time to manual scheduling'],
@@ -196,7 +196,7 @@ export const services = [
     ],
     pricing: P('booking-online-ordering'),
     faqs: [
-      { q: 'Can it take deposits?', a: 'Yes. We can require a deposit or full payment via MoMo or card to reduce no-shows.' },
+      { q: 'Can it take deposits?', a: 'Yes. We can require a deposit or full payment via {{deposit_methods}} to reduce no-shows.' },
       { q: 'Will it send reminders?', a: 'Yes — automatic confirmations and reminders by WhatsApp, SMS or email, depending on your setup.' },
       { q: 'Does it work on a phone?', a: 'Everything is mobile-first, so customers can book or order from any device.' }
     ],
@@ -206,7 +206,7 @@ export const services = [
     slug: 'website-care', division: 'web-commerce', title: 'Website Care & Maintenance',
     metaTitle: 'Website Care & Maintenance Plans',
     summary: 'Hosting, security, backups and updates so your site stays fast, safe and current.',
-    metaDescription: 'Website care plans for Ghanaian businesses: hosting, SSL, backups, security updates, small content changes and uptime monitoring on a simple monthly plan.',
+    metaDescription: 'Website care plans for growing businesses: hosting, SSL, backups, security updates, small content changes and uptime monitoring on a simple monthly plan.',
     problem: 'A website is not "done" at launch. Without updates and monitoring, sites break, slow down or get compromised — usually right when you need them.',
     deliverables: [
       'Managed hosting and SSL certificate',
@@ -229,7 +229,7 @@ export const services = [
       { q: 'What counts as a small change?', a: 'Text edits, swapping images, adding a page section and similar tasks. Larger work is quoted separately.' },
       { q: 'Can I cancel?', a: 'Care plans are month to month once any minimum term is met. You keep your site and assets.' }
     ],
-    related: ['business-websites', 'ecommerce-momo', 'analytics-reporting']
+    related: ['business-websites', 'ecommerce', 'analytics-reporting']
   },
 
   // ===== Growth =====
@@ -237,10 +237,10 @@ export const services = [
     slug: 'growth-retainer', division: 'growth', title: 'ShowMe Growth Retainer',
     metaTitle: 'ShowMe Growth Retainer — Managed Demand & Lead System',
     summary: 'Our core offer: managed ads, a landing page and a WhatsApp lead system with weekly reporting.',
-    metaDescription: pr('The ShowMe Growth retainer: managed ads, a high-converting landing page, a WhatsApp lead system and weekly reporting for {{retainer}}/month, 3-month minimum.', 'The ShowMe Growth retainer: managed ads, a high-converting landing page, a WhatsApp lead system and weekly reporting, with a 3-month minimum. Request pricing.'),
+    metaDescription: pr('The ShowMe Growth retainer: managed ads, a conversion-focused landing page, a WhatsApp lead system and weekly reporting for {{retainer}}/month, 3-month minimum.', 'The ShowMe Growth retainer: managed ads, a conversion-focused landing page, a WhatsApp lead system and weekly reporting, with a 3-month minimum. Request pricing.'),
     problem: 'Running your own ads and follow-up part-time means wasted spend and leads that go cold. You need one accountable partner running demand end to end.',
     deliverables: [
-      'Managed advertising and a high-converting landing page',
+      'Managed advertising and a conversion-focused landing page',
       'A WhatsApp lead system that captures and routes every enquiry',
       'Weekly reporting so you always know what the spend returns',
       'Ongoing optimisation of targeting, offers and follow-up',
@@ -251,7 +251,7 @@ export const services = [
     process: [
       { t: 'Free audit', d: 'We review your site, visibility and systems and hand you three priorities.' },
       { t: 'Growth plan', d: 'You get a plain-English plan: what we run, what it costs, what changes first.' },
-      { t: 'Launch in 7 days', d: 'Your landing page, lead system and reporting go live within 7 days of onboarding — or month 1 is free.' },
+      { t: 'Launch in 7 days', d: 'Your landing page, lead system and reporting go live within 7 days of onboarding — or month 1 of the retainer is free.' },
       { t: 'Grow monthly', d: 'We run demand, follow up every lead and report weekly.' }
     ],
     // Real pricing — do not change without founder input.
@@ -265,7 +265,7 @@ export const services = [
       { q: 'Is ad spend included?', a: 'No. The retainer covers our management, landing page and lead system. Ad spend is paid separately and goes directly to the ad platforms.' },
       { q: 'Is there a plan for larger companies or in-house teams?', a: 'Yes — the ShowMe Enterprise retainer (' + pr(site.facts.enterpriseRetainerPrice + '/month, ', '') + site.facts.retainerMinimum + ') adds a named senior strategist led by our founder, multi-outlet and multi-brand reporting, quarterly business reviews and priority response within 4 business hours. You own the ad accounts, data and creative outright on both tiers.' },
       { q: 'What is the guarantee?', a: site.facts.guarantee + ' We guarantee our speed and execution, not inflated lead promises.' },
-      { q: 'How quickly will we see work happening?', a: 'Fast. Our team follows a proven onboarding process: once we have your first payment and access, your landing page, lead system and reporting go live within 7 days, or month 1 is free.' }
+      { q: 'How quickly will we see work happening?', a: 'Fast. Our team follows a documented onboarding process: once we have your first payment and access, your landing page, lead system and reporting go live within 7 days, or month 1 of the retainer is free.' }
     ],
     related: ['paid-ads', 'landing-pages-funnels', 'analytics-reporting']
   },
@@ -273,7 +273,7 @@ export const services = [
     slug: 'local-seo-gbp', division: 'growth', title: 'Local SEO & Google Business Profile',
     metaTitle: 'Local SEO & Google Business Profile Management',
     summary: 'Show up in the map pack and local searches when nearby customers are ready to buy.',
-    metaDescription: 'Local SEO and Google Business Profile management in Ghana: optimise your profile, win reviews, fix citations and rank in the map pack for nearby searches.',
+    metaDescription: 'Local SEO and Google Business Profile management: optimise your profile, win reviews, fix citations and rank in the map pack for nearby searches.',
     problem: 'When someone nearby searches for what you sell, a competitor with a better-managed profile gets the call. An unclaimed or thin profile costs you walk-ins and enquiries.',
     deliverables: [
       'Google Business Profile setup and optimisation',
@@ -303,7 +303,7 @@ export const services = [
     slug: 'seo-programme', division: 'growth', title: 'SEO Programme',
     metaTitle: 'SEO Programme — Technical, On-Page, Content & Links',
     summary: 'A full search programme: technical fixes, on-page work, content and links with monthly reporting.',
-    metaDescription: 'A complete SEO programme for Ghanaian businesses: technical audits, on-page optimisation, content, ethical link building and clear monthly reporting.',
+    metaDescription: 'A complete SEO programme for growing businesses: technical audits, on-page optimisation, content, ethical link building and clear monthly reporting.',
     problem: 'One-off SEO tweaks fade. Ranking for the terms that bring buyers takes an ongoing programme across your site, content and reputation.',
     deliverables: [
       'Technical SEO audit and fixes (speed, crawlability, structure)',
@@ -362,7 +362,7 @@ export const services = [
     slug: 'paid-ads', division: 'growth', title: 'Paid Ads (Google & Meta)',
     metaTitle: 'Google & Meta Ads Management',
     summary: 'Managed Google and Meta campaigns aimed at qualified enquiries, not vanity clicks.',
-    metaDescription: 'Google and Meta (Facebook & Instagram) ads management for Ghanaian businesses — campaigns built around enquiries and sales, with transparent monthly reporting.',
+    metaDescription: 'Google and Meta (Facebook & Instagram) ads management for growing businesses — campaigns built around enquiries and sales, with transparent monthly reporting.',
     problem: 'Boosting posts and guessing at targeting burns budget. Without proper structure, tracking and follow-up, ad spend rarely turns into real customers.',
     deliverables: [
       'Campaign strategy tied to a clear business goal',
@@ -372,7 +372,7 @@ export const services = [
       'Ongoing optimisation and budget management',
       'Transparent monthly reporting on cost per lead'
     ],
-    whoFor: ['Businesses that need enquiries now', 'Companies scaling a proven offer', 'Anyone tired of boosting with nothing to show'],
+    whoFor: ['Businesses that need enquiries now', 'Companies scaling an offer that already sells', 'Anyone tired of boosting with nothing to show'],
     outcomes: ['Lower cost per qualified lead over time', 'Spend focused on what works', 'Clear reporting you can trust'],
     process: [
       { t: 'Plan', d: 'We set the goal, audience and budget.' },
@@ -392,7 +392,7 @@ export const services = [
     slug: 'social-media', division: 'growth', title: 'Social Media Management',
     metaTitle: 'Social Media Management',
     summary: 'A consistent content calendar, on-brand design and community management across your channels.',
-    metaDescription: 'Social media management for Ghanaian businesses: content calendars, on-brand post and story design, scheduling, community management and monthly summaries.',
+    metaDescription: 'Social media management for growing businesses: content calendars, on-brand post and story design, scheduling, community management and monthly summaries.',
     problem: 'Posting whenever you remember, with mixed visuals and no plan, does not build trust or an audience. Meanwhile, comments and DMs go unanswered.',
     deliverables: [
       'A monthly content calendar tied to your goals',
@@ -422,7 +422,7 @@ export const services = [
     slug: 'content-marketing', division: 'growth', title: 'Content Marketing',
     metaTitle: 'Content Marketing & Blog Writing',
     summary: 'Articles, FAQs and schema that answer customer questions and earn search and AI visibility.',
-    metaDescription: 'Content marketing for Ghanaian businesses: helpful articles, FAQs and structured content that build authority and win visibility in search and AI answers.',
+    metaDescription: 'Content marketing for growing businesses: helpful articles, FAQs and structured content that build authority and win visibility in search and AI answers.',
     problem: 'Buyers search for answers before they buy. If you are not the business answering those questions, a competitor is — and they earn the trust and the traffic.',
     deliverables: [
       'A content plan built around real buyer questions',
@@ -451,7 +451,7 @@ export const services = [
     slug: 'email-sms', division: 'growth', title: 'Email & SMS Campaigns',
     metaTitle: 'Email & SMS Marketing Campaigns',
     summary: 'Turn your contact list into repeat business with well-timed email and SMS.',
-    metaDescription: 'Email and SMS marketing for Ghanaian businesses: build your list, send campaigns and automated sequences that bring customers back and drive repeat sales.',
+    metaDescription: 'Email and SMS marketing for growing businesses: build your list, send campaigns and automated sequences that bring customers back and drive repeat sales.',
     problem: 'Your existing customers are your cheapest source of sales, yet most businesses never message them again. That list is money left on the table.',
     deliverables: [
       'List setup and simple opt-in capture',
@@ -480,7 +480,7 @@ export const services = [
     slug: 'analytics-reporting', division: 'growth', title: 'Analytics & Reporting',
     metaTitle: 'Analytics & Reporting Dashboards',
     summary: 'Know what is working with proper tracking and a simple dashboard you actually read.',
-    metaDescription: 'Analytics and reporting for Ghanaian businesses: GA4 and conversion tracking set up correctly, plus a clear dashboard so you know what marketing actually works.',
+    metaDescription: 'Analytics and reporting for growing businesses: GA4 and conversion tracking set up correctly, plus a clear dashboard so you know what marketing actually works.',
     problem: 'Without proper tracking, marketing is guesswork. You cannot tell which channel brings customers, so you either overspend or cut the wrong thing.',
     deliverables: [
       'Google Analytics (GA4) and Search Console setup',
@@ -511,7 +511,7 @@ export const services = [
     slug: 'brand-identity', division: 'brand', title: 'Brand Identity',
     metaTitle: 'Brand Identity & Logo Design',
     summary: 'A distinctive identity — logo, colours, type and guidelines — from essentials to a full system.',
-    metaDescription: 'Brand identity design for Ghanaian businesses: logo, colour palette, typography and guidelines. Choose Essentials or a full identity system. You own the assets.',
+    metaDescription: 'Brand identity design for growing businesses: logo, colour palette, typography and guidelines. Choose Essentials or a full identity system. You own the assets.',
     problem: 'An inconsistent, DIY look makes even good businesses seem small and untrustworthy. Customers judge credibility in seconds, and your brand is the first thing they see.',
     deliverables: [
       'Essentials: logo, colour palette, fonts and a mini guide',
@@ -540,7 +540,7 @@ export const services = [
     slug: 'marketing-collateral', division: 'brand', title: 'Marketing Collateral & Company Profiles',
     metaTitle: 'Marketing Collateral, Stationery & Company Profiles',
     summary: 'Company profiles, stationery and marketing materials that make your business look the part.',
-    metaDescription: 'Company profiles, business stationery and marketing collateral design for Ghanaian businesses — professional documents that win trust with clients and partners.',
+    metaDescription: 'Company profiles, business stationery and marketing collateral design for growing businesses — professional documents that win trust with clients and partners.',
     problem: 'When a prospect asks for your company profile or proposal, a rushed document undercuts your pitch. Professional materials signal that you are serious.',
     deliverables: [
       'Company profile documents',
@@ -569,7 +569,7 @@ export const services = [
     slug: 'photography-video', division: 'brand', title: 'Photography & Video',
     metaTitle: 'Business Photography & Video',
     summary: 'Real photos and video of your business, products and team — content that builds trust.',
-    metaDescription: 'Business photography and video for Ghanaian companies: product, team and location shoots plus short-form video for your website, social media and ads.',
+    metaDescription: 'Business photography and video for growing companies: product, team and location shoots plus short-form video for your website, social media and ads.',
     problem: 'Stock photos and blurry phone snaps make customers doubt you. Authentic images of your real business build the trust that closes sales.',
     deliverables: [
       'Product, team and location photography',
@@ -592,13 +592,13 @@ export const services = [
       { q: 'Do I own the images?', a: 'Yes, you receive full rights to the delivered files for your marketing.' },
       { q: 'Can you do product-only shoots?', a: 'Yes — from full brand shoots to focused product photography for your store.' }
     ],
-    related: ['brand-identity', 'social-media', 'ecommerce-momo']
+    related: ['brand-identity', 'social-media', 'ecommerce']
   },
   {
     slug: 'pitch-decks', division: 'brand', title: 'Pitch Decks',
     metaTitle: 'Pitch Deck & Presentation Design',
     summary: 'Investor and sales decks that tell a clear story and look the part.',
-    metaDescription: 'Pitch deck and presentation design for Ghanaian founders and businesses — clear structure, strong visuals and a story that persuades investors and clients.',
+    metaDescription: 'Pitch deck and presentation design for founders and growing businesses — clear structure, strong visuals and a story that persuades investors and clients.',
     problem: 'A weak deck sinks a strong idea. Cluttered slides and a muddled story lose investors and clients in the first few minutes.',
     deliverables: [
       'A clear narrative structure for your pitch',
@@ -629,7 +629,7 @@ export const services = [
     slug: 'microsoft-365', division: 'business-technology', title: 'Microsoft 365 & Business Email',
     metaTitle: 'Microsoft 365, Business Email & SharePoint Setup',
     summary: 'Professional email on your domain, plus Microsoft 365 and SharePoint set up for your team.',
-    metaDescription: 'Microsoft 365 setup for Ghanaian businesses: professional email on your own domain, Office apps, SharePoint and Teams configured and migrated with training.',
+    metaDescription: 'Microsoft 365 setup for growing businesses: professional email on your own domain, Office apps, SharePoint and Teams configured and migrated with training.',
     problem: 'Running a business from a free personal email address looks unprofessional and scatters your files. Growing teams need proper email, shared files and collaboration.',
     deliverables: [
       'Professional email on your own domain',
@@ -652,13 +652,13 @@ export const services = [
       { q: 'Can you move my old emails?', a: 'Yes, migration from most common providers is part of the service.' },
       { q: 'Is my current work interrupted?', a: 'We plan migrations to minimise downtime, usually outside working hours where possible.' }
     ],
-    related: ['cloud-document-management', 'crm-setup', 'it-consulting-training']
+    related: ['cloud-document-management', 'crm-setup', 'technology-consulting']
   },
   {
     slug: 'cloud-document-management', division: 'business-technology', title: 'Cloud Storage & Document Management',
     metaTitle: 'Cloud Storage & Document Management',
     summary: 'Get your files off scattered laptops and WhatsApp into a secure, organised, shared system.',
-    metaDescription: 'Cloud storage and document management for Ghanaian businesses: organised, secure, shared files with permissions and backups so your team stops losing documents.',
+    metaDescription: 'Cloud storage and document management for growing businesses: organised, secure, shared files with permissions and backups so your team stops losing documents.',
     problem: 'Critical files live on one person\u2019s laptop, in WhatsApp, or in inboxes. When that person is away or a device fails, work stops and documents disappear.',
     deliverables: [
       'A cloud storage structure that fits how you work',
@@ -681,13 +681,13 @@ export const services = [
       { q: 'Can you set permissions?', a: 'Yes. We control who can see and edit what, so sensitive files stay protected.' },
       { q: 'What about backups?', a: 'Backups are part of the setup so a lost or damaged device never means lost work.' }
     ],
-    related: ['microsoft-365', 'crm-setup', 'it-consulting-training']
+    related: ['microsoft-365', 'crm-setup', 'technology-consulting']
   },
   {
     slug: 'crm-setup', division: 'business-technology', title: 'CRM Setup',
     metaTitle: 'CRM Setup & Customer Management',
     summary: 'A simple CRM so every lead and customer is tracked and nothing slips through.',
-    metaDescription: 'CRM setup for Ghanaian businesses: capture leads, track conversations and follow up on time with a simple customer management system your team will actually use.',
+    metaDescription: 'CRM setup for growing businesses: capture leads, track conversations and follow up on time with a simple customer management system your team will actually use.',
     problem: 'Leads and customers tracked in heads, notebooks and chats get forgotten. Follow-ups slip, and you never see the full picture of your pipeline.',
     deliverables: [
       'A CRM chosen and configured for your business',
@@ -710,17 +710,17 @@ export const services = [
       { q: 'Can it capture WhatsApp leads?', a: 'Yes. We connect your website and WhatsApp so enquiries land in the CRM automatically where possible.' },
       { q: 'Will my team actually use it?', a: 'We keep it simple and train your team, because a CRM only works if people use it.' }
     ],
-    related: ['business-process-automation', 'whatsapp-ai-assistant', 'microsoft-365']
+    related: ['business-process-automation', 'ai-assistants-chatbots', 'microsoft-365']
   },
   {
-    slug: 'it-consulting-training', division: 'business-technology', title: 'IT Consulting & Staff Training',
-    metaTitle: 'IT Consulting & Staff Training',
-    summary: 'Practical advice on the tools you need, plus training so your team actually uses them.',
-    metaDescription: 'IT consulting and staff training for Ghanaian businesses: choose the right tools, tighten security basics and upskill your team with practical, jargon-free training.',
+    slug: 'technology-consulting', division: 'software', title: 'Technology Consulting & Roadmaps',
+    metaTitle: 'Technology Consulting, Roadmaps & Staff Training',
+    summary: 'Independent advice on the systems and priorities you need, a practical technology roadmap, and training so your team uses the tools well.',
+    metaDescription: 'Technology consulting for growing businesses: review your current systems, set priorities in a practical technology roadmap and train your team to use the tools well.',
     problem: 'Businesses waste money on tools they do not use and skip the basics that keep them safe. Meanwhile, staff never get trained on what they already have.',
     deliverables: [
-      'A review of your current tools and gaps',
-      'Practical recommendations, not jargon',
+      'A review of your current systems, tools and gaps',
+      'A prioritised technology roadmap with clear next steps',
       'Security basics: accounts, passwords and access',
       'Hands-on staff training sessions',
       'Simple documentation your team can follow'
@@ -733,50 +733,51 @@ export const services = [
       { t: 'Train', d: 'We run practical sessions with your team.' },
       { t: 'Document', d: 'We leave simple guides behind.' }
     ],
-    pricing: P('it-consulting-training'),
+    pricing: P('technology-consulting'),
     faqs: [
       { q: 'Do you offer one-off sessions?', a: 'Yes — a single training or advisory session, or ongoing support, depending on your needs.' },
       { q: 'Can you train non-technical staff?', a: 'Absolutely. We keep training practical and jargon-free.' },
-      { q: 'Do you provide ongoing IT support?', a: 'We can advise on the right support setup and point you to reliable options where needed.' }
+      { q: 'Do you provide ongoing IT support?', a: 'Yes. Ongoing support is delivered through our managed IT service; see Managed IT Services for what is included.' }
     ],
     related: ['microsoft-365', 'cloud-document-management', 'crm-setup']
   },
 
   // ===== AI & Automation =====
   {
-    slug: 'whatsapp-ai-assistant', division: 'ai-automation', title: 'WhatsApp AI Assistant',
-    metaTitle: 'WhatsApp AI Assistant & AI Customer Service',
-    summary: 'An AI assistant on WhatsApp that answers FAQs, qualifies leads and hands off to a human.',
-    metaDescription: 'A WhatsApp AI assistant for Ghanaian businesses: answers FAQs 24/7, qualifies leads and hands off to a human when needed — so no enquiry goes unanswered.',
-    problem: 'Customers message on WhatsApp at all hours, but you cannot reply instantly. Slow answers lose sales, and your team drowns in repetitive questions.',
+    slug: 'ai-assistants-chatbots', division: 'ai-automation', title: 'AI Assistants & Chatbots',
+    metaTitle: 'AI Assistants & Chatbots for Customer Service',
+    summary: 'AI assistants for your website, messaging channels or internal tools that answer questions, qualify leads and hand off to a person.',
+    metaDescription: 'AI assistants and chatbots for your website, WhatsApp and internal tools: answer common questions instantly, qualify leads and hand off to a person when needed.',
+    problem: 'Customers and staff ask the same questions all day, across website chat, email and messaging apps. Slow answers lose sales, and your team drowns in repetitive work.',
     deliverables: [
-      'An AI assistant trained on your business and FAQs',
-      '24/7 instant replies to common questions',
+      'An AI assistant trained on your business, FAQs and documents',
+      'Instant replies to common questions, at any hour',
       'Lead qualification that captures what you need',
       'Smooth hand-off to a human when it matters',
-      'A knowledge base you can update as you grow'
+      'Deployment on your website, WhatsApp or internal tools',
+      'A knowledge source you can update as you grow'
     ],
-    whoFor: ['Businesses flooded with WhatsApp enquiries', 'Teams losing sales to slow replies', 'Anyone answering the same questions all day'],
+    whoFor: ['Businesses flooded with repetitive enquiries', 'Teams losing sales to slow replies', 'Operations teams answering the same internal questions'],
     outcomes: ['Instant replies, day and night', 'Qualified leads, not just messages', 'Time back for your team'],
     process: [
       { t: 'Train', d: 'We build a knowledge base from your FAQs and info.' },
       { t: 'Design', d: 'We design conversation and qualification flows.' },
-      { t: 'Connect', d: 'We connect it to WhatsApp with human hand-off.' },
+      { t: 'Connect', d: 'We connect it to your website, WhatsApp or internal tools, with human hand-off.' },
       { t: 'Improve', d: 'We refine answers as real questions come in.' }
     ],
-    pricing: P('whatsapp-ai-assistant'),
+    pricing: P('ai-assistants-chatbots'),
     faqs: [
       { q: 'Will it replace my team?', a: 'No — it handles repetitive questions and qualifies leads, then hands off to a human for anything that needs a person.' },
-      { q: 'Does it use the official WhatsApp API?', a: 'We recommend the right setup for your volume and budget, including the official WhatsApp Business API where appropriate.' },
-      { q: 'Can it take orders or bookings?', a: 'Yes — see WhatsApp Ordering & Booking Flows, which we often combine with the assistant.' }
+      { q: 'Which channels can it run on?', a: 'Website chat, WhatsApp (through the official WhatsApp Business Platform where appropriate) and internal tools. We recommend the right setup for your volume and budget.' },
+      { q: 'Can it take orders or bookings?', a: 'Yes. It can connect to your booking or ordering system so customers finish the request in the same conversation.' }
     ],
-    related: ['whatsapp-ordering-booking', 'ai-knowledge-base', 'crm-setup']
+    related: ['ai-knowledge-base', 'business-process-automation', 'crm-setup']
   },
   {
     slug: 'whatsapp-ordering-booking', division: 'ai-automation', title: 'WhatsApp Ordering & Booking Flows',
     metaTitle: 'WhatsApp Ordering & Booking with MoMo Payment Links',
     summary: 'Let customers order or book on WhatsApp and pay with a MoMo link — no app required.',
-    metaDescription: 'WhatsApp ordering and booking flows with MoMo payment links for Ghanaian businesses: customers order or book in chat and pay instantly, with orders routed to you.',
+    metaDescription: 'WhatsApp ordering and booking flows with MoMo payment links for growing businesses: customers order or book in chat and pay instantly, with orders routed to you.',
     problem: 'Taking orders manually over WhatsApp is chaotic: missed messages, wrong details and awkward payment chases. Customers want to order and pay in one place.',
     deliverables: [
       'A guided ordering or booking flow inside WhatsApp',
@@ -799,13 +800,13 @@ export const services = [
       { q: 'Do I need a website too?', a: 'No, though it pairs well with an online store. The WhatsApp flow can work on its own.' },
       { q: 'Can it handle bookings, not just orders?', a: 'Yes — the same approach works for appointments and reservations with reminders.' }
     ],
-    related: ['whatsapp-ai-assistant', 'ecommerce-momo', 'booking-online-ordering']
+    related: ['ai-assistants-chatbots', 'ecommerce', 'booking-online-ordering']
   },
   {
     slug: 'business-process-automation', division: 'ai-automation', title: 'Business Process Automation',
     metaTitle: 'Business Process Automation (Make / n8n)',
     summary: 'Automate the repetitive work: invoice reminders, onboarding, reports, reminders and alerts.',
-    metaDescription: 'Business process automation for Ghanaian companies using tools like Make and n8n: automate invoice reminders, onboarding, reporting, appointment reminders and stock alerts.',
+    metaDescription: 'Business process automation for growing companies using tools like Make and n8n: automate invoice reminders, onboarding, reporting, appointment reminders and stock alerts.',
     problem: 'Your team spends hours each week on repetitive admin — chasing invoices, sending reminders, compiling reports. That time costs money and invites mistakes.',
     deliverables: [
       'Automated invoice and payment reminders',
@@ -835,7 +836,7 @@ export const services = [
     slug: 'automation-audit', division: 'ai-automation', title: 'Automation Audit',
     metaTitle: 'Automation Audit — Find What to Automate First',
     summary: 'A focused paid audit that finds your biggest time-wasters and the automations worth building.',
-    metaDescription: 'An automation audit for Ghanaian businesses: we map your repetitive workflows, estimate the time and cost they waste, and recommend what to automate first.',
+    metaDescription: 'An automation audit for growing businesses: we map your repetitive workflows, estimate the time and cost they waste, and recommend what to automate first.',
     problem: 'Everyone says "automate," but which tasks actually pay off? Guessing leads to over-engineered tools nobody uses. You need a clear, prioritised plan.',
     deliverables: [
       'A review of your day-to-day workflows',
@@ -859,7 +860,7 @@ export const services = [
       { q: 'How much does it cost?', a: pr('A fixed {{audit}}.', 'A fixed fee, confirmed in writing before we start.') + ' The full fee is credited toward any automation build you start with us within 60 days, so if you go ahead, the audit is effectively free.' },
       { q: 'What do I get at the end?', a: 'A prioritised roadmap of what to automate first, with time and cost estimates and a clear starting point.' }
     ],
-    related: ['business-process-automation', 'whatsapp-ai-assistant', 'ai-knowledge-base']
+    related: ['business-process-automation', 'ai-assistants-chatbots', 'ai-knowledge-base']
   },
   {
     slug: 'ai-knowledge-base', division: 'ai-automation', title: 'AI Knowledge Base',
@@ -888,7 +889,7 @@ export const services = [
       { q: 'What documents can it use?', a: 'SOPs, policies, product info, FAQs and most common document formats.' },
       { q: 'Can customers use it too?', a: 'This service is for internal use; for customer-facing AI, see the WhatsApp AI Assistant.' }
     ],
-    related: ['whatsapp-ai-assistant', 'business-process-automation', 'cloud-document-management']
+    related: ['ai-assistants-chatbots', 'business-process-automation', 'cloud-document-management']
   },
 
   // ===== Software =====
@@ -896,7 +897,7 @@ export const services = [
     slug: 'custom-web-apps', division: 'software', title: 'Custom Web Apps & Portals',
     metaTitle: 'Custom Web Applications & Portals',
     summary: 'Web apps, customer and staff portals, directories and marketplaces built around your workflow.',
-    metaDescription: 'Custom web application and portal development for Ghanaian businesses: customer and staff portals, directories, marketplaces and booking systems built to fit your workflow.',
+    metaDescription: 'Custom web application and portal development for growing businesses: customer and staff portals, directories, marketplaces and booking systems built to fit your workflow.',
     problem: 'When spreadsheets and off-the-shelf tools no longer fit how you work, they slow you down. You need software built around your actual process, not the other way round.',
     deliverables: [
       'A web app or portal designed around your workflow',
@@ -925,7 +926,7 @@ export const services = [
     slug: 'mobile-apps', division: 'software', title: 'Mobile Apps',
     metaTitle: 'Mobile App Development',
     summary: 'iOS and Android apps for customers or staff, built to be genuinely useful.',
-    metaDescription: 'Mobile app development for Ghanaian businesses: customer and staff apps for iOS and Android, designed for real use, low data and reliable performance.',
+    metaDescription: 'Mobile app development for growing businesses: customer and staff apps for iOS and Android, designed for real use, low data and reliable performance.',
     problem: 'A mobile app only earns a place on the home screen if it is genuinely useful. Too many are built without a clear reason people would keep using them.',
     deliverables: [
       'A mobile app for iOS, Android or both',
@@ -954,7 +955,7 @@ export const services = [
     slug: 'dashboards-internal-systems', division: 'software', title: 'Dashboards & Internal Systems',
     metaTitle: 'Dashboards & Internal Business Systems',
     summary: 'Bring your data together into dashboards and internal tools your team can act on.',
-    metaDescription: 'Custom dashboards and internal systems for Ghanaian businesses: connect your data into clear dashboards and internal tools that replace messy spreadsheets.',
+    metaDescription: 'Custom dashboards and internal systems for growing businesses: connect your data into clear dashboards and internal tools that replace messy spreadsheets.',
     problem: 'Your numbers live in different tools and spreadsheets, so seeing the real picture means hours of copy-paste. Decisions get made on gut feel or stale data.',
     deliverables: [
       'Dashboards that pull your key numbers together',
@@ -983,7 +984,7 @@ export const services = [
     slug: 'integrations-saas', division: 'software', title: 'Integrations & SaaS Development',
     metaTitle: 'Integrations & SaaS Development',
     summary: 'Connect the tools you use, or build and launch a software product of your own.',
-    metaDescription: 'Integrations and SaaS development for Ghanaian businesses and founders: connect your tools so data flows automatically, or build and launch your own software product.',
+    metaDescription: 'Integrations and SaaS development for growing businesses and founders: connect your tools so data flows automatically, or build and launch your own software product.',
     problem: 'Disconnected tools mean double entry and errors. And founders with a software idea often struggle to turn it into a real, sellable product.',
     deliverables: [
       'Integrations so your tools share data automatically',
@@ -1022,7 +1023,7 @@ export const industries = [
     problems: ['Portals and social bring browsers, not serious buyers', 'Enquiries come in on WhatsApp and go cold before follow-up', 'No clear view of which listings and channels actually convert'],
     whatWeBuild: ['A listings site that showcases properties and captures enquiries', 'A WhatsApp lead system so no serious buyer is missed', 'Targeted Google and Meta ads for real demand', 'Reporting on enquiries, viewings and cost per lead'],
     starter: 'A listings website plus the ShowMe Growth retainer, so demand and fast follow-up run together from day one.',
-    relatedServices: ['business-websites', 'growth-retainer', 'paid-ads', 'whatsapp-ai-assistant']
+    relatedServices: ['business-websites', 'growth-retainer', 'paid-ads', 'ai-assistants-chatbots']
   },
   {
     slug: 'diaspora-property', title: 'Diaspora Property Buyers',
@@ -1031,7 +1032,7 @@ export const industries = [
     problems: ['Buyers abroad need extra trust before committing from a distance', 'Time-zone gaps mean enquiries wait too long for a reply', 'Pricing and payment in a foreign currency raise doubts'],
     whatWeBuild: ['A trust-building site aimed at diaspora buyers', 'Enquiry capture that works across time zones', 'Clear presentation of pricing (USD quotes as needed)', 'Automated first responses so no lead waits'],
     starter: 'A diaspora-focused landing page and lead system, paired with ads targeting key markets abroad.',
-    relatedServices: ['landing-pages-funnels', 'growth-retainer', 'whatsapp-ai-assistant', 'business-websites'],
+    relatedServices: ['landing-pages-funnels', 'growth-retainer', 'ai-assistants-chatbots', 'business-websites'],
     note: 'We focus on buyers in the US, UK and Canada. Developers and agents can be quoted in cedis; diaspora-facing businesses abroad can be quoted and invoiced in USD and pay by card or international transfer.'
   },
   {
@@ -1041,7 +1042,7 @@ export const industries = [
     problems: ['Patients call or DM and reach a busy front desk', 'No easy way to book online or after hours', 'No-shows waste valuable appointment slots'],
     whatWeBuild: ['A credible clinic website with clear services', 'Online booking with reminders to cut no-shows', 'Local SEO and Google Business Profile management', 'A WhatsApp assistant for common patient questions'],
     starter: 'A clinic website with online booking, plus Local SEO so nearby patients find and book you.',
-    relatedServices: ['booking-online-ordering', 'local-seo-gbp', 'business-websites', 'whatsapp-ai-assistant']
+    relatedServices: ['booking-online-ordering', 'local-seo-gbp', 'business-websites', 'ai-assistants-chatbots']
   },
   {
     slug: 'private-schools', title: 'Private Schools & Tutoring',
@@ -1059,7 +1060,7 @@ export const industries = [
     problems: ['Orders over WhatsApp are messy and error-prone', 'Chasing payment after cooking hurts cash flow', 'A great menu but no easy way to order or book'],
     whatWeBuild: ['WhatsApp ordering with MoMo payment links', 'An online menu and booking flow', 'Social content that turns followers into orders', 'Automated confirmations and reminders'],
     starter: 'A WhatsApp ordering flow with MoMo payments, plus social media to keep orders coming in.',
-    relatedServices: ['whatsapp-ordering-booking', 'ecommerce-momo', 'social-media', 'booking-online-ordering']
+    relatedServices: ['whatsapp-ordering-booking', 'ecommerce', 'social-media', 'booking-online-ordering']
   },
   {
     slug: 'hospitality-tourism', title: 'Hospitality & Tourism',
@@ -1077,7 +1078,7 @@ export const industries = [
     problems: ['Giving is manual and hard to track', 'Members miss events and announcements', 'No central home for sermons and information'],
     whatWeBuild: ['A church website with events and sermons', 'A MoMo giving page for easy, trackable giving', 'Broadcasts by WhatsApp, SMS or email', 'Simple content your team can update'],
     starter: 'A church website with a MoMo giving page and a simple way to reach members.',
-    relatedServices: ['business-websites', 'ecommerce-momo', 'email-sms', 'website-care']
+    relatedServices: ['business-websites', 'ecommerce', 'email-sms', 'website-care']
   },
   {
     slug: 'fashion-retail', title: 'Fashion & Retail Boutiques',
@@ -1086,7 +1087,7 @@ export const industries = [
     problems: ['Selling through DMs does not scale and loses orders', 'No easy checkout, so customers drop off', 'Great products but scattered, inconsistent content'],
     whatWeBuild: ['A mobile-first store with MoMo and card checkout', 'WhatsApp reordering for loyal customers', 'On-brand product photography', 'A consistent social content calendar'],
     starter: 'A mobile-first store with MoMo checkout, plus social media and photography to drive sales.',
-    relatedServices: ['ecommerce-momo', 'social-media', 'photography-video', 'whatsapp-ordering-booking']
+    relatedServices: ['ecommerce', 'social-media', 'photography-video', 'whatsapp-ordering-booking']
   },
   {
     slug: 'events-weddings', title: 'Events & Weddings',
@@ -1125,7 +1126,7 @@ export const faqGroups = [
     { q: 'Do you quote in US dollars?', a: '{{faq_usd}}' }
   ]},
   { title: 'Timelines', items: [
-    { q: 'How fast can you launch?', a: 'For the Growth retainer, your landing page, lead system and reporting go live within 7 days of onboarding — or month 1 is free. A business website typically takes 3–5 weeks, an online store 5–8 weeks and a custom web app first version 6–10 weeks.' },
+    { q: 'How fast can you launch?', a: 'For the Growth retainer, your landing page, lead system and reporting go live within 7 days of onboarding — or month 1 of the retainer is free. A business website typically takes 3–5 weeks, an online store 5–8 weeks and a custom web app first version 6–10 weeks.' },
     { q: 'What do you need from me to hit those timelines?', a: 'Timely content, approvals and access. We tell you exactly what we need up front so nothing stalls.' }
   ]},
   { title: 'Websites & e-commerce', items: [
@@ -1157,12 +1158,12 @@ function words(html) { return html.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(
 const insightList = [
   {
     slug: 'get-recommended-by-ai-assistants', file: 'ai-assistants.html', topic: 'AI search',
-    title: 'How to get your Ghanaian business recommended by AI assistants',
+    title: 'How to get your business recommended by AI assistants',
     excerpt: 'AI answers are becoming the new front page. Here is how to structure your content, profiles and reputation so tools like ChatGPT, Gemini and Perplexity name your business.'
   },
   {
     slug: 'ai-search-visibility-for-ghana-businesses', file: 'ai-search-ghana.html', topic: 'AI search',
-    title: 'AI search visibility for Ghanaian businesses: a plain-English guide',
+    title: 'AI search visibility for growing businesses: a plain-English guide',
     excerpt: 'What AI search actually is, how it differs from traditional SEO, what to realistically expect and how to judge anyone offering to help.'
   },
   {
@@ -1182,7 +1183,7 @@ const insightList = [
   },
   {
     slug: 'whatsapp-automation-for-ghana-businesses', file: 'whatsapp-automation.html', topic: 'Automation',
-    title: 'WhatsApp automation for Ghanaian businesses: what to automate and how',
+    title: 'WhatsApp automation for growing businesses: what to automate and how',
     excerpt: 'Orders, payments, bookings, reminders and FAQs: what you can safely automate on WhatsApp, the tools involved, costs to plan for and mistakes to avoid.'
   }
 ];

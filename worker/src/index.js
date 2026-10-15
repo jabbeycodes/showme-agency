@@ -15,7 +15,7 @@
 //
 // PREVIEW mode (env.PREVIEW === "1", see wrangler.preview.toml): no KV, no
 // email, no audits, no admin; /api/* return a harmless 200; pages carry a
-// "PREVIEW — proposed prices" banner and noindex.
+// "PREVIEW: not live" banner and noindex.
 //
 // This reproduces the behaviour of the previous inline worker while adding
 // multi-page static-asset serving. It is intentionally dependency-free.
@@ -29,6 +29,7 @@ function registerSelfRoute(env) {
   if (env.ASSETS) setSelfRoute(SELF_HOSTS, req => env.ASSETS.fetch(req));
 }
 import { handleAdmin, handleReport } from './admin.js';
+import { GH_ONLY, REDIRECTS, SECURITY_TXT } from './generated/routes.js';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const ALLOWED_EVENTS = new Set(['pageview', 'lead_submitted', 'whatsapp_click']);
@@ -227,7 +228,61 @@ async function notFoundResponse(request, env, url) {
 }
 
 async function serveAsset(request, env, url) {
+  return withSecurityHeaders(await serveAssetInner(request, env, url));
+}
+
+// ---- Site security headers (technical hygiene; applied to every response
+// from the static site, including redirects and 404s) ------------------------
+const CSP = [
+  "default-src 'self'", "script-src 'self'", "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data:", "font-src 'self'", "connect-src 'self'", "frame-ancestors 'none'",
+  "base-uri 'self'", "object-src 'none'", "form-action 'self'", 'upgrade-insecure-requests'
+].join('; ');
+function withSecurityHeaders(res) {
+  const headers = new Headers(res.headers);
+  headers.set('Strict-Transport-Security', 'max-age=31536000');
+  headers.set('Content-Security-Policy', CSP);
+  headers.set('X-Content-Type-Options', 'nosniff');
+  headers.set('X-Frame-Options', 'DENY');
+  headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()');
+  headers.set('Cross-Origin-Opener-Policy', 'same-origin');
+  return new Response(res.body, { status: res.status, statusText: res.statusText, headers });
+}
+
+// Region-gated pages and retired URLs (generated from scripts/content.mjs).
+//  - REDIRECTS: permanent 301 to the page's new home (query string kept).
+//  - GH_ONLY: Ghana-view-only pages. US (default) visitors get a 302 to the
+//    fallback page. 302 (not 301) so browsers never cache it across a region
+//    switch; Vary: Cookie and no-store keep shared caches honest too.
+function routeRedirect(request, url) {
+  const p = url.pathname.endsWith('/') ? url.pathname : url.pathname + '/';
+  if (REDIRECTS[p]) {
+    const q = new URLSearchParams(url.search);
+    return new Response(null, { status: 301, headers: { Location: REDIRECTS[p] + (q.toString() ? '?' + q : ''), 'Cache-Control': 'public, max-age=3600' } });
+  }
+  if (GH_ONLY[p]) {
+    const { region, fromQuery } = pickRegion(request, url);
+    if (region !== 'gh') {
+      const headers = { Location: GH_ONLY[p], 'Cache-Control': 'no-store', Vary: 'Cookie' };
+      const res = new Response(null, { status: 302, headers });
+      if (fromQuery) res.headers.append('Set-Cookie', `sm_region=${region}; Path=/; Max-Age=31536000; SameSite=Lax; Secure`);
+      return res;
+    }
+  }
+  return null;
+}
+
+async function serveAssetInner(request, env, url) {
   const { pathname, search } = url;
+
+  if (pathname === '/.well-known/security.txt') {
+    return new Response(request.method === 'HEAD' ? null : SECURITY_TXT, { headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'public, max-age=86400' } });
+  }
+  if (looksLikeHtml(pathname)) {
+    const r = routeRedirect(request, url);
+    if (r) return r;
+  }
 
   // HTML differs per region, but the asset layer's ETag does not, so never
   // let a conditional request return a 304 for the other region's page.
@@ -312,7 +367,7 @@ function pickRegion(request, url) {
   return { region: country === 'GH' ? 'gh' : 'us' };
 }
 
-const PREVIEW_BANNER = '<div class="preview-banner" role="note">PREVIEW &mdash; proposed prices (not live). US prices are proposals awaiting approval.</div>';
+const PREVIEW_BANNER = '<div class="preview-banner" role="note">PREVIEW: not live</div>';
 
 function localize(request, env, url, res) {
   const type = res.headers.get('content-type') || '';
@@ -336,7 +391,10 @@ function localize(request, env, url, res) {
       .on('html', { element(el) { el.setAttribute('data-region', 'gh'); } })
       // data-gh values are built from trusted, entity-encoded build output.
       .on('[data-gh]', { element(el) { el.setInnerContent(el.getAttribute('data-gh'), { html: true }); } })
-      .on('[data-set-region]', { element(el) { el.setAttribute('aria-pressed', String(el.getAttribute('data-set-region') === 'gh')); } });
+      // Region blocks: drop US-only content, unwrap the inert Ghana templates.
+      .on('[data-us-only]', { element(el) { el.remove(); } })
+      .on('template[data-gh-block]', { element(el) { el.removeAndKeepContent(); } })
+      .on('[data-set-region]', { element(el) { el.setAttribute('aria-current', String(el.getAttribute('data-set-region') === 'gh')); } });
   }
   if (preview) {
     rw = rw

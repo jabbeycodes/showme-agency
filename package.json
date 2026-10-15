@@ -2,7 +2,7 @@
   "name": "showme-agency",
   "version": "2.0.0",
   "private": true,
-  "description": "Public website for agency.showmeworld.app — ShowMe Digital Agency (Build. Grow. Automate.)",
+  "description": "Public website for agency.showmeworld.app — ShowMe Digital Agency (technology & digital transformation partner)",
   "type": "module",
   "scripts": {
     "build:site": "node scripts/build.mjs",

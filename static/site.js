@@ -1,46 +1,19 @@
 /* ============================================================================
    ShowMe Digital Agency — shared site behaviour
-   Vanilla JS, no dependencies. Progressive enhancement: the site works without
-   it (links, native form submit fall back to the /api/lead endpoint).
+   Vanilla JS, no dependencies, no inline scripts (CSP: script-src 'self').
+   Progressive enhancement: every link works without JS; the region switcher
+   is plain ?region= links handled by the edge worker.
    ========================================================================== */
 (function () {
   'use strict';
 
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var WA_NUMBER = '13364572361';
-  var EMAIL = 'josh@showmeworld.app';
-
-  /* ---- Region / currency (United States USD default, Ghana GHS) ----------
-     Every regional price/phrase is rendered with data-us / data-gh values.
-     The edge worker serves the visitor's region; this applies a stored or
-     ?region= choice and powers the switcher without a reload. */
+  var EMAIL = 'info@showmeworld.app';
   var root = document.documentElement;
-  function setCookieRegion(r) {
-    document.cookie = 'sm_region=' + r + ';path=/;max-age=31536000;samesite=lax' + (location.protocol === 'https:' ? ';secure' : '');
-    try { localStorage.setItem('sm_region', r); } catch (e) {}
-  }
-  function applyRegion(r) {
-    if (r !== 'us' && r !== 'gh') return;
-    var els = document.querySelectorAll('[data-us][data-gh]');
-    for (var i = 0; i < els.length; i++) {
-      var v = els[i].getAttribute('data-' + r);
-      if (els[i].textContent !== v) els[i].textContent = v;
-    }
-    root.setAttribute('data-region', r);
-    root.classList.remove('region-pending');
-    var btns = document.querySelectorAll('[data-set-region]');
-    for (var j = 0; j < btns.length; j++) btns[j].setAttribute('aria-pressed', String(btns[j].getAttribute('data-set-region') === r));
-  }
-  applyRegion(root.getAttribute('data-region') || 'us');
-  document.addEventListener('click', function (e) {
-    var b = e.target.closest && e.target.closest('[data-set-region]');
-    if (!b) return;
-    var r = b.getAttribute('data-set-region');
-    setCookieRegion(r);
-    applyRegion(r);
-  });
+  root.classList.add('js');
 
-  /* ---- Analytics beacons (pageview / lead_submitted / whatsapp_click) ---- */
+  /* ---- Analytics beacons (cookieless daily counters) ---------------------- */
   function track(event) {
     try {
       fetch('/api/event', {
@@ -51,125 +24,84 @@
       });
     } catch (_) { /* analytics must never break the page */ }
   }
-  window.__smeTrack = track;
   track('pageview');
-
-  // Count clicks on any WhatsApp link once.
   document.addEventListener('click', function (e) {
     var link = e.target.closest && e.target.closest('a[href*="wa.me"]');
     if (link) track('whatsapp_click');
   }, { passive: true });
 
-  /* ---- Scroll progress + sticky header state ----------------------------- */
-  var progress = document.querySelector('.scroll-progress');
+  /* ---- Header state ------------------------------------------------------- */
   var topbar = document.querySelector('.topbar');
-  var ticking = false;
-  function updateScroll() {
-    var max = document.documentElement.scrollHeight - window.innerHeight;
-    var value = max > 0 ? window.scrollY / max : 0;
-    if (progress) progress.style.transform = 'scaleX(' + Math.min(1, Math.max(0, value)) + ')';
-    if (topbar) topbar.classList.toggle('scrolled', window.scrollY > 12);
-    ticking = false;
-  }
-  window.addEventListener('scroll', function () {
-    if (!ticking) { requestAnimationFrame(updateScroll); ticking = true; }
-  }, { passive: true });
-  updateScroll();
+  function onScroll() { if (topbar) topbar.classList.toggle('scrolled', window.scrollY > 8); }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
 
-  /* ---- Mobile navigation + mega menus ------------------------------------ */
+  /* ---- Navigation: mobile menu + dropdowns -------------------------------- */
   var navToggle = document.querySelector('.nav-toggle');
-  var navLinks = document.querySelector('.nav-links');
-
-  function closeMobileNav() {
-    if (!navToggle || !navLinks) return;
-    navToggle.setAttribute('aria-expanded', 'false');
-    navLinks.classList.remove('mobile-open');
-    document.body.style.overflow = '';
+  var navPanel = document.getElementById('navPanel');
+  function closeMenus(except) {
+    document.querySelectorAll('.nav-trigger[aria-expanded="true"]').forEach(function (t) {
+      if (t !== except) t.setAttribute('aria-expanded', 'false');
+    });
   }
-  if (navToggle && navLinks) {
+  if (navToggle && navPanel) {
     navToggle.addEventListener('click', function () {
       var open = navToggle.getAttribute('aria-expanded') === 'true';
       navToggle.setAttribute('aria-expanded', String(!open));
-      navLinks.classList.toggle('mobile-open', !open);
-      document.body.style.overflow = !open ? 'hidden' : '';
+      navPanel.classList.toggle('open', !open);
+      document.body.classList.toggle('nav-open', !open);
     });
   }
-
-  // Dropdown / mega-menu triggers
-  var triggers = Array.prototype.slice.call(document.querySelectorAll('.nav-trigger'));
-  function closeAllMenus(except) {
-    triggers.forEach(function (t) {
-      if (t === except) return;
-      t.setAttribute('aria-expanded', 'false');
-      var menu = document.getElementById(t.getAttribute('aria-controls'));
-      if (menu) menu.classList.remove('open');
+  document.querySelectorAll('.nav-trigger').forEach(function (t) {
+    t.addEventListener('click', function () {
+      var open = t.getAttribute('aria-expanded') === 'true';
+      closeMenus(t);
+      t.setAttribute('aria-expanded', String(!open));
     });
-  }
-  triggers.forEach(function (trigger) {
-    var menu = document.getElementById(trigger.getAttribute('aria-controls'));
-    if (!menu) return;
-    trigger.addEventListener('click', function (e) {
-      e.preventDefault();
-      var open = trigger.getAttribute('aria-expanded') === 'true';
-      closeAllMenus(trigger);
-      trigger.setAttribute('aria-expanded', String(!open));
-      menu.classList.toggle('open', !open);
-    });
-    // Hover open on fine-pointer / wide screens
-    var li = trigger.closest('li');
-    if (li && window.matchMedia('(min-width: 821px)').matches) {
-      li.addEventListener('mouseenter', function () {
-        if (window.matchMedia('(min-width: 821px)').matches) {
-          closeAllMenus(trigger);
-          trigger.setAttribute('aria-expanded', 'true');
-          menu.classList.add('open');
-        }
-      });
-      li.addEventListener('mouseleave', function () {
-        if (window.matchMedia('(min-width: 821px)').matches) {
-          trigger.setAttribute('aria-expanded', 'false');
-          menu.classList.remove('open');
-        }
-      });
-    }
   });
   document.addEventListener('click', function (e) {
-    if (!e.target.closest('.nav-links')) closeAllMenus();
+    if (!e.target.closest || !e.target.closest('.has-menu')) closeMenus(null);
   });
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') { closeAllMenus(); closeMobileNav(); }
+    if (e.key !== 'Escape') return;
+    var open = document.querySelector('.nav-trigger[aria-expanded="true"]');
+    closeMenus(null);
+    if (open) open.focus();
+    if (navToggle && navToggle.getAttribute('aria-expanded') === 'true') {
+      navToggle.setAttribute('aria-expanded', 'false');
+      navPanel.classList.remove('open');
+      document.body.classList.remove('nav-open');
+      navToggle.focus();
+    }
   });
 
-  /* ---- FAQ accordion ------------------------------------------------------ */
-  document.querySelectorAll('.faq-q').forEach(function (q) {
-    q.addEventListener('click', function () {
-      var expanded = q.getAttribute('aria-expanded') === 'true';
-      var item = q.closest('.faq-item');
-      var answer = document.getElementById(q.getAttribute('aria-controls'));
-      q.setAttribute('aria-expanded', String(!expanded));
-      if (item) item.classList.toggle('open', !expanded);
-      if (answer) answer.style.maxHeight = !expanded ? answer.scrollHeight + 'px' : '0px';
-    });
-  });
-
-  /* ---- Lead forms (contact, home, free-audit) ---------------------------- */
+  /* ---- Lead / consultation forms ------------------------------------------ */
   function setupLeadForm(form) {
     var submitButton = form.querySelector('[type="submit"]');
     var formStatus = form.querySelector('.form-status');
     var emailAlt = form.querySelector('.email-alternative');
-    var successTarget = form; // replaced on success
+    var kind = form.getAttribute('data-kind') || 'Enquiry';
 
-    // Extra fields appended into `message` so the existing worker still accepts.
+    // Extra fields are appended into `message` so the worker needs no change.
     var EXTRA_LABELS = {
+      company_size: 'Company size',
+      interests: 'Areas of interest',
+      it_setup: 'Current IT setup',
+      it_setup_notes: 'IT setup notes',
+      timeline: 'Timeline',
       services: 'Services of interest',
-      challenge: 'Biggest challenge',
-      budget: 'Budget band',
-      timeline: 'Timeline'
+      challenge: 'Biggest challenge'
     };
 
     function val(name) {
-      var el = form.querySelector('[name="' + name + '"]');
-      return el ? String(el.value).trim() : '';
+      var els = form.querySelectorAll('[name="' + name + '"]');
+      if (!els.length) return '';
+      if (els[0].type === 'checkbox') {
+        var out = [];
+        els.forEach(function (c) { if (c.checked) out.push(c.value); });
+        return out.join(', ');
+      }
+      return String(els[0].value).trim();
     }
 
     function buildMessage() {
@@ -183,15 +115,16 @@
     }
 
     function values() {
+      var interests = val('interests');
       return {
         name: val('name'),
         business: val('business'),
         email: val('email'),
         phone: val('phone'),
-        need: val('need'),
+        need: val('need') || (interests ? kind + ': ' + interests : kind),
         message: buildMessage(),
-        // Free-audit form only (the `website` input is a honeypot, so the real
-        // URL is `site_url`). Empty values are ignored by the worker.
+        // Digital-presence-check form only (`website` is a honeypot, so the
+        // real URL is `site_url`). Empty values are ignored by the worker.
         site_url: val('site_url'),
         found_via: val('found_via'),
         time_waster: val('time_waster'),
@@ -200,24 +133,24 @@
     }
 
     function enquiryText(v) {
-      return 'New enquiry — ShowMe Digital Agency | Name: ' + v.name +
-        ' | Business: ' + v.business + ' | Email: ' + v.email +
-        ' | Phone: ' + v.phone + ' | Needs: ' + v.need +
-        (v.site_url ? ' | Website: ' + v.site_url : '') + ' | Message: ' + v.message;
+      return kind + ' — ShowMe Digital Agency | Name: ' + v.name +
+        ' | Company: ' + v.business + ' | Email: ' + v.email +
+        ' | Phone: ' + v.phone + ' | Topic: ' + v.need +
+        (v.site_url ? ' | Website: ' + v.site_url : '') + ' | Details: ' + v.message;
     }
 
     function clearErrors() {
       form.querySelectorAll('.field').forEach(function (f) { f.classList.remove('has-error'); });
       form.querySelectorAll('[aria-invalid="true"]').forEach(function (i) { i.removeAttribute('aria-invalid'); });
-      form.querySelectorAll('.field-error').forEach(function (er) { if (!er.hasAttribute('aria-hidden')) er.textContent = ''; });
+      form.querySelectorAll('.field-error[id]').forEach(function (er) { er.textContent = ''; });
     }
     function setError(input, message) {
       var field = input.closest('.field');
       if (!field) return;
       field.classList.add('has-error');
       input.setAttribute('aria-invalid', 'true');
-      var er = field.querySelector('.field-error');
-      if (er && !er.hasAttribute('aria-hidden')) er.textContent = message;
+      var er = field.querySelector('.field-error[id]');
+      if (er) er.textContent = message;
     }
     function validate() {
       clearErrors();
@@ -233,22 +166,28 @@
 
     function showSuccess(v) {
       var panel = document.createElement('div');
-      panel.className = 'contact-success';
+      panel.className = 'form-success';
       panel.setAttribute('role', 'status');
       panel.setAttribute('tabindex', '-1');
       var h = document.createElement('h3');
       h.textContent = 'Request received.';
       var p = document.createElement('p');
-      p.textContent = 'Thanks ' + (v.name || 'there') + ' — we\u2019ve got your details and will reply to ' + v.email + ' within one business day.';
+      p.textContent = 'Thank you, ' + (v.name || 'there') + '. We have your details and will reply to ' + v.email + ' within one business day to arrange next steps.';
       panel.appendChild(h); panel.appendChild(p);
-      successTarget.replaceWith(panel);
+      form.replaceWith(panel);
       panel.focus({ preventScroll: true });
     }
 
-    function openWhatsApp(v) {
-      track('whatsapp_click');
-      if (formStatus) { formStatus.textContent = "Couldn't reach our server — opening WhatsApp instead."; formStatus.classList.add('visible'); }
-      window.location.assign('https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(enquiryText(v)));
+    function fallback(v) {
+      if (formStatus) {
+        formStatus.textContent = 'We could not reach our server. Please email ' + EMAIL + ' (your details are ready in the email link below) or message us on WhatsApp.';
+        formStatus.classList.add('visible');
+      }
+      if (emailAlt) emailAlt.href = mailtoFor(v);
+    }
+
+    function mailtoFor(v) {
+      return 'mailto:' + EMAIL + '?subject=' + encodeURIComponent(kind + ' — ' + (v.business || v.name || 'ShowMe')) + '&body=' + encodeURIComponent(enquiryText(v));
     }
 
     form.addEventListener('input', function (e) {
@@ -256,71 +195,64 @@
       if (field && field.classList.contains('has-error')) {
         field.classList.remove('has-error');
         e.target.removeAttribute('aria-invalid');
-        var er = field.querySelector('.field-error:not([aria-hidden])');
+        var er = field.querySelector('.field-error[id]');
         if (er) er.textContent = '';
       }
       if (formStatus) formStatus.classList.remove('visible');
     });
 
-    form.addEventListener('submit', async function (e) {
+    form.addEventListener('submit', function (e) {
       e.preventDefault();
       if (!validate()) return;
       var v = values();
       var honeypot = form.querySelector('[name="website"]');
       if (honeypot && honeypot.value) { showSuccess(v); return; }
-      if (submitButton) { submitButton.disabled = true; submitButton.dataset.label = submitButton.innerHTML; submitButton.innerHTML = 'Sending…'; }
-      try {
-        var res = await fetch('/api/lead', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(v)
-        });
-        var result = res.status === 200 ? await res.json() : null;
-        if (res.status !== 200 || !result || result.ok !== true) throw new Error('Lead request failed');
+      if (submitButton) { submitButton.disabled = true; submitButton.dataset.label = submitButton.innerHTML; submitButton.textContent = 'Sending…'; }
+      fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(v)
+      }).then(function (res) {
+        if (res.status !== 200) throw new Error('Lead request failed');
+        return res.json();
+      }).then(function (result) {
+        if (!result || result.ok !== true) throw new Error('Lead request failed');
         track('lead_submitted');
         showSuccess(v);
-      } catch (err) {
+      }).catch(function () {
         if (submitButton) { submitButton.disabled = false; submitButton.innerHTML = submitButton.dataset.label || 'Send'; }
-        openWhatsApp(v);
-      }
+        fallback(v);
+      });
     });
 
     if (emailAlt) {
-      emailAlt.addEventListener('click', function () {
-        var v = values();
-        var subject = 'Website enquiry — ' + (v.name || 'ShowMe');
-        emailAlt.href = 'mailto:' + EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(enquiryText(v));
+      emailAlt.addEventListener('click', function () { emailAlt.href = mailtoFor(values()); });
+    }
+    // WhatsApp stays a secondary channel: prefill it with the form so far.
+    var waAlt = form.querySelector('.whatsapp-alternative');
+    if (waAlt) {
+      waAlt.addEventListener('click', function () {
+        waAlt.href = 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(enquiryText(values()));
       });
     }
   }
   document.querySelectorAll('form[data-lead-form]').forEach(setupLeadForm);
 
-  /* ---- Reveal on scroll --------------------------------------------------- */
-  if (!reduced) {
-    document.documentElement.classList.add('motion-ready');
-    var revealItems = Array.prototype.slice.call(document.querySelectorAll('[data-reveal]'));
-    var groupCounts = new Map();
-    revealItems.forEach(function (el) {
-      if (el.style.getPropertyValue('--i')) return;
-      var group = el.parentElement;
-      var count = groupCounts.get(group) || 0;
-      el.style.setProperty('--i', Math.min(count, 6));
-      groupCounts.set(group, count + 1);
-    });
-    if ('IntersectionObserver' in window) {
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) { entry.target.classList.add('is-visible'); io.unobserve(entry.target); }
-        });
-      }, { threshold: 0.1, rootMargin: '0px 0px -6% 0px' });
-      revealItems.forEach(function (el) { io.observe(el); });
-      // Safety net: reveal everything after 2s in case observer misses.
-      window.setTimeout(function () { revealItems.forEach(function (el) { el.classList.add('is-visible'); }); }, 2000);
-    } else {
-      revealItems.forEach(function (el) { el.classList.add('is-visible'); });
-    }
+  /* ---- Subtle reveal on first view (skipped for reduced motion) ----------- */
+  if (!reduced && 'IntersectionObserver' in window) {
+    var items = Array.prototype.slice.call(document.querySelectorAll('[data-reveal]'));
+    var vh = window.innerHeight;
+    items = items.filter(function (el) { return el.getBoundingClientRect().top > vh; });
+    items.forEach(function (el) { el.classList.add('reveal'); });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) { entry.target.classList.add('in'); io.unobserve(entry.target); }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -5% 0px' });
+    items.forEach(function (el) { io.observe(el); });
+    window.setTimeout(function () { items.forEach(function (el) { el.classList.add('in'); }); }, 2500);
   }
 
-  /* ---- Current year in footer -------------------------------------------- */
+  /* ---- Current year -------------------------------------------------------- */
   document.querySelectorAll('[data-year]').forEach(function (el) { el.textContent = new Date().getFullYear(); });
 })();

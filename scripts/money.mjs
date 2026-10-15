@@ -19,7 +19,7 @@ export const US_PRICES_STATUS = 'proposed';
 // SHOW_PRICES = true  -> today's preview: USD/GHS prices, region switcher.
 // SHOW_PRICES = false -> every visible price (and price mention in meta /
 //   JSON-LD) is replaced with "Request pricing" / "Get a quote" CTAs; the
-//   region switcher is hidden and regional wording uses NEUTRAL (below).
+//   regional wording uses HIDDEN_WORDS (below), still swapped per region.
 // All price data in this file stays intact either way. Rebuild after flipping.
 // An environment override is also honoured for one-off builds:
 //   SHOW_PRICES=true npm run build   /   SHOW_PRICES=false npm run build
@@ -124,29 +124,31 @@ export const WORDS = {
   faq_pay: ['Mobile Money (MTN MoMo, Telecel Cash, AT Money), bank transfer and debit or credit card via a secure payment link. Clients outside Ghana pay USD invoices by card or international bank transfer.', 'Debit or credit card via a secure payment link, or bank transfer in US dollars. Clients in Ghana can also pay by Mobile Money in cedis.']
 };
 
-// Region-neutral wording used when SHOW_PRICES = false (no switcher, so one
-// text must hold for every visitor). Only wording that can still appear
-// without prices needs an entry; price tokens are an error in that mode.
-export const NEUTRAL = {
-  bill_methods: 'card, bank transfer or Mobile Money (Ghana)',
-  adspend_paid: 'paid directly to the ad platforms',
-  adspend_paid_full: 'separate and paid directly to the ad platforms',
-  checkout_row: 'Card, bank and Mobile Money checkout',
-  checkout_methods: 'card, bank and Mobile Money checkout',
-  deposit_methods: 'card or Mobile Money',
-  momo_links: 'card or Mobile Money payment links',
-  photo_where: 'A half-day shoot in Accra, Ghana',
-  dollar_ads: 'We set up and run the ad accounts in your name &mdash; you keep full ownership',
-  dollar_ads_lead: 'creative testing, ad-account management',
-  pay1: 'Debit or credit card via a secure payment link',
-  pay2: 'Bank transfer (USD or GHS)',
-  pay3: 'Mobile Money in Ghana (MTN MoMo, Telecel Cash, AT Money)',
-  faq_usd: 'Yes. Clients in the US and elsewhere are quoted in US dollars (USD), and clients in Ghana in Ghana cedis (GHS). The exact figure is fixed in your proposal.',
-  faq_pay: 'Debit or credit card via a secure payment link, or bank transfer. Clients in Ghana can also pay by Mobile Money (MTN MoMo, Telecel Cash, AT Money).'
+// Regional wording used when SHOW_PRICES = false: [ghana, united states].
+// With prices hidden there are no price tokens, but wording still differs by
+// region (payment methods, shoot location). The US value is the visible
+// default and must never mention Ghana-specific terms (check.mjs enforces
+// this); the Ghana value goes in data-gh for the edge worker to swap in.
+export const HIDDEN_WORDS = {
+  bill_methods: ['MoMo, bank transfer or card', 'card or bank transfer'],
+  adspend_paid: ['paid directly to the ad platforms', 'paid directly to the ad platforms'],
+  adspend_paid_full: ['separate and paid directly to the ad platforms', 'separate and paid directly to the ad platforms'],
+  checkout_row: ['MoMo, card and bank checkout', 'Card and digital-wallet checkout'],
+  checkout_methods: ['MoMo, card and bank checkout', 'card and digital-wallet checkout'],
+  deposit_methods: ['MoMo or card', 'card'],
+  momo_links: ['MoMo payment links', 'card payment links'],
+  photo_where: ['A half-day shoot in Accra', 'A half-day shoot'],
+  dollar_ads: ['We set up and run the ad accounts in your name &mdash; you keep full ownership', 'We set up and run the ad accounts in your name &mdash; you keep full ownership'],
+  dollar_ads_lead: ['creative testing, ad-account management', 'creative testing, ad-account management'],
+  pay1: ['Mobile Money (MTN MoMo, Telecel Cash, AT Money)', 'Debit or credit card via a secure payment link'],
+  pay2: ['Bank transfer (GHS or USD)', 'Bank transfer'],
+  pay3: ['Debit or credit card via a secure payment link', 'Invoices in US dollars (USD)'],
+  faq_usd: ['Clients in Ghana are quoted in Ghana cedis (GHS) and clients elsewhere in US dollars (USD). The exact figure is fixed in your proposal.', 'Yes. Quotes are in US dollars (USD), and the exact figure is fixed in your proposal.'],
+  faq_pay: ['Mobile Money (MTN MoMo, Telecel Cash, AT Money), bank transfer, or debit or credit card via a secure payment link.', 'Debit or credit card via a secure payment link, or bank transfer.']
 };
-for (const [k, v] of Object.entries(NEUTRAL)) {
-  if (!WORDS[k]) throw new Error('money.mjs: NEUTRAL has unknown key ' + k);
-  if (/["<>]|&(?!mdash;)/.test(v)) throw new Error('money.mjs: unsafe character in NEUTRAL.' + k);
+for (const [k, v] of Object.entries(HIDDEN_WORDS)) {
+  if (!WORDS[k]) throw new Error('money.mjs: HIDDEN_WORDS has unknown key ' + k);
+  for (const x of v) if (/["<>]|&(?!mdash;)/.test(x)) throw new Error('money.mjs: unsafe character in HIDDEN_WORDS.' + k);
 }
 
 export const ALL = { ...Object.fromEntries(Object.entries(MONEY).map(([k, v]) => [k, v])), ...Object.fromEntries(Object.entries(WORDS).map(([k, v]) => [k, v])) };

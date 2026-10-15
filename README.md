@@ -1,5 +1,11 @@
 # ShowMe Digital Agency
 
+> **Repositioning (branch `repositioning`, 2026-10-15):** the site is being rebuilt as a technology & digital
+> transformation partner (4 pillars, managed IT flagship, region v2 with a Ghana-gated view). See
+> `repositioning/` (audit, roadmap, placeholders.md) and `scripts/content.mjs`. Parts of this README
+> below describe the previous site and are out of date for this branch.
+
+
 Public website for **agency.showmeworld.app** — _"Your digital business partner: Build. Grow. Automate."_
 
 This is a comprehensive, multi-page static site (plain HTML/CSS/vanilla JS, no

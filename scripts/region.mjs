@@ -7,23 +7,19 @@
 //     (or, inside <option>, the attributes go on the <option> itself) so the
 //     edge worker / switcher can show Ghana prices without a second URL.
 // ============================================================================
-import { ALL, MONEY, NEUTRAL, SHOW_PRICES } from './money.mjs';
-
-// With SHOW_PRICES = false there is one region-neutral page: wording tokens
-// resolve to NEUTRAL text and any leftover price token fails the build.
-function neutralize(html) {
-  return html.replace(TOKEN_N, (m, k, off) => {
-    if (NEUTRAL[k] !== undefined) return NEUTRAL[k];
-    const ctx = html.slice(Math.max(0, off - 80), off + 40).replace(/\s+/g, ' ');
-    throw new Error((MONEY[k] ? 'Price' : 'Regional wording') + ' token {{' + k + '}} used while SHOW_PRICES=false: …' + ctx + '…');
-  });
-}
-const TOKEN_N = /\{\{([a-z0-9_]+)\}\}/g;
+import { ALL, MONEY, HIDDEN_WORDS, SHOW_PRICES } from './money.mjs';
 
 const TOKEN = /\{\{([a-z0-9_]+)\}\}/g;
 
+// With SHOW_PRICES = false, wording tokens resolve from HIDDEN_WORDS (still
+// region-aware) and any price token fails the build.
 function resolve(s, idx) {
-  return s.replace(TOKEN, (m, k) => {
+  return s.replace(TOKEN, (m, k, off) => {
+    if (!SHOW_PRICES) {
+      if (HIDDEN_WORDS[k]) return HIDDEN_WORDS[k][idx];
+      const ctx = s.slice(Math.max(0, off - 80), off + 40).replace(/\s+/g, ' ');
+      throw new Error((MONEY[k] ? 'Price' : 'Regional wording') + ' token {{' + k + '}} used while SHOW_PRICES=false: …' + ctx + '…');
+    }
     if (!ALL[k]) throw new Error('Unknown price/wording token {{' + k + '}}');
     return ALL[k][idx];
   });
@@ -34,7 +30,6 @@ const attr = s => s.replace(/"/g, '&quot;');
 
 export function regionize(html) {
   if (!html.includes('{{')) return html;
-  if (!SHOW_PRICES) return neutralize(html);
   // Split into raw-text elements, tags and text.
   const re = /(<script\b[\s\S]*?<\/script>|<style\b[\s\S]*?<\/style>|<title\b[\s\S]*?<\/title>|<!--[\s\S]*?-->|<[^>]+>)/gi;
   const parts = html.split(re);

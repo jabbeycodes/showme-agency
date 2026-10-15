@@ -24,7 +24,7 @@ export const USD_NOTE = 'Your proposal fixes the exact amount.';
 export const PRICES = {
   // ---- Web & Commerce ----
   'business-websites': { price: 'From {{web}}', note: 'Up to 6 custom pages, mobile-first design, enquiry capture to WhatsApp and email, SEO foundations, analytics, training and 30 days of launch support. Typical delivery 3–5 weeks.' },
-  'ecommerce-momo': { price: 'From {{store}}', note: 'Up to 50 products loaded, {{checkout_methods}}, WhatsApp reordering, order and stock management, training and 30 days of launch support. Payment-provider fees are separate. Typical delivery 5–8 weeks.' },
+  'ecommerce': { price: 'From {{store}}', note: 'Up to 50 products loaded, {{checkout_methods}}, WhatsApp reordering, order and stock management, training and 30 days of launch support. Payment-provider fees are separate. Typical delivery 5–8 weeks.' },
   'landing-pages-funnels': { price: 'From {{landing}}', note: 'One focused campaign page with copy, lead capture and conversion tracking. Additional variants from {{landing_variant}} each. Typical delivery 5–7 working days.' },
   'booking-online-ordering': { price: 'From {{booking}}', note: 'Booking or ordering flow, availability rules, confirmations and reminders, optional {{deposit_methods}} deposits and a simple dashboard. Typical delivery 3–6 weeks.' },
   'website-care': { price: 'From {{care}} / month', note: 'Hosting, SSL, backups, security updates, uptime monitoring, up to 1 hour of small changes each month and a monthly summary. Month to month after a 3-month minimum.' },
@@ -49,10 +49,10 @@ export const PRICES = {
   'microsoft-365': { price: 'From {{m365}}', note: 'Setup for up to 5 users: domain email, Microsoft 365 apps, Teams and SharePoint basics, mailbox migration and a training session. Additional users from {{m365_user}} each. Microsoft licence fees are paid separately to Microsoft.' },
   'cloud-document-management': { price: 'From {{cloud}}', note: 'Folder and permission structure, migration of up to 50 GB of existing files, backup setup and one team training session.' },
   'crm-setup': { price: 'From {{crm}}', note: 'CRM selection and configuration, pipeline stages, website and WhatsApp lead capture, follow-up reminders and team training. CRM subscription fees are separate.' },
-  'it-consulting-training': { price: 'From {{it_session}} per session', note: 'A half-day advisory or hands-on training session for up to 10 staff, with a written summary and simple guides. Multi-session programmes are quoted.' },
+  'technology-consulting': { price: 'From {{it_session}} per session', note: 'A half-day advisory or hands-on training session for up to 10 staff, with a written summary and simple guides. Multi-session programmes are quoted.' },
 
   // ---- AI & Automation ----
-  'whatsapp-ai-assistant': { price: 'From {{wa_ai}}', note: 'Setup of an AI assistant trained on up to 50 FAQs, lead qualification and human hand-off, plus 30 days of tuning. Ongoing care from {{wa_ai_care}}/month; WhatsApp and AI usage fees are passed through at cost.' },
+  'ai-assistants-chatbots': { price: 'From {{wa_ai}}', note: 'Setup of an AI assistant trained on up to 50 FAQs, lead qualification and human hand-off, plus 30 days of tuning. Ongoing care from {{wa_ai_care}}/month; WhatsApp and AI usage fees are passed through at cost.' },
   'whatsapp-ordering-booking': { price: 'From {{wa_order}}', note: 'A guided ordering or booking flow for up to 40 menu items or services, {{momo_links}}, routing to your team and automatic confirmations. Payment-provider and WhatsApp fees are separate.' },
   'business-process-automation': { price: 'From {{bpa}}', note: 'A Quick-Win package of up to 3 automated workflows (for example invoice reminders, onboarding and a weekly report), documented and tested. Larger automation programmes from {{bpa_large}}. Support from {{bpa_support}}/month. Tool subscriptions are separate.' },
   'automation-audit': { price: '{{audit}}', note: 'A fixed-fee audit with a prioritised roadmap. The full {{audit}} is credited toward any automation build you start with us within 60 days.' },
@@ -88,7 +88,7 @@ export const BUNDLES = [
     monthly: pr('then {{retainer}}/month Growth retainer (3-month minimum)', 'then the Growth retainer (3-month minimum)'),
     saving: 'Over {{b_grow_saving}} less on setup than buying each part separately',
     timeline: 'Lead system live in 7 days; full site 3–5 weeks',
-    forWho: 'Businesses with a proven offer that want a steady, measured flow of qualified leads.',
+    forWho: 'Businesses with an offer that already sells that want a steady, measured flow of qualified leads.',
     includes: [
       'Conversion-focused website, up to 8 pages, with SEO foundations',
       'WhatsApp AI assistant: FAQs, lead qualification, human hand-off',
@@ -137,7 +137,7 @@ export const NOTES_HIDDEN = {
   'brand-identity': 'Brand Essentials: logo suite, colour palette, typography and a mini brand guide (2 concepts, 2 revision rounds). A Full Identity System, adding complete guidelines, stationery and a social media kit, is also available.',
   'photography-video': '{{photo_where}} with up to 40 edited photos. A short-form video add-on (3 edited clips) is available. Travel outside Greater Accra is quoted separately.',
   'microsoft-365': 'Setup for up to 5 users: domain email, Microsoft 365 apps, Teams and SharePoint basics, mailbox migration and a training session. Additional users can be added. Microsoft licence fees are paid separately to Microsoft.',
-  'whatsapp-ai-assistant': 'Setup of an AI assistant trained on up to 50 FAQs, lead qualification and human hand-off, plus 30 days of tuning. Ongoing monthly care is available; WhatsApp and AI usage fees are passed through at cost.',
+  'ai-assistants-chatbots': 'Setup of an AI assistant trained on up to 50 FAQs, lead qualification and human hand-off, plus 30 days of tuning. Ongoing monthly care is available; WhatsApp and AI usage fees are passed through at cost.',
   'business-process-automation': 'A Quick-Win package of up to 3 automated workflows (for example invoice reminders, onboarding and a weekly report), documented and tested. Larger automation programmes and monthly support are also available. Tool subscriptions are separate.',
   'automation-audit': 'A fixed-fee audit with a prioritised roadmap. The full fee is credited toward any automation build you start with us within 60 days.',
   'integrations-saas': 'A single integration between two systems, built, tested and monitored. SaaS product builds start with a paid discovery sprint, credited toward the build.'
