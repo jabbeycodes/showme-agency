@@ -1,0 +1,16 @@
+/* ShowMe logo motion: the two ribbon halves glide along their fold line and lock together,
+   the pixel squares assemble, then the wordmark settles in. ~1.6s total, runs once. */
+.sm-anim .slide{animation:sm-glide 1s cubic-bezier(.16,.84,.24,1) both}
+.sm-anim .hook1 .slide{animation-delay:.08s}
+.sm-anim .px{transform-box:fill-box;transform-origin:50% 50%;animation:sm-px .55s cubic-bezier(.2,.9,.25,1.15) both}
+.sm-anim .px0{animation-delay:.62s}.sm-anim .px1{animation-delay:.70s}.sm-anim .px3{animation-delay:.76s}
+.sm-anim .px2{animation-delay:.82s}.sm-anim .px5{animation-delay:.90s}.sm-anim .px4{animation-delay:.98s}
+.sm-anim .wordmark,.sm-anim .sub,.sm-anim .tagline{animation:sm-rise .7s cubic-bezier(.2,.7,.2,1) both}
+.sm-anim .wordmark{animation-delay:.55s}.sm-anim .sub{animation-delay:.72s}.sm-anim .tagline{animation-delay:.85s}
+
+.sm-anim .slot{animation:sm-fade .35s .8s both}
+@keyframes sm-fade{0%{opacity:0}100%{opacity:1}}
+@keyframes sm-glide{0%{transform:translate(-210px,0);opacity:0}35%{opacity:1}100%{transform:none;opacity:1}}
+@keyframes sm-px{0%{transform:translate(-46px,46px) scale(.2);opacity:0}100%{transform:none;opacity:1}}
+@keyframes sm-rise{0%{transform:translateY(18px);opacity:0}100%{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.sm-anim *{animation:none!important}}

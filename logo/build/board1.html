@@ -1,0 +1,21 @@
+<html><head><style>body{margin:0;font-family:"Inter",system-ui,sans-serif;color:#0b1b33;background:#f4f6f9}
+.lbl{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#4b5563}
+.card{background:#fff;border:1px solid #dfe5ee;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.card.dark{background:#0b1b33;border-color:#0b1b33}.card .lbl{position:absolute;left:18px;top:14px}.card.dark .lbl{color:#b4c0d3}
+h1{font-size:26px;margin:0;letter-spacing:-.01em}
+.wrap{padding:36px 40px;box-sizing:border-box;width:1600px;height:1000px;display:grid;grid-template-columns:560px 560px 360px;grid-template-rows:auto 1fr;gap:20px}
+.head{grid-column:1/4;display:flex;justify-content:space-between;align-items:baseline}
+ul{margin:8px 0 0;padding-left:18px;font-size:14px;line-height:1.55;color:#1f2937}</style></head><body><div class="wrap">
+<div class="head"><h1>ShowMe logo · reference vs vector rebuild</h1><span class="lbl">Exploration · not live</span></div>
+<div class="card"><span class="lbl">Josh's reference (PNG)</span><img src="file:///workspace/showme-agency/logo/reference.png" style="width:530px;height:530px;object-fit:contain;margin-top:20px"></div>
+<div class="card"><span class="lbl">Rebuild (SVG) · same tagline for comparison</span><img src="stacked-ref-artboard.svg" style="width:530px;height:530px;margin-top:20px"></div>
+<div style="display:flex;flex-direction:column;gap:20px">
+<div class="card" style="height:400px"><span class="lbl">Construction</span><img src="../build/construction.svg" style="width:330px;margin-top:28px"></div>
+<div class="card" style="flex:1;align-items:flex-start;justify-content:flex-start;padding:18px 20px"><span class="lbl" style="position:static">What changed</span><ul>
+<li>Two identical hooks, one turned 180°, with one even gap: that gap is the white S</li>
+<li>Every curve is a true arc; all four bands are the same width and run parallel</li>
+<li>Both cut ends at the same angle</li>
+<li>Pixel squares on a 12-unit grid in 3 sizes</li>
+<li>Shading cut to one crisp fold per bowl plus a soft glow</li>
+<li>Montserrat ExtraBold wordmark turned into outlines</li></ul></div></div>
+</div></body></html>

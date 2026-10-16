@@ -4,3 +4,8 @@ node_modules/
 *.log
 .dev.vars
 .env
+
+# logo: generated review boards/screenshots and the full-size reference PNG stay local
+logo/boards/
+logo/reference.png
+__pycache__/
