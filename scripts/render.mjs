@@ -16,6 +16,7 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { site } from './data.mjs';
 import { PILLARS, INDUSTRIES, GH_INDUSTRIES } from './content.mjs';
+import { BRAND_HEADER, BRAND_FOOTER } from './brand.mjs';
 
 export function esc(s) {
   return String(s == null ? '' : s)
@@ -85,7 +86,6 @@ export function icon(name, cls = 'icon') {
   return `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${p}</svg>`;
 }
 
-const BRAND_MARK = '<svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><rect x="1" y="1" width="30" height="30" rx="7" fill="#0b1b33"/><path d="M9 11.5h9.5a3.5 3.5 0 010 7H13a3.5 3.5 0 000 7h9.5" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/><circle cx="23" cy="9" r="2.2" fill="#3b8fe0"/></svg>';
 
 // ---- Head / SEO -------------------------------------------------------------
 export const DEFAULT_OG = { url: site.origin + '/og-image.png', w: 1200, h: 630, alt: 'ShowMe Digital Agency: managed IT, AI automation, software development and digital marketing for growing businesses.' };
@@ -216,7 +216,7 @@ export function header() {
   return `<a class="skip-link" href="#main">Skip to content</a>
 <header class="topbar">
   <nav class="wrap nav" aria-label="Primary">
-    <a class="brand" href="/">${BRAND_MARK}<span>ShowMe <small>Digital Agency</small></span></a>
+    <a class="brand" href="/" aria-label="ShowMe Digital Agency home">${BRAND_HEADER}</a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="navPanel" aria-label="Menu"><span></span></button>
     <div class="nav-panel" id="navPanel">
       <ul class="nav-links">
@@ -253,7 +253,7 @@ export function footer() {
   <div class="wrap">
     <div class="footer-grid">
       <div class="footer-brand">
-        <a class="brand" href="/">${BRAND_MARK}<span>ShowMe <small>Digital Agency</small></span></a>
+        <a class="brand" href="/" aria-label="ShowMe Digital Agency home">${BRAND_FOOTER}</a>
         <p>Managed IT, AI and automation, software and digital marketing from one accountable technology partner. ${esc(site.facts.experience)} of experience and ${esc(site.facts.businessesHelped)} businesses helped.</p>
         ${byRegion(`<p>Founded by ${esc(site.founder)} · ${tbc('city, state')}</p>`, `<p>${esc(site.locationLine)}.</p>`)}
         ${regionSwitch()}
