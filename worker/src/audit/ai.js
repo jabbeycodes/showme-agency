@@ -4,6 +4,7 @@
 // caller falls back to the templated copy.
 // =============================================================================
 import { withTimeout } from './util.js';
+import { regionOf, US_BANNED } from './score.js';
 
 export const AI_MODEL = '@cf/meta/llama-3.3-70b-instruct-fp8-fast';
 
@@ -17,14 +18,18 @@ Rules (strict):
 - Titles in sentence case. Address the owner as "you".
 - Return ONLY valid JSON, no markdown, in exactly this shape:
 {"summary":"2 sentences max","priorities":[{"title":"max 8 words","why":"1-2 sentences: what we found and why it matters to customers","action":"1-2 sentences: the concrete next step"}]}
-- Return exactly as many priorities as given (same count), in the same order.`;
+- Return exactly as many priorities as given (same count), in the same order.
+- The input has a "region" field. Write for a business in that country.
+- If region is "United States": never suggest or mention WhatsApp, Mobile Money (MoMo), Paystack, Hubtel, ExpressPay, Flutterwave, Ghana or Accra. For messaging suggest a tap-to-call or text (SMS) option or live chat; for payments suggest card payments (for example Stripe, Square or PayPal). Use US spelling.`;
 
 const BANNED = /first client|testimonial|guarantee|award|trusted by|clients like|case study|\bROI\b|revenue increase|double your|triple your|\d+\s?%/i;
 
 function numbersIn(s) { return (String(s).match(/\d+(?:[.,]\d+)?/g) || []).map(n => n.replace(',', '.')); }
 
 export function buildAiInput(result, lead) {
+  const gh = regionOf(lead) === 'gh';
   return {
+    region: gh ? 'Ghana' : 'United States',
     business: lead.business || null,
     customer_said: [lead.message, lead.industry ? 'Industry: ' + lead.industry : '', lead.company_size ? 'Company size: ' + lead.company_size : '', lead.interests ? 'Interested in: ' + lead.interests : '', lead.challenge ? 'Biggest challenge: ' + lead.challenge : '', lead.time_waster ? 'Biggest time-waster: ' + lead.time_waster : '', lead.found_via ? 'Customers mostly find them via: ' + lead.found_via : ''].filter(Boolean).join(' | ').slice(0, 600) || null,
     overall: result.total + '/60',
@@ -46,6 +51,7 @@ export function validateAi(out, input) {
   const text = summary + ' ' + items.map(i => i.title + ' ' + i.why + ' ' + i.action).join(' ');
   if (items.some(i => !i.title || !i.why || !i.action)) return null;
   if (BANNED.test(text)) return null;
+  if (input.region !== 'Ghana' && US_BANNED.test(text)) return null; // US leads: no WhatsApp/MoMo/Ghana advice
   for (const n of numbersIn(text)) if (!allowed.has(n) && !['1', '2', '3'].includes(n)) return null;
   return { summary, priorities: items };
 }

@@ -68,7 +68,17 @@ const SIGNALS = {
   ],
   payments: [
     ['Paystack', /paystack\.(com|co)/i], ['Flutterwave', /flutterwave\.com|ravepay/i], ['Stripe', /js\.stripe\.com|buy\.stripe\.com|checkout\.stripe\.com/i], ['PayPal', /paypal\.com|paypalobjects\.com/i],
-    ['Hubtel', /hubtel\.com/i], ['ExpressPay', /expresspaygh\.com/i], ['Square checkout', /square\.link|checkout\.square/i], ['Mobile Money (mentioned)', /mobile money|\bmomo\b/i]
+    ['Hubtel', /hubtel\.com/i], ['ExpressPay', /expresspaygh\.com/i], ['Square checkout', /square\.link|checkout\.square|squareup\.com\/(pay|checkout|store)/i], ['Mobile Money (mentioned)', /mobile money|\bmomo\b/i],
+    ['Shopify checkout', /shopify\.com\/checkout|shop\.app\/|myshopify\.com\/cart/i], ['Clover', /clover\.com\/(pay|online-ordering)|pay\.clover\.com/i], ['Toast payments', /toasttab\.com\/[^"']*order/i]
+  ],
+  // US-oriented trust signals (used for US leads; harmless for others).
+  maps: [
+    ['Google Maps link', /google\.[a-z.]+\/maps|maps\.google\.|maps\.app\.goo\.gl|goo\.gl\/maps|g\.page\//i], ['Map embed', /google\.com\/maps\/embed|maps\.googleapis\.com\/maps\/api\/js/i]
+  ],
+  reviews: [
+    ['Google reviews', /search\.google\.com\/local\/(write)?review|g\.page\/r\/|writereview|elfsight\.com[^"']*review|google-reviews/i], ['Yelp', /yelp\.com\/biz\//i],
+    ['Trustpilot', /trustpilot\.com/i], ['BBB', /bbb\.org\/[a-z-]+\/profile/i], ['Angi / HomeAdvisor', /angi\.com|homeadvisor\.com/i], ['Nextdoor', /nextdoor\.com\/(pages|business)/i],
+    ['Review stars (schema)', /AggregateRating/i]
   ],
   analytics: [
     ['Google Analytics', /googletagmanager\.com\/gtag|google-analytics\.com|gtag\(/i], ['Google Tag Manager', /googletagmanager\.com\/gtm\.js|GTM-[A-Z0-9]+/i], ['Meta Pixel', /connect\.facebook\.net\/[^"']*fbevents|fbq\(/i],
@@ -334,6 +344,7 @@ export function analyseHtml(html, pageUrl) {
     .filter(e => !/\.(png|jpe?g|webp|gif|svg)$/i.test(e) && !/sentry|wixpress|example\.|domain\.com|email\.com/i.test(e));
   const emails = [...new Set([...mailtos, ...textEmails])].filter(e => /@/.test(e)).slice(0, 6);
   const tel = hrefs.some(h => /^tel:/i.test(h));
+  const sms = hrefs.some(h => /^sms:/i.test(h));
   const contactLink = hrefs.some(h => /(^|\/)(contact|contact-us|get-in-touch|enquir|book|appointment)/i.test(h));
 
   // Images
@@ -366,12 +377,12 @@ export function analyseHtml(html, pageUrl) {
     jsonLdTypes: [...ldTypes].slice(0, 15), jsonLdName: ldName, jsonLdLogo: ldLogo,
     social, socialCount: Object.keys(social).filter(k => k !== 'whatsapp').length,
     whatsapp: !!social.whatsapp || /wa\.me\/|api\.whatsapp\.com|whatsapp:\/\//i.test(html),
-    emails, freeMailOnSite: emails.filter(e => FREE_MAIL.has(emailDomain(e))), tel, contactLink,
+    emails, freeMailOnSite: emails.filter(e => FREE_MAIL.has(emailDomain(e))), tel, sms, contactLink,
     images: imgs.length, imagesWithAlt: imgsWithAlt,
     logo: !!logo, iconHrefs: icons.slice(0, 4).map(h => abs(h, pageUrl)).filter(Boolean),
     forms, emailInputs, embeddedForms,
     booking: signals.booking, ordering: signals.ordering, chat: signals.chat, payments: signals.payments,
-    analytics: signals.analytics, platform: signals.platform,
+    analytics: signals.analytics, platform: signals.platform, maps: signals.maps, reviews: signals.reviews,
     scriptCount: scripts
   };
 }

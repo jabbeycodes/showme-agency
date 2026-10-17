@@ -235,9 +235,16 @@ async function serveAsset(request, env, url) {
 
 // ---- Site security headers (technical hygiene; applied to every response
 // from the static site, including redirects and 404s) ------------------------
+// Cloudflare Web Analytics is auto-injected by Cloudflare on the production
+// domain (static.cloudflareinsights.com beacon, reporting to
+// cloudflareinsights.com). Those two exact origins are allowed so the beacon
+// is not blocked (a blocked beacon logs a CSP console error and costs the
+// Lighthouse best-practices score); nothing else is opened up.
+const CF_BEACON = 'https://static.cloudflareinsights.com';
+const CF_RUM = 'https://cloudflareinsights.com';
 const CSP = [
-  "default-src 'self'", "script-src 'self'", "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data:", "font-src 'self'", "connect-src 'self'", "frame-ancestors 'none'",
+  "default-src 'self'", `script-src 'self' ${CF_BEACON}`, "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data:", "font-src 'self'", `connect-src 'self' ${CF_RUM}`, "frame-ancestors 'none'",
   "base-uri 'self'", "object-src 'none'", "form-action 'self'", 'upgrade-insecure-requests'
 ].join('; ');
 function withSecurityHeaders(res) {

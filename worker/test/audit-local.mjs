@@ -19,8 +19,9 @@ assert.equal(normaliseUrl('localhost'), null);
 assert.equal(normaliseUrl('http://192.168.0.1'), null);
 assert.equal(normaliseUrl('javascript:alert(1)'), null);
 assert.equal(normaliseUrl(''), null);
-assert.deepEqual(waNumber('024 123 4567'), { digits: '233241234567', assumed: true });
-assert.deepEqual(waNumber('+1 (336) 457-2361'), { digits: '13364572361', assumed: false });
+assert.deepEqual(waNumber('024 123 4567'), { digits: '233241234567', assumed: true, country: 'Ghana (+233)' });
+assert.deepEqual(waNumber('(336) 457-2361'), { digits: '13364572361', assumed: true, country: 'US (+1)' });
+assert.deepEqual(waNumber('+1 (336) 457-2361'), { digits: '13364572361', assumed: false, country: '' });
 
 const SITES = [
   { url: 'https://agency.showmeworld.app', lead: { id: 'lead:1700000000000:sample1', name: 'Sample — ShowMe', business: 'ShowMe Digital Agency', email: 'info@showmeworld.app', phone: '+1 336 457 2361', message: 'We want more enquiries from Google.', time_waster: 'Replying to the same WhatsApp questions', found_via: 'Google search', created_at: new Date().toISOString() } },

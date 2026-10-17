@@ -3,6 +3,13 @@
 // Each area is a list of rules worth fixed points. Area score = earned / max of
 // the rules we could actually measure, scaled to 0–10 and rounded. Overall /60.
 // Unmeasured rules are listed as "not measured" and excluded (never guessed).
+//
+// Region-aware: leads from the Ghana view (lead.region === 'gh') keep the
+// original Ghana rules (WhatsApp click-to-chat, MoMo/Paystack/Hubtel advice).
+// Everyone else (US, the default) is scored on US-appropriate signals instead:
+// a clickable phone/text option, reviews shown on the site, a map/Google
+// Maps link, card payments or ecommerce (Stripe/Square/PayPal/Shopify), with
+// no WhatsApp or Ghana-specific advice. Six areas, 60 points, either way.
 // =============================================================================
 import { FREE_MAIL, emailDomain } from './util.js';
 
@@ -23,7 +30,12 @@ function nameIn(name, text) {
 }
 function secs(ms) { return (Math.round(ms / 100) / 10).toFixed(1) + 's'; }
 
+export function regionOf(lead) { return lead && lead.region === 'gh' ? 'gh' : 'us'; }
+// Advice we must never give a US lead (also enforced on AI output in ai.js).
+export const US_BANNED = /whats\s?app|wa\.me|\bmomo\b|mobile money|paystack|hubtel|expresspay|flutterwave|ghana|accra|\bcedi|\bGHS\b/i;
+
 export function scoreAudit(scan, lead = {}) {
+  const gh = regionOf(lead) === 'gh';
   const areas = {};
   const issues = [];
   for (const a of AREAS) areas[a.key] = { key: a.key, label: a.label, rules: [], manual: [], earned: 0, max: 0, score: 0 };
@@ -121,13 +133,18 @@ export function scoreAudit(scan, lead = {}) {
   const pl = scan.places || {};
   if (pl.status === 'found') {
     rule('search', 'Google Business Profile linked to this website', 2, 2, (pl.name || 'Profile found') + (pl.reviews != null ? ` · ${pl.reviews} reviews` : '') + (pl.rating != null ? ` · ${pl.rating}★` : ''));
-    if ((pl.reviews || 0) < 10) issue('search', 'few_reviews', 45, `Your Google Business Profile has ${pl.reviews || 0} reviews; more recent reviews help you rank in Maps and win trust.`, 'Ask happy customers for a Google review after each job, with a short link sent by WhatsApp.');
+    if ((pl.reviews || 0) < 10) issue('search', 'few_reviews', 45, `Your Google Business Profile has ${pl.reviews || 0} reviews; more recent reviews help you rank in Maps and win trust.`, gh ? 'Ask happy customers for a Google review after each job, with a short link sent by WhatsApp.' : 'Ask happy customers for a Google review after each job, with a short review link sent by text or email.');
   } else if (pl.status === 'not_found') {
     rule('search', 'Google Business Profile linked to this website', 0, 2, pl.note || 'Not found');
     issue('search', 'no_gbp', 70, `We could not find a Google Business Profile for ${business || 'your business'} linked to your website.`, 'Claim or create your free Google Business Profile, add your website, hours, photos and services, and link it to the site.');
   } else {
     rule('search', 'Google Business Profile', null, 0, pl.note || 'Needs manual check');
     manual('search', 'Google Business Profile: search for the business on Google Maps — check it exists, links to the website, has hours, photos and recent reviews.');
+  }
+  if (!gh && reachable) {
+    const mp = p.maps || [];
+    rule('search', 'Map or Google Maps link on the website', mp.length ? 1 : 0, 1, mp.length ? mp.join(', ') : 'None found');
+    if (!mp.length) issue('search', 'no_map', 25, 'We did not find a map or Google Maps link on your homepage, so local customers have to look up where you are.', 'Add a Google Maps link or embedded map (and your address) to your contact section, matching your Google Business Profile.');
   }
   manual('search', 'AI assistant visibility: ask ChatGPT/Gemini for "best [service] in [city]" and note whether the business appears.');
 
@@ -138,12 +155,18 @@ export function scoreAudit(scan, lead = {}) {
     rule('social', 'Social profiles linked from the website', n >= 4 ? 5 : n === 3 ? 4 : n === 2 ? 3 : n === 1 ? 2 : 0, 5, plats.length ? plats.map(x => x === 'x' ? 'X/Twitter' : x[0].toUpperCase() + x.slice(1)).join(', ') : 'None found');
     if (n === 0) issue('social', 'no_social', 55, 'Your website does not link to any social media profiles, so visitors cannot check your recent work or follow you.', 'Add links (header or footer) to the 2–3 platforms where your customers actually are, and keep them active.');
     else if (n === 1) issue('social', 'one_social', 25, `Your website links to only one social profile (${plats[0]}).`, 'Link every active profile from your site so customers can find you wherever they spend time.');
-    rule('social', 'WhatsApp chat link on the website', p.whatsapp ? 2 : 0, 2, p.whatsapp ? 'Found' : 'Not found');
-    if (!p.whatsapp) issue('social', 'no_whatsapp', 60, 'There is no WhatsApp chat link on your website, even though many customers prefer to message rather than call or email.', 'Add a click-to-chat WhatsApp button (wa.me link) with a pre-filled greeting on every page.');
+    if (gh) {
+      rule('social', 'WhatsApp chat link on the website', p.whatsapp ? 2 : 0, 2, p.whatsapp ? 'Found' : 'Not found');
+      if (!p.whatsapp) issue('social', 'no_whatsapp', 60, 'There is no WhatsApp chat link on your website, even though many customers prefer to message rather than call or email.', 'Add a click-to-chat WhatsApp button (wa.me link) with a pre-filled greeting on every page.');
+    } else {
+      const rv = p.reviews || [];
+      rule('social', 'Customer reviews shown or linked on the website', rv.length ? 2 : 0, 2, rv.length ? rv.join(', ') : 'None found');
+      if (!rv.length) issue('social', 'no_reviews_link', 45, 'We did not find customer reviews shown or linked on your homepage (for example Google or Yelp), which new customers look for before they call.', 'Link to your Google reviews (and Yelp or other review sites you use) or show a few recent reviews on the homepage.');
+    }
     const og = p.og || {};
     const ogScore = (og.title ? 1 : 0) + (og.image ? 1 : 0);
     rule('social', 'Link previews set up (Open Graph title + image)', ogScore, 2, [og.title ? 'og:title' : null, og.image ? 'og:image' : null].filter(Boolean).join(', ') || 'Missing');
-    if (ogScore < 2) issue('social', 'no_og', 40, 'When someone shares your website on WhatsApp or Facebook, it may show without a proper title or image.', 'Add Open Graph tags (title, description and a 1200×630 share image) so shared links look professional.');
+    if (ogScore < 2) issue('social', 'no_og', 40, gh ? 'When someone shares your website on WhatsApp or Facebook, it may show without a proper title or image.' : 'When someone shares your website by text message, Facebook or LinkedIn, it may show without a proper title or image.', 'Add Open Graph tags (title, description and a 1200×630 share image) so shared links look professional.');
     rule('social', 'X/Twitter card tag', p.twitterCard ? 1 : 0, 1, p.twitterCard || 'Missing');
   } else {
     rule('social', 'Social links on the website', 0, 10, 'Site did not load');
@@ -199,9 +222,17 @@ export function scoreAudit(scan, lead = {}) {
     freeOnSite ? 'Site shows ' + p.freeMailOnSite[0] : leadFree ? 'Enquiry sent from a free webmail address' : siteEmails2.length ? 'Site shows ' + siteEmails2[0] : 'Enquiry from ' + emailDomain(lead.email));
   if (anyKnown && usesFree) issue('systems', 'webmail', 55, freeOnSite ? `Your website lists a free webmail address (${p.freeMailOnSite[0]}), which looks less established to customers and suppliers.` : 'You are using a free webmail address for the business, which looks less established and is harder to manage as the team grows.', 'Move to a branded address on your own domain (e.g. info@yourbusiness) with Google Workspace or Microsoft 365.');
   if (reachable) {
-    const contact = siteEmails2.length > 0 || p.tel || p.whatsapp;
-    rule('systems', 'Easy contact details on the homepage', contact ? 1 : 0, 1, [siteEmails2.length ? 'email' : null, p.tel ? 'phone' : null, p.whatsapp ? 'WhatsApp' : null].filter(Boolean).join(', ') || 'None found');
-    if (!contact) issue('systems', 'no_contact', 50, 'We could not find an email, phone number or WhatsApp link on your homepage.', 'Put your phone/WhatsApp and email in the header or footer of every page.');
+    if (gh) {
+      const contact = siteEmails2.length > 0 || p.tel || p.whatsapp;
+      rule('systems', 'Easy contact details on the homepage', contact ? 1 : 0, 1, [siteEmails2.length ? 'email' : null, p.tel ? 'phone' : null, p.whatsapp ? 'WhatsApp' : null].filter(Boolean).join(', ') || 'None found');
+      if (!contact) issue('systems', 'no_contact', 50, 'We could not find an email, phone number or WhatsApp link on your homepage.', 'Put your phone/WhatsApp and email in the header or footer of every page.');
+    } else {
+      const contact = siteEmails2.length > 0 || p.tel || p.sms;
+      rule('systems', 'Easy contact details on the homepage', contact ? 1 : 0, 1, [siteEmails2.length ? 'email' : null, p.tel ? 'phone' : null, p.sms ? 'text' : null].filter(Boolean).join(', ') || 'None found');
+      if (!contact) issue('systems', 'no_contact', 50, 'We could not find an email address or clickable phone number on your homepage.', 'Put a clickable phone number and your email in the header or footer of every page.');
+      rule('systems', 'Clickable phone (tel:) or text (sms:) link', p.tel || p.sms ? 1 : 0, 1, [p.tel ? 'tel: link' : null, p.sms ? 'sms: link' : null].filter(Boolean).join(', ') || 'None found');
+      if (!p.tel && !p.sms) issue('systems', 'no_tel', 45, 'We did not find a tap-to-call or tap-to-text link on your homepage, so visitors on phones have to copy your number by hand.', 'Make your phone number a tap-to-call (tel:) link, and add a text-us (sms:) option if you take texts.');
+    }
   }
   manual('systems', 'Ask: where do customer records, invoices and files live today (spreadsheets, notebooks, a CRM)? Is anything backed up?');
 
@@ -210,16 +241,28 @@ export function scoreAudit(scan, lead = {}) {
   if (reachable) {
     const hasForm = p.forms > 0 || p.embeddedForms.length > 0;
     rule('automation', 'Enquiry form on the site', hasForm ? 2 : p.contactLink ? 1 : 0, 2, hasForm ? (p.embeddedForms.join(', ') || p.forms + ' form(s) on homepage') : p.contactLink ? 'No homepage form; links to a contact page' : 'No form found');
-    if (!hasForm) issue('automation', 'no_form', p.contactLink ? 30 : 60, p.contactLink ? 'There is no enquiry form on your homepage (visitors have to click through to contact you).' : 'We found no enquiry form on your site, so leads depend on people calling or emailing.', 'Add a short enquiry form that sends each lead straight to your email/WhatsApp and a simple lead list.');
+    if (!hasForm) issue('automation', 'no_form', p.contactLink ? 30 : 60, p.contactLink ? 'There is no enquiry form on your homepage (visitors have to click through to contact you).' : 'We found no enquiry form on your site, so leads depend on people calling or emailing.', gh ? 'Add a short enquiry form that sends each lead straight to your email/WhatsApp and a simple lead list.' : 'Add a short contact form that sends each lead straight to your email (and phone, if you like) and a simple lead list.');
     const bo = [...p.booking, ...p.ordering];
     rule('automation', 'Online booking or ordering', bo.length ? 3 : 0, 3, bo.length ? bo.join(', ') : 'None detected');
     if (!bo.length) issue('automation', 'no_booking', 50, 'We could not detect online booking or ordering on your website, so bookings likely need a manual back-and-forth.', 'Add online booking or ordering (e.g. a booking calendar or simple order form) with automatic confirmations and reminders.');
-    const chat = p.chat.length > 0 || p.whatsapp;
-    rule('automation', 'Live chat or WhatsApp on the site', chat ? 2 : 0, 2, p.chat.length ? p.chat.join(', ') : p.whatsapp ? 'WhatsApp link' : 'None');
-    if (!chat) issue('automation', 'no_chat', 40, 'We did not find a chat or WhatsApp option for quick questions, so some visitors may leave without asking.', 'Add a WhatsApp chat button and set up quick replies (or an AI assistant) for common questions.');
-    const realPay = p.payments.filter(x => !/mentioned/.test(x));
-    rule('automation', 'Online payments', realPay.length ? 2 : p.payments.length ? 1 : 0, 2, p.payments.length ? p.payments.join(', ') : 'None detected');
-    if (!realPay.length) issue('automation', 'no_payments', 30, 'We did not find an online payment option (card or MoMo link) on your site.', 'Add Paystack/Hubtel payment links or checkout so customers can pay deposits and invoices instantly.');
+    if (gh) {
+      const chat = p.chat.length > 0 || p.whatsapp;
+      rule('automation', 'Live chat or WhatsApp on the site', chat ? 2 : 0, 2, p.chat.length ? p.chat.join(', ') : p.whatsapp ? 'WhatsApp link' : 'None');
+      if (!chat) issue('automation', 'no_chat', 40, 'We did not find a chat or WhatsApp option for quick questions, so some visitors may leave without asking.', 'Add a WhatsApp chat button and set up quick replies (or an AI assistant) for common questions.');
+      const realPay = p.payments.filter(x => !/mentioned/.test(x));
+      rule('automation', 'Online payments', realPay.length ? 2 : p.payments.length ? 1 : 0, 2, p.payments.length ? p.payments.join(', ') : 'None detected');
+      if (!realPay.length) issue('automation', 'no_payments', 30, 'We did not find an online payment option (card or MoMo link) on your site.', 'Add Paystack/Hubtel payment links or checkout so customers can pay deposits and invoices instantly.');
+    } else {
+      const chats = p.chat.filter(x => !/whatsapp/i.test(x));
+      const quick = chats.length > 0 || p.sms;
+      rule('automation', 'Live chat or text option on the site', quick ? 2 : 0, 2, chats.length ? chats.join(', ') : p.sms ? 'Text (sms:) link' : 'None');
+      if (!quick) issue('automation', 'no_chat', 40, 'We did not find a live chat or text-us option for quick questions, so some visitors may leave without asking.', 'Add a text-us (sms:) link or a live chat widget, with quick replies (or an AI assistant) for common questions.');
+      const cardPay = p.payments.filter(x => !/mentioned|Paystack|Hubtel|ExpressPay|Flutterwave/i.test(x));
+      const shop = (p.ordering || []).filter(x => /Shopify|WooCommerce|Ecwid|Square|Wix Stores|Cart|Toast|ChowNow/i.test(x));
+      const payOk = cardPay.length > 0 || shop.length > 0;
+      rule('automation', 'Card payments or online checkout', payOk ? 2 : 0, 2, payOk ? [...cardPay, ...shop].join(', ') : 'None detected');
+      if (!payOk) issue('automation', 'no_payments', 30, 'We did not find a way to pay by card online (payment link or checkout) on your site.', 'Add Stripe, Square or PayPal payment links (or a simple checkout) so customers can pay deposits and invoices online.');
+    }
     rule('automation', 'Analytics installed', p.analytics.length ? 1 : 0, 1, p.analytics.length ? p.analytics.join(', ') : 'None detected');
     if (!p.analytics.length) issue('automation', 'no_analytics', 40, 'We did not detect website analytics, so you cannot see where visitors come from or which pages bring enquiries.', 'Install Google Analytics 4 (or a privacy-friendly alternative) and track enquiry clicks and form submissions.');
   } else {
@@ -230,9 +273,9 @@ export function scoreAudit(scan, lead = {}) {
   // Boost issues that match what the lead told us.
   const boosts = [
     [/book|appointment|reservation|schedul/, ['no_booking']],
-    [/whatsapp|messag|repl|dm|inbox|enquir|inquir/, ['no_whatsapp', 'no_chat', 'no_form']],
+    [/whatsapp|messag|repl|dm|inbox|enquir|inquir|phone|\btexts?\b/, ['no_whatsapp', 'no_chat', 'no_form', 'no_tel']],
     [/pay|invoice|momo|deposit/, ['no_payments']],
-    [/google|seo|search|found|visib|rank/, ['no_gbp', 'no_meta_desc', 'no_schema', 'noindex', 'no_sitemap']],
+    [/google|seo|search|found|visib|rank|review|map/, ['no_gbp', 'no_meta_desc', 'no_schema', 'noindex', 'no_sitemap', 'no_map', 'few_reviews', 'no_reviews_link']],
     [/instagram|facebook|tiktok|social/, ['no_social', 'one_social', 'no_og']],
     [/slow|speed|load/, ['slow_mobile', 'slow_lcp', 'slow_server']],
     [/email|spam|gmail/, ['webmail', 'no_mx', 'no_spf', 'no_dmarc']],
@@ -269,7 +312,7 @@ const PRIORITY_TITLES = {
   a11y: 'Make the site easier for everyone to use', slow_server: 'Fix slow server response', noindex: 'Let Google index your website', no_title: 'Add a strong page title',
   title_len: 'Tighten your page title', short_meta_desc: 'Expand your search snippet', no_meta_desc: 'Write a search snippet that earns the click', no_h1: 'Give your homepage a clear headline', no_sitemap: 'Add an XML sitemap',
   no_schema: 'Tell Google and AI assistants who you are', psi_seo: 'Fix Google\u2019s basic SEO flags', few_reviews: 'Grow your Google reviews', no_gbp: 'Claim your Google Business Profile',
-  no_social: 'Connect your social profiles to your website', one_social: 'Link all your active social profiles', no_whatsapp: 'Add WhatsApp click-to-chat', no_og: 'Make shared links look professional',
+  no_social: 'Connect your social profiles to your website', one_social: 'Link all your active social profiles', no_whatsapp: 'Add WhatsApp click-to-chat', no_reviews_link: 'Show your reviews on your website', no_map: 'Help local customers find you on the map', no_tel: 'Make your phone number tap-to-call', no_og: 'Make shared links look professional',
   no_favicon: 'Add a favicon', no_logo: 'Make your logo visible on every page', name_mismatch: 'Use your business name consistently', no_mx: 'Set up business email on your domain',
   no_spf: 'Add SPF so your emails reach the inbox', no_dmarc: 'Protect your domain with DMARC', webmail: 'Move to a branded business email', no_contact: 'Make it easy to contact you',
   no_form: 'Capture enquiries with a simple form', no_booking: 'Let customers book or order online', no_chat: 'Answer quick questions instantly', no_payments: 'Take payments online', no_analytics: 'Measure where your enquiries come from'
