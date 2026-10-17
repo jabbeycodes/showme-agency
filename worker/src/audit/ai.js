@@ -26,7 +26,7 @@ function numbersIn(s) { return (String(s).match(/\d+(?:[.,]\d+)?/g) || []).map(n
 export function buildAiInput(result, lead) {
   return {
     business: lead.business || null,
-    customer_said: [lead.message, lead.time_waster ? 'Biggest time-waster: ' + lead.time_waster : '', lead.found_via ? 'Customers mostly find them via: ' + lead.found_via : ''].filter(Boolean).join(' | ').slice(0, 600) || null,
+    customer_said: [lead.message, lead.industry ? 'Industry: ' + lead.industry : '', lead.company_size ? 'Company size: ' + lead.company_size : '', lead.interests ? 'Interested in: ' + lead.interests : '', lead.challenge ? 'Biggest challenge: ' + lead.challenge : '', lead.time_waster ? 'Biggest time-waster: ' + lead.time_waster : '', lead.found_via ? 'Customers mostly find them via: ' + lead.found_via : ''].filter(Boolean).join(' | ').slice(0, 600) || null,
     overall: result.total + '/60',
     area_scores: Object.fromEntries(Object.values(result.areas).map(a => [a.label, a.score + '/10'])),
     priorities: result.topIssues.map(i => ({ area: i.area, finding: i.finding, suggested_action: i.action }))

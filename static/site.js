@@ -82,9 +82,10 @@
     var emailAlt = form.querySelector('.email-alternative');
     var kind = form.getAttribute('data-kind') || 'Inquiry';
 
-    // Extra fields are appended into `message` so the worker needs no change
-    // (the stored lead keeps its existing shape; `need` stays short because
-    // the worker caps it at 80 characters).
+    // Extra fields are sent individually (the worker stores each one; see
+    // LEAD_EXTRAS in worker/src/audit/util.js) and are also folded into the
+    // WhatsApp/email fallback text if the request fails. `need` stays short
+    // because the worker caps it at 80 characters.
     var EXTRA_LABELS = {
       role: 'Role',
       industry: 'Industry',
@@ -121,13 +122,13 @@
     }
 
     function values() {
-      return {
+      var out = {
         name: val('name'),
         business: val('business'),
         email: val('email'),
         phone: val('phone'),
         need: (val('need') || kind).slice(0, 80),
-        message: buildMessage(),
+        message: val('message'),
         // Digital-presence-check form only (`website` is a honeypot, so the
         // real URL is `site_url`). Empty values are ignored by the worker.
         site_url: val('site_url'),
@@ -135,13 +136,15 @@
         time_waster: val('time_waster'),
         page: window.location.pathname
       };
+      Object.keys(EXTRA_LABELS).forEach(function (name) { var x = val(name); if (x) out[name] = x; });
+      return out;
     }
 
     function enquiryText(v) {
       return kind + ' — ShowMe Digital Agency | Name: ' + v.name +
         ' | Company: ' + v.business + ' | Email: ' + v.email +
         ' | Phone: ' + v.phone + ' | Topic: ' + v.need +
-        (v.site_url ? ' | Website: ' + v.site_url : '') + ' | Details: ' + v.message;
+        (v.site_url ? ' | Website: ' + v.site_url : '') + ' | Details: ' + buildMessage();
     }
 
     function clearErrors() {

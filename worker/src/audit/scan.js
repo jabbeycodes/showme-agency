@@ -1,5 +1,5 @@
 // =============================================================================
-// Free Digital Audit — automated scanner.
+// Free Technology Assessment (website check) — automated scanner.
 // Pure fetch-based checks that run in Cloudflare Workers and in Node 20.
 // Every network call is time-boxed and every check is wrapped so a bad or slow
 // site can never crash the scan: failures become { status: 'error' } entries.

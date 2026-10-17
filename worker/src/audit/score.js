@@ -1,5 +1,5 @@
 // =============================================================================
-// Free Digital Audit — transparent rule-based scoring.
+// Free Technology Assessment (website check) — transparent rule-based scoring.
 // Each area is a list of rules worth fixed points. Area score = earned / max of
 // the rules we could actually measure, scaled to 0–10 and rounded. Overall /60.
 // Unmeasured rules are listed as "not measured" and excluded (never guessed).
@@ -48,11 +48,11 @@ export function scoreAudit(scan, lead = {}) {
     issue('website', 'unreachable', 100, `Your website (${scan.host || scan.input}) did not load when we tested it${w.status ? ' (HTTP ' + w.status + ')' : ''}.`,
       'Get the site loading reliably first; every other channel sends customers there. Check hosting, the domain renewal and DNS settings.');
   } else {
-    rule('website', 'Loads securely over HTTPS', w.https ? 2 : 0, 2, w.https ? 'HTTPS works' : 'Served without HTTPS');
-    if (!w.https) issue('website', 'no_https', 90, 'Your site is not served securely over HTTPS, so browsers can label it "Not secure".', 'Turn on a free SSL certificate (most hosts and Cloudflare offer one) and force HTTPS.');
+    rule('website', 'Loads over HTTPS', w.https ? 2 : 0, 2, w.https ? 'HTTPS works' : 'Served without HTTPS');
+    if (!w.https) issue('website', 'no_https', 90, 'Your site is not served over HTTPS, so browsers can label it "Not secure".', 'Turn on a free SSL certificate (most hosts and Cloudflare offer one) and force HTTPS.');
     const rd = w.httpRedirect || {};
     rule('website', 'http:// redirects to https://', rd.checked ? (rd.redirectsToHttps ? 1 : 0) : null, 1, rd.checked ? (rd.redirectsToHttps ? 'Redirects (' + rd.status + ')' : 'No redirect (HTTP ' + rd.status + ')') : 'Could not test');
-    if (rd.checked && !rd.redirectsToHttps && w.https) issue('website', 'no_redirect', 35, 'Visitors who type http:// are not sent to the secure version of your site.', 'Add a permanent (301) redirect from http:// to https://.');
+    if (rd.checked && !rd.redirectsToHttps && w.https) issue('website', 'no_redirect', 35, 'Visitors who type http:// are not sent to the HTTPS version of your site.', 'Add a permanent (301) redirect from http:// to https://.');
     rule('website', 'Mobile-friendly viewport', p.mobileViewport ? 1 : 0, 1, p.viewport ? 'viewport: ' + p.viewport.slice(0, 60) : 'No viewport meta tag');
     if (!p.mobileViewport) issue('website', 'no_viewport', 75, 'Your homepage is missing the mobile viewport setting, so phones may show a shrunken desktop layout.', 'Make the site responsive and add the standard mobile viewport tag; most customers will visit on a phone.');
 
@@ -264,7 +264,7 @@ export function scoreAudit(scan, lead = {}) {
 
 // ---- Templated copy (used directly, or as the fallback when AI is unavailable)
 const PRIORITY_TITLES = {
-  unreachable: 'Get your website loading reliably', no_https: 'Secure your site with HTTPS', no_redirect: 'Redirect every visitor to the secure site',
+  unreachable: 'Get your website loading reliably', no_https: 'Turn on HTTPS for your site', no_redirect: 'Send every visitor to the HTTPS version',
   no_viewport: 'Make the site work properly on phones', slow_mobile: 'Speed up your site on mobile', slow_lcp: 'Show your main content faster', cls: 'Stop the page jumping while it loads',
   a11y: 'Make the site easier for everyone to use', slow_server: 'Fix slow server response', noindex: 'Let Google index your website', no_title: 'Add a strong page title',
   title_len: 'Tighten your page title', short_meta_desc: 'Expand your search snippet', no_meta_desc: 'Write a search snippet that earns the click', no_h1: 'Give your homepage a clear headline', no_sitemap: 'Add an XML sitemap',

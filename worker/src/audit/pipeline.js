@@ -1,5 +1,5 @@
 // =============================================================================
-// Free Digital Audit pipeline: lead alert -> scan -> draft -> founder approval
+// Free Technology Assessment (website check) pipeline: lead alert -> scan -> draft -> founder approval
 // -> send -> optional follow-up. All state lives in the LEADS KV namespace
 // under NEW key prefixes only (existing lead:/stats: keys are never touched,
 // except that a new lead's own record is written once at creation).

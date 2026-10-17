@@ -116,13 +116,19 @@ export function emailDomain(email) {
 /** Digits for a wa.me link. Local Ghana numbers (0XXXXXXXXX) are assumed +233. */
 export function waNumber(phone) {
   const raw = String(phone || '').trim();
-  if (!raw) return { digits: '', assumed: false };
+  if (!raw) return { digits: '', assumed: false, country: '' };
   let digits = raw.replace(/[^\d]/g, '');
   if (raw.startsWith('00')) digits = digits.slice(2);
   let assumed = false;
-  if (!raw.startsWith('+') && !raw.startsWith('00') && /^0\d{9}$/.test(digits)) { digits = '233' + digits.slice(1); assumed = true; }
-  if (digits.length < 8 || digits.length > 15) return { digits: '', assumed: false };
-  return { digits, assumed };
+  let country = '';
+  if (!raw.startsWith('+') && !raw.startsWith('00')) {
+    // Local formats: Ghana numbers start with 0 (0XX XXX XXXX); US numbers are
+    // 10 digits starting 2-9, optionally prefixed with 1.
+    if (/^0\d{9}$/.test(digits)) { digits = '233' + digits.slice(1); assumed = true; country = 'Ghana (+233)'; }
+    else if (/^[2-9]\d{9}$/.test(digits)) { digits = '1' + digits; assumed = true; country = 'US (+1)'; }
+  }
+  if (digits.length < 8 || digits.length > 15) return { digits: '', assumed: false, country: '' };
+  return { digits, assumed, country };
 }
 
 export function leadSlug(leadId) {
@@ -132,3 +138,12 @@ export function slugToLeadId(slug) {
   if (!/^\d{10,16}_[a-z0-9]{1,16}$/.test(slug || '')) return null;
   return 'lead:' + slug.replace('_', ':');
 }
+
+// Optional form fields stored on a lead (Technology Assessment / contact forms).
+// [key, label, max length]. Kept in sync with EXTRA_LABELS in static/site.js.
+export const LEAD_EXTRAS = [
+  ['role', 'Role', 120], ['industry', 'Industry', 120], ['company_size', 'Company size', 80],
+  ['it_setup', 'Current IT setup', 300], ['it_setup_notes', 'IT setup notes', 500], ['office_tools', 'Email and office tools', 200],
+  ['interests', 'Areas of interest', 300], ['timeline', 'Timeline', 120], ['services', 'Services of interest', 300],
+  ['challenge', 'Biggest challenge', 500], ['consent', 'OK to review public website and domain info', 200]
+];

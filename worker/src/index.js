@@ -22,7 +22,7 @@
 // =============================================================================
 
 import { enqueueLead, processLead, runScheduled } from './audit/pipeline.js';
-import { setSelfRoute } from './audit/util.js';
+import { setSelfRoute, LEAD_EXTRAS } from './audit/util.js';
 
 const SELF_HOSTS = ['agency.showmeworld.app', 'showme-agency.codeproject1111.workers.dev'];
 function registerSelfRoute(env) {
@@ -74,12 +74,14 @@ async function handleLead(request, env, ctx) {
     found_via: clamp(data.found_via, 80).trim(),
     time_waster: clamp(data.time_waster, 500).trim(),
     page: clamp(data.page, 80).trim(),
+    region: pickRegion(request, new URL(request.url)).region,
     created_at: new Date().toISOString(),
     ua: clamp(request.headers.get('user-agent') || '', 200),
     notified: false
   };
 
   // Drop empty optional fields so legacy-shaped records stay the same.
+  for (const [k, , max] of LEAD_EXTRAS) { const v = clamp(data[k], max).trim(); if (v) lead[k] = v; }
   for (const k of ['website', 'found_via', 'time_waster', 'page']) if (!lead[k]) delete lead[k];
 
   try {

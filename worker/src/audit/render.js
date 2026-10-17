@@ -1,15 +1,26 @@
 // =============================================================================
-// HTML for the audit report page, emails, and admin screens.
+// HTML for the Free Technology Assessment report page, emails, and admin
+// screens. US is the default audience; leads whose region is 'gh' get the
+// Ghana variant (WhatsApp booking and the Accra team line).
 // =============================================================================
-import { esc, waNumber, leadSlug } from './util.js';
+import { esc, waNumber, leadSlug, LEAD_EXTRAS } from './util.js';
 import { AREAS } from './score.js';
+import { BRAND_HEADER } from '../../../scripts/brand.mjs';
 
 export const ORIGIN = 'https://agency.showmeworld.app';
 export const BOOK_WA = 'https://wa.me/13364572361';
-const ABOUT = 'ShowMe Digital Agency is US-led, with our team on the ground in Accra, Ghana. We bring 7+ years of experience and have helped 50+ businesses with websites, growth and automation.';
+export const PHONE_DISPLAY = '+1 336 457 2361';
+export const PHONE_E164 = '+13364572361';
+const ABOUT_US = 'ShowMe Digital Agency is a US-based technology and growth partner, founded by Josh Abbey and working with an experienced delivery team. We bring 7+ years of experience and have helped 50+ businesses.';
+const ABOUT_GH = 'ShowMe Digital Agency is US-led, with an experienced team in Accra, Ghana. We bring 7+ years of experience and have helped 50+ businesses.';
+const isGh = lead => !!lead && lead.region === 'gh';
+const regionLabel = lead => lead && lead.region ? (lead.region === 'gh' ? 'Ghana view' : 'US view') : '';
+const about = lead => isGh(lead) ? ABOUT_GH : ABOUT_US;
+const ASSESS = 'Free Technology Assessment';
 
-function fmtDate(iso) {
-  try { return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Africa/Accra' }); } catch { return ''; }
+function fmtDate(iso, lead) {
+  const gh = isGh(lead);
+  try { return new Date(iso).toLocaleDateString(gh ? 'en-GB' : 'en-US', { day: 'numeric', month: 'long', year: 'numeric', timeZone: gh ? 'Africa/Accra' : 'America/New_York' }); } catch { return ''; }
 }
 function fmtDateTime(iso) {
   try { return new Date(iso).toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Africa/Accra' }) + ' GMT'; } catch { return ''; }
@@ -19,26 +30,32 @@ function scoreColor(s, max = 10) {
   return r >= 0.75 ? 'var(--mint)' : r >= 0.5 ? 'var(--gold)' : 'var(--coral)';
 }
 export function bookWaUrl(business) {
-  return BOOK_WA + '?text=' + encodeURIComponent(`Hi Josh, I've read my free digital audit${business ? ' for ' + business : ''} and I'd like to book a call about the priorities.`);
+  return BOOK_WA + '?text=' + encodeURIComponent(`Hi Josh, I've read my Free Technology Assessment report${business ? ' for ' + business : ''} and I'd like to book a call about the priorities.`);
 }
+// How a lead books a follow-up call: call/text in the US, WhatsApp in Ghana.
+function bookUrl(lead) { return isGh(lead) ? bookWaUrl(lead.business) : 'tel:' + PHONE_E164; }
+function bookLabel(lead) { return isGh(lead) ? 'Book a call on WhatsApp' : 'Call ' + PHONE_DISPLAY; }
+function bookLine(lead) { return isGh(lead) ? 'book a free 20-minute call on WhatsApp' : 'call or text us on ' + PHONE_DISPLAY; }
 
 const AUDIT_CSS = `
+:root{--text-muted:var(--muted);--surface:#fff;--surface-2:var(--bg-alt);--night-line:var(--line);--night-2:#fff;--ink2:var(--bg-alt);--coral:#b42318;--mint:var(--teal);--gold:#a16207}
+.audit-simple-top .brand{display:inline-flex;align-items:center}
 .audit-score{display:flex;gap:28px;align-items:center;flex-wrap:wrap;margin-top:22px}
-.audit-total{font-family:'Anton',Impact,sans-serif;font-size:clamp(64px,10vw,104px);line-height:1;color:var(--text)}
+.audit-total{font-weight:800;font-size:clamp(64px,10vw,104px);line-height:1;color:var(--text)}
 .audit-total small{font-size:.35em;color:var(--text-muted);margin-left:6px}
 .audit-bars{display:grid;gap:12px;flex:1;min-width:260px}
 .audit-bar{display:grid;grid-template-columns:150px 1fr 48px;gap:12px;align-items:center;font-size:15px}
 .audit-bar .track{height:10px;border-radius:99px;background:var(--surface-2);overflow:hidden}
 .audit-bar .fill{display:block;height:100%;border-radius:99px}
-.audit-bar b{text-align:right;font-family:'Archivo',sans-serif}
+.audit-bar b{text-align:right;font-weight:800}
 .audit-prio{counter-reset:p;display:grid;gap:16px;padding:0;margin:20px 0 0;list-style:none}
 .audit-prio li{position:relative;padding:22px 22px 22px 70px;border:1px solid var(--night-line);border-radius:16px;background:var(--surface)}
-.audit-prio li:before{counter-increment:p;content:counter(p);position:absolute;left:22px;top:20px;width:32px;height:32px;border-radius:50%;background:var(--coral);color:#fff;display:grid;place-items:center;font-weight:800;font-family:'Archivo',sans-serif}
+.audit-prio li:before{counter-increment:p;content:counter(p);position:absolute;left:22px;top:20px;width:32px;height:32px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:800;font-weight:800}
 .audit-prio h3{margin:0 0 8px;font-size:19px}.audit-prio p{margin:6px 0 0;color:var(--text-muted)}
 .audit-prio .tag{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mint);font-weight:700}
 .audit-area{border:1px solid var(--night-line);border-radius:16px;background:var(--surface);padding:22px;margin-top:16px}
 .audit-area header{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
-.audit-area h3{margin:0;font-size:20px}.audit-area .s{font-family:'Archivo',sans-serif;font-weight:800;font-size:20px}
+.audit-area h3{margin:0;font-size:20px}.audit-area .s{font-weight:800;font-size:20px}
 .audit-area p{color:var(--text-muted);margin:10px 0 0}
 .audit-area details{margin-top:12px}.audit-area summary{cursor:pointer;color:var(--text);font-weight:600;font-size:14px}
 .audit-checks{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px;font-size:14px}
@@ -61,21 +78,17 @@ function docHead(title, extraCss = '') {
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="robots" content="noindex,nofollow,noarchive" />
   <meta name="referrer" content="no-referrer" />
-  <meta name="color-scheme" content="dark light" />
-  <meta name="theme-color" content="#07111f" />
+  <meta name="theme-color" content="#0b1b33" />
   <link rel="icon" href="/favicon.ico" sizes="32x32" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <title>${esc(title)}</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css" />
   <style>${AUDIT_CSS}${extraCss}</style>
 </head>`;
 }
 
 function topBar(right = '') {
-  return `<div class="audit-simple-top"><div class="wrap"><a class="brand" href="/"><span>ShowMe<span class="dot">.</span></span><small>Digital Agency</small></a>${right}</div></div>`;
+  return `<div class="audit-simple-top"><div class="wrap"><a class="brand" href="/" aria-label="ShowMe Digital Agency home">${BRAND_HEADER}</a>${right}</div></div>`;
 }
 
 function checksList(rules) {
@@ -95,7 +108,7 @@ export function reportPage(audit, lead, { preview = false, replyTo = 'info@showm
   const r = audit.result;
   const c = audit.copy;
   const business = lead.business || audit.scan?.host || 'Your business';
-  const date = fmtDate(audit.scan?.scannedAt || audit.created_at);
+  const date = fmtDate(audit.scan?.scannedAt || audit.created_at, lead);
   const site = audit.scan?.url || '';
   const areaBlocks = AREAS.map(a => {
     const ar = r.areas[a.key];
@@ -106,15 +119,15 @@ export function reportPage(audit, lead, { preview = false, replyTo = 'info@showm
   }).join('');
   const prio = (c.priorities || []).map(p => `<li><span class="tag">${esc((AREAS.find(a => a.key === p.area) || {}).label || '')}</span><h3>${esc(p.title)}</h3><p>${esc(p.why)}</p><p><strong style="color:var(--text)">Next step:</strong> ${esc(p.action)}</p></li>`).join('');
 
-  return `${docHead('Digital audit: ' + business + ' | ShowMe Agency')}
+  return `${docHead('Technology Assessment: ' + business + ' | ShowMe Digital Agency')}
 <body>
   ${preview ? `<div class="audit-banner">DRAFT PREVIEW — not yet sent to the lead (status: ${esc(audit.status)})</div>` : ''}
-  ${topBar(`<a class="btn whatsapp" href="${esc(bookWaUrl(lead.business))}" target="_blank" rel="noopener"><span>Book a free call</span></a>`)}
+  ${topBar(`<a class="btn small" href="${esc(bookUrl(lead))}"${isGh(lead) ? ' target="_blank" rel="noopener"' : ''}>${isGh(lead) ? 'Book a free call' : 'Call or text us'}</a>`)}
   <main id="main">
     <section class="page-hero">
       <div class="wrap">
-        <p class="kicker">Free digital audit</p>
-        <h1>${esc(business)}: your digital audit</h1>
+        <p class="eyebrow">${ASSESS}</p>
+        <h1>${esc(business)}: your assessment report</h1>
         <p class="lead">${esc(c.summary || '')}</p>
         <p class="audit-meta">${site ? `Website checked: ${esc(site)} · ` : ''}${esc(date)}</p>
         <div class="audit-score">
@@ -133,24 +146,25 @@ export function reportPage(audit, lead, { preview = false, replyTo = 'info@showm
       <div class="wrap wrap-narrow">
         <h2>Area by area</h2>
         ${areaBlocks}
-        <p class="audit-meta" style="margin-top:20px">Some things can't be judged by an automated check — like how active your social profiles are, your Google Business Profile, how your brand looks next to competitors, and the day-to-day workflows behind your business. We'll go through those with you on a call.</p>
+        <p class="audit-meta" style="margin-top:20px">Some things can't be judged by an automated check — like how active your social profiles are, your Google Business Profile, how your brand looks next to competitors, and the day-to-day workflows behind your business. The automated part of your assessment covers your website and online presence; we'll go through your wider technology setup with you on a call.</p>
       </div>
     </section>
     <section class="cta-band">
       <div class="wrap inner">
         <div>
           <h2>Want help with these priorities?</h2>
-          <p>Book a free 20-minute call on WhatsApp and we'll walk through your report together. The priorities are yours to keep, whether or not you work with us.</p>
+          <p>${isGh(lead) ? 'Book a free 20-minute call on WhatsApp' : 'Call or text us, or reply by email,'} and we'll walk through your report together. The priorities are yours to keep, whether or not you work with us.</p>
         </div>
         <div class="btn-row">
-          <a class="btn whatsapp" href="${esc(bookWaUrl(lead.business))}" target="_blank" rel="noopener"><span>Book a call on WhatsApp</span></a>
-          <a class="btn secondary" href="mailto:${esc(replyTo)}?subject=${encodeURIComponent('My digital audit' + (lead.business ? ' — ' + lead.business : ''))}"><span>Reply by email</span></a>
+          <a class="btn" href="${esc(bookUrl(lead))}"${isGh(lead) ? ' target="_blank" rel="noopener"' : ''}>${esc(bookLabel(lead))}</a>
+          ${isGh(lead) ? '' : `<a class="btn secondary" href="sms:${PHONE_E164}">Text us</a>`}
+          <a class="btn secondary" href="mailto:${esc(replyTo)}?subject=${encodeURIComponent('My Technology Assessment' + (lead.business ? ' — ' + lead.business : ''))}">Reply by email</a>
         </div>
       </div>
     </section>
   </main>
   <footer class="audit-foot"><div class="wrap">
-    <p>${esc(ABOUT)}</p>
+    <p>${esc(about(lead))}</p>
     <p>How we scored: automated checks of your public website and domain on ${esc(date)}. Each area is scored 0–10 from fixed, transparent rules (listed under “What we checked”); checks we couldn't run are marked “–” and left out of the score rather than guessed.</p>
     <p><a href="/">agency.showmeworld.app</a> · <a href="/privacy/">Privacy</a></p>
   </div></footer>
@@ -160,17 +174,17 @@ export function reportPage(audit, lead, { preview = false, replyTo = 'info@showm
 
 // ---- Emails -----------------------------------------------------------------
 const E = {
-  wrap: 'margin:0;padding:0;background:#f4f1ec;',
+  wrap: 'margin:0;padding:0;background:#f4f6f9;',
   card: 'max-width:600px;margin:0 auto;background:#ffffff;border-radius:12px;overflow:hidden;font-family:Arial,Helvetica,sans-serif;color:#10243f;',
-  head: 'background:#07111f;color:#ffffff;padding:22px 28px;font-size:20px;font-weight:bold;',
+  head: 'background:#0b1b33;color:#ffffff;padding:22px 28px;font-size:20px;font-weight:bold;',
   body: 'padding:24px 28px;font-size:15px;line-height:1.6;',
-  btn: 'display:inline-block;background:#f2654b;color:#ffffff;text-decoration:none;padding:12px 20px;border-radius:8px;font-weight:bold;',
-  btn2: 'display:inline-block;background:#24bda4;color:#07111f;text-decoration:none;padding:12px 20px;border-radius:8px;font-weight:bold;',
+  btn: 'display:inline-block;background:#0a58a8;color:#ffffff;text-decoration:none;padding:12px 20px;border-radius:8px;font-weight:bold;',
+  btn2: 'display:inline-block;background:#0f6e66;color:#ffffff;text-decoration:none;padding:12px 20px;border-radius:8px;font-weight:bold;',
   muted: 'color:#5b6b80;font-size:13px;',
   td: 'padding:6px 8px;border-bottom:1px solid #eee;vertical-align:top;font-size:14px;'
 };
 function emailShell(inner, pre = '') {
-  return `<!doctype html><html><body style="${E.wrap}"><div style="display:none;max-height:0;overflow:hidden">${esc(pre)}</div><div style="padding:20px 10px"><div style="${E.card}"><div style="${E.head}">ShowMe<span style="color:#f2654b">.</span> <span style="font-size:13px;font-weight:normal;opacity:.8">Digital Agency</span></div><div style="${E.body}">${inner}</div></div></div></body></html>`;
+  return `<!doctype html><html><body style="${E.wrap}"><div style="display:none;max-height:0;overflow:hidden">${esc(pre)}</div><div style="padding:20px 10px"><div style="${E.card}"><div style="${E.head}">ShowMe <span style="font-size:13px;font-weight:normal;opacity:.8">Digital Agency</span></div><div style="${E.body}">${inner}</div></div></div></body></html>`;
 }
 function scoreTable(result) {
   return `<table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;margin:8px 0 16px">${AREAS.map(a => {
@@ -187,22 +201,22 @@ export function leadReportEmail(audit, lead) {
   const prio = (c.priorities || []).map((p, i) => `<p style="margin:0 0 12px"><strong>${i + 1}. ${esc(p.title)}</strong><br>${esc(p.why)}<br><span style="color:#173657">Next step: ${esc(p.action)}</span></p>`).join('');
   const html = emailShell(`
     <p>Hi ${esc(first)},</p>
-    <p>Thanks for requesting a free digital audit${lead.business ? ' for <strong>' + esc(lead.business) + '</strong>' : ''}. Here is your report.</p>
+    <p>Thanks for requesting a ${ASSESS}${lead.business ? ' for <strong>' + esc(lead.business) + '</strong>' : ''}. Here is your report.</p>
     <p>${esc(c.summary || '')}</p>
     ${scoreTable(audit.result)}
     <h3 style="margin:18px 0 10px;font-size:17px">Your three highest-impact priorities</h3>
     ${prio}
     <p style="margin:22px 0"><a href="${esc(link)}" style="${E.btn}">View your full report</a></p>
-    <p>If you'd like help with any of these, book a free 20-minute call with me on WhatsApp — the priorities are yours to keep either way.</p>
-    <p style="margin:18px 0"><a href="${esc(bookWaUrl(lead.business))}" style="${E.btn2}">Book a call on WhatsApp</a></p>
+    <p>If you'd like help with any of these, ${bookLine(lead)} and we'll talk it through. The priorities are yours to keep either way.</p>
+    <p style="margin:18px 0"><a href="${esc(bookUrl(lead))}" style="${E.btn2}">${esc(bookLabel(lead))}</a></p>
     <p>Or simply reply to this email.</p>
     <p>Josh Abbey<br>Founder, ShowMe Digital Agency</p>
-    <p style="${E.muted}">${esc(ABOUT)}</p>`, 'Your free digital audit: ' + audit.result.total + '/60 and three priorities');
-  const text = `Hi ${first},\n\nThanks for requesting a free digital audit${lead.business ? ' for ' + lead.business : ''}. Here is your report.\n\n${c.summary || ''}\n\n` +
+    <p style="${E.muted}">${esc(about(lead))}</p>`, 'Your Free Technology Assessment: ' + audit.result.total + '/60 and three priorities');
+  const text = `Hi ${first},\n\nThanks for requesting a ${ASSESS}${lead.business ? ' for ' + lead.business : ''}. Here is your report.\n\n${c.summary || ''}\n\n` +
     AREAS.map(a => `${a.label}: ${audit.result.areas[a.key].score}/10`).join('\n') + `\nOverall: ${audit.result.total}/60\n\nYour three highest-impact priorities:\n` +
     (c.priorities || []).map((p, i) => `${i + 1}. ${p.title}\n   ${p.why}\n   Next step: ${p.action}`).join('\n') +
-    `\n\nFull report: ${link}\n\nBook a free 20-minute call on WhatsApp: ${bookWaUrl(lead.business)}\nOr just reply to this email.\n\nJosh Abbey\nFounder, ShowMe Digital Agency\n\n${ABOUT}\n`;
-  return { subject: `Your free digital audit${lead.business ? ': ' + lead.business : ''} (${audit.result.total}/60)`, html, text };
+    `\n\nFull report: ${link}\n\n${isGh(lead) ? 'Book a free 20-minute call on WhatsApp: ' + bookWaUrl(lead.business) : 'Call or text: ' + PHONE_DISPLAY}\nOr just reply to this email.\n\nJosh Abbey\nFounder, ShowMe Digital Agency\n\n${about(lead)}\n`;
+  return { subject: `Your ${ASSESS}${lead.business ? ': ' + lead.business : ''} (${audit.result.total}/60)`, html, text };
 }
 
 export function followupEmail(audit, lead) {
@@ -211,18 +225,18 @@ export function followupEmail(audit, lead) {
   const p1 = audit.copy?.priorities?.[0];
   const html = emailShell(`
     <p>Hi ${esc(first)},</p>
-    <p>Just checking you received your free digital audit${lead.business ? ' for ' + esc(lead.business) : ''}. ${p1 ? 'The first priority we flagged was <strong>' + esc(p1.title.toLowerCase()) + '</strong>.' : ''}</p>
+    <p>Just checking you received your ${ASSESS} report${lead.business ? ' for ' + esc(lead.business) : ''}. ${p1 ? 'The first priority we flagged was <strong>' + esc(p1.title.toLowerCase()) + '</strong>.' : ''}</p>
     <p>Happy to talk it through on a free 20-minute call if useful — no obligation.</p>
-    <p style="margin:18px 0"><a href="${esc(bookWaUrl(lead.business))}" style="${E.btn2}">Book a call on WhatsApp</a> &nbsp; <a href="${esc(link)}" style="color:#d94d36">View your report</a></p>
-    <p>Josh Abbey<br>Founder, ShowMe Digital Agency</p>`, 'Quick follow-up on your digital audit');
-  const text = `Hi ${first},\n\nJust checking you received your free digital audit${lead.business ? ' for ' + lead.business : ''}.${p1 ? ' The first priority we flagged was: ' + p1.title + '.' : ''}\n\nHappy to talk it through on a free 20-minute call if useful.\nBook on WhatsApp: ${bookWaUrl(lead.business)}\nYour report: ${link}\n\nJosh Abbey\nFounder, ShowMe Digital Agency\n`;
-  return { subject: 'Following up on your digital audit', html, text };
+    <p style="margin:18px 0"><a href="${esc(bookUrl(lead))}" style="${E.btn2}">${esc(bookLabel(lead))}</a> &nbsp; <a href="${esc(link)}" style="color:#0a58a8">View your report</a></p>
+    <p>Josh Abbey<br>Founder, ShowMe Digital Agency</p>`, 'Quick follow-up on your Technology Assessment');
+  const text = `Hi ${first},\n\nJust checking you received your ${ASSESS} report${lead.business ? ' for ' + lead.business : ''}.${p1 ? ' The first priority we flagged was: ' + p1.title + '.' : ''}\n\nHappy to talk it through on a free 20-minute call if useful.\n${isGh(lead) ? 'Book on WhatsApp: ' + bookWaUrl(lead.business) : 'Call or text: ' + PHONE_DISPLAY}\nYour report: ${link}\n\nJosh Abbey\nFounder, ShowMe Digital Agency\n`;
+  return { subject: 'Following up on your Technology Assessment', html, text };
 }
 
 export function ackEmail(lead) {
   const first = String(lead.name || '').trim().split(/\s+/)[0] || 'there';
-  const html = emailShell(`<p>Hi ${esc(first)},</p><p>Thanks for getting in touch with ShowMe Digital Agency — we've received your ${lead.website ? 'audit request' : 'enquiry'} and will reply within one business day.</p><p>If it's urgent, message us on WhatsApp: <a href="${BOOK_WA}">+1 336 457 2361</a>.</p><p>Josh Abbey<br>Founder, ShowMe Digital Agency</p>`, 'We received your request');
-  const text = `Hi ${first},\n\nThanks for getting in touch with ShowMe Digital Agency — we've received your ${lead.website ? 'audit request' : 'enquiry'} and will reply within one business day.\n\nUrgent? WhatsApp: ${BOOK_WA}\n\nJosh Abbey\nFounder, ShowMe Digital Agency\n`;
+  const html = emailShell(`<p>Hi ${esc(first)},</p><p>Thanks for getting in touch with ShowMe Digital Agency — we've received your ${lead.need === ASSESS || lead.website ? 'assessment request' : (isGh(lead) ? 'enquiry' : 'inquiry')} and will reply within one business day.</p><p>${isGh(lead) ? `If it's urgent, message us on WhatsApp: <a href="${BOOK_WA}">${PHONE_DISPLAY}</a>.` : `If it's urgent, call or text <a href="tel:${PHONE_E164}">${PHONE_DISPLAY}</a>.`}</p><p>Josh Abbey<br>Founder, ShowMe Digital Agency</p>`, 'We received your request');
+  const text = `Hi ${first},\n\nThanks for getting in touch with ShowMe Digital Agency — we've received your ${lead.need === ASSESS || lead.website ? 'assessment request' : (isGh(lead) ? 'enquiry' : 'inquiry')} and will reply within one business day.\n\n${isGh(lead) ? 'Urgent? WhatsApp: ' + BOOK_WA : 'Urgent? Call or text ' + PHONE_DISPLAY}\n\nJosh Abbey\nFounder, ShowMe Digital Agency\n`;
   return { subject: 'We received your request — ShowMe Digital Agency', html, text };
 }
 
@@ -230,41 +244,44 @@ export function alertEmail(lead, audit) {
   const wa = waNumber(lead.phone);
   const review = ORIGIN + '/admin/audits/' + leadSlug(lead.id) + '/';
   const rows = [
-    ['Name', lead.name], ['Business', lead.business], ['Email', lead.email], ['Phone / WhatsApp', lead.phone], ['Website', lead.website],
-    ['Need', lead.need], ['Customers find them via', lead.found_via], ['Biggest time-waster', lead.time_waster], ['Message', lead.message],
+    ['Name', lead.name], ['Role', lead.role], ['Business', lead.business], ['Email', lead.email], ['Phone', lead.phone], ['Website', lead.website],
+    ['Need', lead.need], ['Region', regionLabel(lead)],
+    ...LEAD_EXTRAS.filter(x => x[0] !== 'role').map(([k, label]) => [label, lead[k]]),
+    ['Customers find them via', lead.found_via], ['Biggest time-waster', lead.time_waster], ['Message', lead.message],
     ['Page', lead.page], ['Received', fmtDateTime(lead.created_at)], ['Lead ID', lead.id]
   ].filter(r => r[1]);
   const waLink = wa.digits ? 'https://wa.me/' + wa.digits + '?text=' + encodeURIComponent(`Hi ${String(lead.name || '').split(' ')[0]}, this is Josh from ShowMe Digital Agency — thanks for your request${lead.business ? ' for ' + lead.business : ''}.`) : '';
   let auditBlock = '';
   if (audit && audit.result) {
-    auditBlock = `<h3 style="margin:20px 0 6px;font-size:17px">Draft audit: ${audit.result.total}/60</h3>${scoreTable(audit.result)}
+    auditBlock = `<h3 style="margin:20px 0 6px;font-size:17px">Draft website check: ${audit.result.total}/60</h3>${scoreTable(audit.result)}
       <p style="margin:0 0 6px"><strong>Draft priorities:</strong></p><ol style="margin:0 0 12px;padding-left:20px">${(audit.copy?.priorities || []).map(p => `<li>${esc(p.title)}</li>`).join('')}</ol>
       <p style="${E.muted}">Nothing is sent to the lead until you click Approve &amp; send.</p>`;
   } else if (lead.website) {
-    auditBlock = `<p><strong>Audit:</strong> the automated scan is still running (or failed); it will appear on the review page shortly.</p>`;
+    auditBlock = `<p><strong>Website check:</strong> the automated scan is still running (or failed); it will appear on the review page shortly.</p>`;
   } else {
-    auditBlock = `<p><strong>Audit:</strong> no website given, so no automated scan. You can run one from the review page if you find their site.</p>`;
+    auditBlock = `<p><strong>Website check:</strong> no website given, so no automated scan. You can run one from the review page if you find their site.</p>`;
   }
+  const kind = (lead.need === ASSESS || lead.website) ? 'Technology Assessment request' : 'lead';
   const html = emailShell(`
-    <p style="margin-top:0"><strong>New ${lead.website ? 'free audit request' : 'lead'}${lead.test ? ' (TEST)' : ''}</strong> from the website.</p>
+    <p style="margin-top:0"><strong>New ${kind}${lead.test ? ' (TEST)' : ''}</strong> from the website.</p>
     <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse">${rows.map(r => `<tr><td style="${E.td}width:34%;color:#5b6b80">${esc(r[0])}</td><td style="${E.td}">${esc(r[1]).replace(/\n/g, '<br>')}</td></tr>`).join('')}</table>
-    <p style="margin:18px 0 8px">${waLink ? `<a href="${esc(waLink)}" style="${E.btn2}">WhatsApp ${esc(lead.name || 'lead')}</a> ` : ''}<a href="mailto:${esc(lead.email)}" style="color:#d94d36;margin-left:8px">Email ${esc(lead.email)}</a></p>
-    ${wa.assumed ? `<p style="${E.muted}">WhatsApp link assumes a Ghana (+233) number.</p>` : ''}
+    <p style="margin:18px 0 8px">${waLink ? `<a href="${esc(waLink)}" style="${E.btn2}">WhatsApp ${esc(lead.name || 'lead')}</a> ` : ''}<a href="mailto:${esc(lead.email)}" style="color:#0a58a8;margin-left:8px">Email ${esc(lead.email)}</a></p>
+    ${wa.assumed ? `<p style="${E.muted}">WhatsApp link assumes a ${esc(wa.country)} number.</p>` : ''}
     ${auditBlock}
     <p style="margin:18px 0"><a href="${esc(review)}" style="${E.btn}">Review &amp; approve</a></p>
     <p style="${E.muted}">Admin: ${esc(ORIGIN)}/admin/audits/ (sign in with your admin key)</p>`, `${lead.name}${lead.business ? ' — ' + lead.business : ''}`);
-  const text = `New ${lead.website ? 'free audit request' : 'lead'}${lead.test ? ' (TEST)' : ''}\n\n` + rows.map(r => `${r[0]}: ${r[1]}`).join('\n') +
+  const text = `New ${kind}${lead.test ? ' (TEST)' : ''}\n\n` + rows.map(r => `${r[0]}: ${r[1]}`).join('\n') +
     (waLink ? `\n\nWhatsApp: ${waLink}` : '') + `\nEmail: ${lead.email}\n` +
-    (audit && audit.result ? `\nDraft audit: ${audit.result.total}/60\n` + AREAS.map(a => `  ${a.label}: ${audit.result.areas[a.key].score}/10`).join('\n') + '\n' : '') +
+    (audit && audit.result ? `\nDraft website check: ${audit.result.total}/60\n` + AREAS.map(a => `  ${a.label}: ${audit.result.areas[a.key].score}/10`).join('\n') + '\n' : '') +
     `\nReview & approve: ${review}\n`;
-  const subj = `${lead.test ? '[TEST] ' : ''}New ${lead.website ? 'audit request' : 'lead'}: ${lead.name}${lead.business ? ' — ' + lead.business : ''}${audit && audit.result ? ' (draft ' + audit.result.total + '/60)' : ''}`;
+  const subj = `${lead.test ? '[TEST] ' : ''}New ${lead.need === ASSESS || lead.website ? 'assessment request' : 'lead'}: ${lead.name}${lead.business ? ' — ' + lead.business : ''}${audit && audit.result ? ' (draft ' + audit.result.total + '/60)' : ''}`;
   return { subject: subj.slice(0, 200), html, text };
 }
 
 export function draftReadyEmail(lead, audit) {
   const review = ORIGIN + '/admin/audits/' + leadSlug(lead.id) + '/';
-  const html = emailShell(`<p style="margin-top:0"><strong>Audit draft ready</strong> for ${esc(lead.name)}${lead.business ? ' — ' + esc(lead.business) : ''}: ${audit.result.total}/60.</p>${scoreTable(audit.result)}<p><a href="${esc(review)}" style="${E.btn}">Review &amp; approve</a></p>`, 'Audit draft ready');
-  return { subject: `${lead.test ? '[TEST] ' : ''}Audit draft ready: ${lead.business || lead.name} (${audit.result.total}/60)`, html, text: `Audit draft ready for ${lead.name}: ${audit.result.total}/60\nReview: ${review}\n` };
+  const html = emailShell(`<p style="margin-top:0"><strong>Assessment draft ready</strong> for ${esc(lead.name)}${lead.business ? ' — ' + esc(lead.business) : ''}: ${audit.result.total}/60.</p>${scoreTable(audit.result)}<p><a href="${esc(review)}" style="${E.btn}">Review &amp; approve</a></p>`, 'Assessment draft ready');
+  return { subject: `${lead.test ? '[TEST] ' : ''}Assessment draft ready: ${lead.business || lead.name} (${audit.result.total}/60)`, html, text: `Assessment draft ready for ${lead.name}: ${audit.result.total}/60\nReview: ${review}\n` };
 }
 
 // ---- Admin ------------------------------------------------------------------
@@ -289,7 +306,7 @@ const ADMIN_CSS = `
 function adminShell(title, inner) {
   return `${docHead(title, ADMIN_CSS)}
 <body>
-  ${topBar('<span class="muted" style="font-size:13px">Admin · Free audits</span>')}
+  ${topBar('<span class="muted" style="font-size:13px">Admin · Technology Assessments</span>')}
   <main id="main" class="adm"><div class="wrap">${inner}</div></main>
 </body></html>`;
 }
@@ -311,7 +328,7 @@ export function adminList(rows, { flash, cursorNext } = {}) {
       <td>${r.audit && r.audit.result ? '<strong>' + r.audit.result.total + '</strong>/60' : '<span class="muted">—</span>'}</td>
     </tr>`;
   }).join('');
-  return adminShell('Free audits | ShowMe admin', `<h1>Leads &amp; audits</h1><p class="muted">Most recent first. Nothing is emailed to a lead until you open an audit and click Approve &amp; send.</p>
+  return adminShell('Technology Assessments | ShowMe admin', `<h1>Leads &amp; audits</h1><p class="muted">Most recent first. Nothing is emailed to a lead until you open an audit and click Approve &amp; send.</p>
     ${flash ? `<p class="flash">${esc(flash)}</p>` : ''}
     <div class="table-wrap"><table><thead><tr><th>Received</th><th>Lead</th><th>Contact</th><th>Website</th><th>Audit</th><th>Score</th></tr></thead><tbody>${tr || '<tr><td colspan="6" class="muted">No leads yet.</td></tr>'}</tbody></table></div>
     ${cursorNext ? `<p style="margin-top:16px"><a href="/admin/audits/?cursor=${encodeURIComponent(cursorNext)}">Older leads →</a></p>` : ''}`);
@@ -320,7 +337,7 @@ export function adminList(rows, { flash, cursorNext } = {}) {
 export function adminReview(lead, audit, { flash, error, config = {} } = {}) {
   const slug = leadSlug(lead.id);
   const wa = waNumber(lead.phone);
-  const kv = [['Email', lead.email], ['Phone', lead.phone], ['Website', lead.website], ['Need', lead.need], ['Found via', lead.found_via], ['Time-waster', lead.time_waster], ['Message', lead.message], ['Received', fmtDateTime(lead.created_at)], ['Lead ID', lead.id]]
+  const kv = [['Email', lead.email], ['Phone', lead.phone], ['Website', lead.website], ['Need', lead.need], ['Region', regionLabel(lead)], ...LEAD_EXTRAS.map(([k, label]) => [label, lead[k]]), ['Found via', lead.found_via], ['Time-waster', lead.time_waster], ['Message', lead.message], ['Received', fmtDateTime(lead.created_at)], ['Lead ID', lead.id]]
     .filter(r => r[1]).map(r => `<dt>${esc(r[0])}</dt><dd>${esc(r[1])}</dd>`).join('');
   let main = '';
   if (audit && audit.result) {
