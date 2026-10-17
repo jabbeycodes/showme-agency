@@ -302,7 +302,7 @@ export function marketingPackages() {
 // ---- Flagship: managed IT ----------------------------------------------------------
 // Plans follow repositioning/managed-it-packages.md; [CONFIRM WITH JOSH] /
 // [PRICE TBD] items there are shown as placeholders here.
-const tbcText = v => (v && typeof v === 'object') ? (v.t ? `${esc(v.t)} ${tbc(v.tbc)}` : tbc(v.tbc)) : esc(v);
+const tbcText = v => (v && typeof v === 'object') ? tbc(v.tbc, v.live ?? v.t ?? '') : esc(v);
 export function managedIt() {
   const path = '/managed-it-services/';
   const crumbs = [{ name: 'Home', path: '/' }, { name: 'Solutions', path: '/solutions/' }, { name: 'Managed IT Services', path }];
@@ -345,7 +345,7 @@ export function managedIt() {
 
     <section class="section-alt" id="plans">
       <div class="wrap">
-        <div class="section-head"><p class="eyebrow">Plans</p><h2>Three monthly plans</h2><p>Every plan starts with a <a href="/technology-assessment/">Free Technology Assessment</a> and is quoted for your team after it. Pricing ${tbc('pricing unit (per user, per device or per site), minimum users, onboarding fee and prices')}. Who delivers each item and which tools we use ${tbc('delivery model and tools per plan')}.</p></div>
+        <div class="section-head"><p class="eyebrow">Plans</p><h2>Three monthly plans</h2><p>Every plan starts with a <a href="/technology-assessment/">Free Technology Assessment</a> and is quoted for your team after it. ${tbc('pricing unit (per user, per device or per site), minimum users, onboarding fee and prices', 'Pricing depends on your team, devices and plan, and is set out in your written proposal.')} ${tbc('delivery model and tools per plan', 'Your proposal also sets out who delivers each item and which tools we use.')}</p></div>
         <div class="tiers">
           ${TIERS.map(t => `<div class="tier${t.featured ? ' featured' : ''}" data-reveal>${t.featured ? '<span class="tier-badge">A common starting point</span>' : ''}<h3>${esc(t.name)}</h3><p class="tier-tagline">${esc(t.tagline)}</p><p class="tier-for">${esc(t.forWho)}</p><ul class="ticklist">${t.items.map(x => `<li>${tbcText(x)}</li>`).join('')}</ul><a class="btn${t.featured ? '' : ' secondary'}" href="/contact/">Request pricing</a></div>`).join('')}
         </div>
@@ -355,18 +355,18 @@ export function managedIt() {
           <thead><tr><th scope="col">Area</th>${TIERS.map(t => `<th scope="col">${esc(t.name)}</th>`).join('')}</tr></thead>
           <tbody>${TIER_MATRIX.map(r => `<tr><th scope="row">${esc(r[0])}</th>${r.slice(1).map(v => `<td>${tbcText(v)}</td>`).join('')}</tr>`).join('')}</tbody>
         </table></div>
-        <p class="hint" style="margin-top:14px">Backup tool and retention period ${tbc('backup tool and retention')}. Hardware, software licenses and third-party tools are billed separately ${tbc('pass-through at cost or with a markup')}.</p>
+        <p class="hint" style="margin-top:14px">${tbc('backup tool and retention', 'Backup tools and retention periods are agreed for your business.')} Hardware, software licenses and third-party tools are billed separately${tbc('pass-through at cost or with a markup', ', as set out in your proposal')}.</p>
       </div>
     </section>
 
     <section>
       <div class="wrap">
         <div class="section-head"><p class="eyebrow">How support works</p><h2>Priorities and response</h2><p>Requests are logged, given a priority and tracked to resolution. Response targets are for first response (a person acknowledges the request, starts work and gives you an update time), not fix times. We will only publish targets we can consistently meet.</p></div>
-        ${tbcBlock('support hours and time zone, how to log a request, and first-response targets per priority and plan. No out-of-hours cover is offered unless confirmed.')}
+        ${tbcBlock('support hours and time zone, how to log a request, and first-response targets per priority and plan. No out-of-hours cover is offered unless confirmed.', 'Response targets are agreed in your service agreement. Support hours and how to log a request are set out there too.')}
         <div class="table-wrap" style="margin-top:18px"><table>
           <caption class="visually-hidden">Request priorities and response targets</caption>
           <thead><tr><th scope="col">Priority</th><th scope="col">Example</th><th scope="col">Target first response</th></tr></thead>
-          <tbody>${RESPONSE_ROWS.map(r => `<tr><th scope="row">${esc(r[0])}</th><td>${esc(r[1])}</td><td>${tbc('response target')}</td></tr>`).join('')}</tbody>
+          <tbody>${RESPONSE_ROWS.map(r => `<tr><th scope="row">${esc(r[0])}</th><td>${esc(r[1])}</td><td>${tbc('response target', 'Agreed in your service agreement')}</td></tr>`).join('')}</tbody>
         </table></div>
         <p class="hint" style="margin-top:14px">Escalation: your named contact, then our founder. Response performance is included in your monthly report.</p>
       </div>
@@ -375,7 +375,7 @@ export function managedIt() {
     <section class="section-alt">
       <div class="wrap grid grid-2">
         <div class="panel"><h2 style="font-size:1.35rem">Not included</h2><p class="hint">Clear boundaries keep the service predictable.</p>${list(BOUNDARIES, 'crosslist')}</div>
-        <div class="panel"><h2 style="font-size:1.35rem">What we need from you</h2>${list(CLIENT_RESPONSIBILITIES)}<h2 style="font-size:1.35rem;margin-top:26px">Service agreement</h2><p>Each plan is covered by a written agreement setting out scope, exclusions, response targets, reporting and how either side can end the service. Term and notice ${tbc('month-to-month, 3, 6 or 12 months, and notice period')}</p></div>
+        <div class="panel"><h2 style="font-size:1.35rem">What we need from you</h2>${list(CLIENT_RESPONSIBILITIES)}<h2 style="font-size:1.35rem;margin-top:26px">Service agreement</h2><p>Each plan is covered by a written agreement setting out scope, exclusions, response targets, reporting and how either side can end the service. ${tbc('month-to-month, 3, 6 or 12 months, and notice period', 'The term and notice period are set out in your agreement.')}</p></div>
       </div>
       <div class="wrap" style="margin-top:28px">
         <h2 style="font-size:1.35rem">Optional add-ons (any plan)</h2>
@@ -451,7 +451,7 @@ export function howWeWork() {
 
     <section>
       <div class="wrap grid grid-2">
-        <div class="panel"><h2 style="font-size:1.35rem">Communication and reporting</h2>${list(['A named contact for your account', 'Requests and decisions recorded in writing', 'Regular service summaries for monthly services', 'Reviews against your technology roadmap'])}<p class="hint">Reporting cadence and channels ${tbc('standard reporting cadence and communication channels')}</p></div>
+        <div class="panel"><h2 style="font-size:1.35rem">Communication and reporting</h2>${list(['A named contact for your account', 'Requests and decisions recorded in writing', 'Regular service summaries for monthly services', 'Reviews against your technology roadmap'])}<p class="hint">${tbc('standard reporting cadence and communication channels', 'Reporting cadence and communication channels are agreed at the start of each engagement.')}</p></div>
         <div class="panel"><h2 style="font-size:1.35rem">Payment terms</h2>${list(['Projects: 50% to start and 50% on launch, after you approve a working preview', 'Monthly services: billed monthly in advance', 'Advisory: fixed fee agreed up front'])}<p><a class="text-link" href="/pricing/">How pricing works</a></p></div>
       </div>
     </section>
@@ -479,7 +479,7 @@ export function pricing() {
     <section>
       <div class="wrap grid grid-3">
         <div class="panel"><h2 style="font-size:1.3rem">Projects</h2><p>A fixed quote for a defined outcome, such as a website, a migration, an automation or an application.</p>${list(['Fixed price for the agreed scope', 'Changes quoted before any extra work', '50% to start, 50% on launch after preview approval'])}</div>
-        <div class="panel"><h2 style="font-size:1.3rem">Managed monthly services</h2><p>A predictable monthly fee for ongoing IT support and administration, marketing or application maintenance.</p>${list(['Clear inclusions and exclusions', 'Billed monthly in advance', 'Any minimum term stated in your proposal'])}<p class="hint">Pricing basis for managed IT ${tbc('per user, per device or per package')}</p></div>
+        <div class="panel"><h2 style="font-size:1.3rem">Managed monthly services</h2><p>A predictable monthly fee for ongoing IT support and administration, marketing or application maintenance.</p>${list(['Clear inclusions and exclusions', 'Billed monthly in advance', 'Any minimum term stated in your proposal'])}<p class="hint">${tbc('per user, per device or per package', 'The pricing basis for managed IT is set out in your proposal.')}</p></div>
         <div class="panel"><h2 style="font-size:1.3rem">Advisory</h2><p>Fixed-fee consultations, assessments, workshops and technology roadmaps.</p>${list(['Fee agreed up front', 'Written recommendations you keep', 'No obligation to buy implementation'])}</div>
       </div>
     </section>
@@ -521,23 +521,20 @@ export function about() {
 
     <section class="section-alt" id="leadership">
       <div class="wrap">
-        <div class="section-head"><p class="eyebrow">Leadership</p><h2>The people accountable for your work</h2></div>
-        <div class="grid grid-2">
+        <div class="section-head"><p class="eyebrow">Leadership</p><h2>Who is accountable for your work</h2></div>
+        <div style="max-width:820px">
           <div class="panel leader">
             ${founderPhoto({ size: 160 })}
-            <div><h3>${esc(site.founder)}</h3><p class="role">Founder</p><p>Joshua leads ShowMe's client relationships and delivery. He founded the agency to give growing businesses one accountable partner across technology and growth.</p><p class="hint">${tbc('full bio and LinkedIn link')}</p></div>
+            <div><h3>${esc(site.founder)}</h3><p class="role">Founder</p><p>Joshua founded ShowMe to give growing businesses one accountable partner across technology and growth, and he leads client relationships and delivery.</p>${byRegion('<p>US-based, Joshua has more than 7 years of experience and has helped over 50 businesses, working with an experienced delivery team.</p>', '<p>US-based, Joshua has more than 7 years of experience and has helped over 50 businesses, working with an experienced team in Accra.</p>')}${tbc('full bio and LinkedIn link', '')}</div>
           </div>
-          <div class="panel leader">
-            <div class="leader-placeholder">Photo to come</div>
-            <div><h3>${tbc('additional leadership profiles')}</h3><p class="hint">Further leaders will be added here with their real names, roles, photos and consent. None are shown until confirmed.</p></div>
-          </div>
+          ${tbc('additional leadership profiles', '')}
         </div>
       </div>
     </section>
 
     <section>
       <div class="wrap split">
-        <div><p class="eyebrow">Delivery</p><h2>How our services are delivered</h2><p>${tbc('who delivers managed IT services: in-house team, contractors or partners, and their experience')}</p></div>
+        <div><p class="eyebrow">Delivery</p><h2>How our services are delivered</h2>${byRegion(`<p>${tbc('who delivers managed IT services: in-house team, contractors or partners, and their experience', 'Joshua leads every engagement, working with an experienced delivery team. Your proposal sets out who delivers each part of your service.')}</p>`, '<p>Joshua leads every engagement, working with an experienced team in Accra. Your proposal sets out who delivers each part of your service.</p>')}</div>
         <div class="panel"><h3>Get in touch</h3><p>Call or text <a href="tel:${site.phoneE164}">${esc(site.phoneDisplay)}</a>, or email <a href="mailto:${site.email}">${esc(site.email)}</a>.</p><a class="btn" href="/contact/">Book a Technology Consultation</a></div>
       </div>
     </section>
@@ -559,12 +556,7 @@ export function capabilities() {
     <section>
       <div class="wrap grid grid-2">${caps}</div>
     </section>
-    <section class="section-alt">
-      <div class="wrap split">
-        <div><p class="eyebrow">See it working</p><h2>Demonstrations on request</h2><p>During a consultation we can walk you through working examples of automations, AI assistants and dashboards, using clearly labeled demo data rather than client data.</p><p>${tbc('which demonstrations are ready to show')}</p></div>
-        <div class="panel"><h3>Client examples</h3><p>${tbc('client examples with written consent: the problem, what we did, the outcome and the date')}</p><p class="hint">We do not publish client names, logos or quotes without written permission.</p></div>
-      </div>
-    </section>
+    ${tbc('which demonstrations are ready to show', '')}${tbc('client examples with written consent: the problem, what we did, the outcome and the date', '')}
     ${ctaBand()}`;
   return page({
     title: 'Capabilities | ' + site.name,
@@ -582,11 +574,11 @@ export function trust() {
     <section>
       <div class="wrap grid grid-2">
         ${card('Your accounts stay yours', '<p>Domains, licenses, workspace tenants, ad accounts, app-store listings and code repositories are set up in your name wherever possible. When an engagement ends, you keep everything.</p>')}
-        ${card('Access on a need-to-know basis', `<p>Access to client data and systems is limited to the people who need it to deliver your work, and we use strong authentication on our own accounts.</p><p class="hint">${tbc('written access policy, password manager and staff confidentiality agreements')}</p>`)}
+        ${card('Access on a need-to-know basis', `<p>Access to client data and systems is limited to the people who need it to deliver your work, and we use strong authentication on our own accounts.</p>${tbc('written access policy, password manager and staff confidentiality agreements', '')}`)}
         ${card('Confidentiality', '<p>Both parties keep each other\'s confidential information private and use it only for the engagement, during and after it. This is part of our <a href="/terms/">terms</a>.</p>')}
-        ${card('Where data is handled', `<p>We use reputable cloud providers. ${tbc('where client systems are accessed from and where client data is stored')}</p>`)}
+        ${card('Where data is handled', `<p>We use reputable cloud providers. ${tbc('where client systems are accessed from and where client data is stored', 'Where your data is stored is set out in your service agreement.')}</p>`)}
         ${card('When we process data for you', '<p>When we build or run systems for you, you remain in control of your customers\' data and we process it only on your instructions, as described in our <a href="/privacy/">privacy policy</a>.</p>')}
-        ${card('If something goes wrong', `<p>If an issue affects your data, we tell you promptly and work with you on next steps. ${tbc('notification timeframe and contact process')}</p>`)}
+        ${card('If something goes wrong', `<p>If an issue affects your data, we tell you promptly and work with you on next steps. ${tbc('notification timeframe and contact process', 'The notification process is set out in your service agreement.')}</p>`)}
         ${card('This website', '<p>Our site uses no advertising or third-party tracking cookies. Requests you send are stored with our hosting provider and used only to reply to you.</p>')}
         ${card('Questions', `<p>Ask anything about how we handle data at <a href="mailto:${site.email}">${esc(site.email)}</a>.</p>`)}
       </div>
@@ -656,8 +648,8 @@ ${a.body}
 // US-friendly order: form first, then booking (placeholder), then call or
 // text, email, and WhatsApp last.
 function contactOptions() {
-  return `<div class="side-card"><h2 style="font-size:1.1rem">Book a time</h2><p class="hint">Online scheduling ${tbc('booking calendar link (for example a 20-minute call)')}</p></div>
-          <div class="side-card"><h2 style="font-size:1.1rem">Call or text</h2><p><a class="btn small" href="tel:${site.phoneE164}">Call ${esc(site.phoneDisplay)}</a> <a class="btn small secondary" href="sms:${site.phoneE164}">Text us</a></p><p class="hint">Hours ${tbc('phone and text hours and time zone')}</p></div>
+  return `<div class="side-card"><h2 style="font-size:1.1rem">Book a time</h2><p class="hint">${tbc('booking calendar link (for example a 20-minute call)', 'Send the form on this page or call or text us, and we will arrange a time that suits you.')}</p></div>
+          <div class="side-card"><h2 style="font-size:1.1rem">Call or text</h2><p><a class="btn small" href="tel:${site.phoneE164}">Call ${esc(site.phoneDisplay)}</a> <a class="btn small secondary" href="sms:${site.phoneE164}">Text us</a></p>${tbc('phone and text hours and time zone', '')}</div>
           <div class="side-card"><h2 style="font-size:1.1rem">Email</h2><p><a href="mailto:${site.email}">${esc(site.email)}</a></p></div>
           <div class="side-card"><h2 style="font-size:1.1rem">WhatsApp</h2><p><a href="${WA}" target="_blank" rel="noopener">Message us on WhatsApp</a></p></div>`;
 }
@@ -725,7 +717,7 @@ export function technologyAssessment() {
           <div class="grid grid-2" style="margin:20px 0 36px">${areas.map(p => `<div class="panel"><h3>${esc(p[0])}</h3><p class="hint">${esc(p[1])}</p></div>`).join('')}</div>
           <h2>How it works</h2>
           <ol class="steps" style="margin-top:20px">${steps.map(x => `<li><h3>${esc(x.t)}</h3><p>${esc(x.d)}</p></li>`).join('')}</ol>
-          <p class="hint">Report turnaround ${tbc('report turnaround, for example within 5 business days')}. In-person assessments ${tbc('whether in-person assessments are offered, and where')}</p>
+          <p class="hint">${tbc('report turnaround, for example within 5 business days', 'We will confirm when to expect your report when we schedule your assessment.')} ${tbc('whether in-person assessments are offered, and where', 'Assessments are carried out remotely unless we agree otherwise.')}</p>
           <div style="margin-top:32px">${faqList(faqs)}</div>
         </div>
         <aside class="detail-side" aria-label="Request your assessment">
@@ -750,7 +742,7 @@ export const FAQ_GROUPS = [
     { q: 'Do I have to buy everything from you?', a: 'No. Many clients start with one area. Because one team understands all four, it is easier to add more later.' },
     { q: 'Do I own what you build?', a: 'Yes. Accounts, domains, licenses, content, brand assets and the code written for you are yours once paid for.' },
     { q: 'Where is ShowMe based?', a: 'Our founder, Joshua Abbey, is based in the United States and leads every engagement. We work with clients by video, phone and shared workspaces.' },
-    { q: 'What time zone do you work in?', a: 'We schedule calls in your local time zone, including US Central and Eastern time. Support hours for managed IT are set out in your service agreement.', aHtml: 'We schedule calls in your local time zone, including US Central and Eastern time. Support hours for managed IT are set out in your service agreement. ' + tbc('standard support hours and time zone') },
+    { q: 'What time zone do you work in?', a: 'We schedule calls in your local time zone, including US Central and Eastern time. Support hours for managed IT are set out in your service agreement.', aHtml: 'We schedule calls in your local time zone, including US Central and Eastern time. Support hours for managed IT are set out in your service agreement.' + tbc('standard support hours and time zone', '') },
     { q: 'Do you require long contracts?', a: 'Projects are fixed-scope, with no ongoing commitment. Any minimum term and notice period for a monthly service are stated in your proposal before you sign.' },
     { q: 'How does the Free Technology Assessment work?', a: 'You fill in a short intake form, we check public basics such as your website and domain, and then we have a 45-minute call about how your business uses technology. You receive a written report with your top priorities. It is free and there is no obligation.' }
   ] },
@@ -812,7 +804,7 @@ function usPrivacyBody(mail) {
           <li>To keep our website working properly and understand overall usage.</li>
           <li>To meet legal and accounting obligations.</li>
         </ul>
-        <p>We only send marketing emails if you have agreed to receive them. Every marketing email identifies us, includes our postal address and a working unsubscribe link, as required by the CAN-SPAM Act, and we honor opt-out requests promptly. Postal address ${tbc('business postal address')}</p>
+        <p>We only send marketing emails if you have agreed to receive them. Every marketing email identifies us, includes our postal address and a working unsubscribe link, as required by the CAN-SPAM Act, and we honor opt-out requests promptly. ${tbc('business postal address', '')}</p>
         <h2>4. Who we share information with</h2>
         <p>We do not sell your personal information, and we do not share it for cross-context behavioral advertising. We share it only with service providers that help us run the business, such as website hosting, email and messaging providers, payment processors and the productivity tools we use to deliver your work, under appropriate confidentiality terms. We may also disclose information where required by law.</p>
         <h2>5. Where information is processed</h2>
@@ -838,7 +830,7 @@ function usPrivacyBody(mail) {
 function usTermsBody(mail) {
   return `
         <h2>1. About these terms</h2>
-        <p>These terms apply between ShowMe Digital Agency ("ShowMe", "we", "us") and you, the client. They apply to every engagement together with your written proposal or service agreement; if they conflict, the proposal or agreement wins for that engagement. Legal entity ${tbc('legal entity name and state')}</p>
+        <p>These terms apply between ShowMe Digital Agency ("ShowMe", "we", "us") and you, the client. They apply to every engagement together with your written proposal or service agreement; if they conflict, the proposal or agreement wins for that engagement. ${tbc('legal entity name and state', '')}</p>
         <h2>2. Proposals and scope</h2>
         <ul>
           <li>Every engagement starts with a written proposal setting out scope, deliverables, exclusions, price, timeline and what we need from you.</li>
@@ -898,7 +890,7 @@ function usTermsBody(mail) {
         <h2>16. Using this website</h2>
         <p>Content on this website is general information, not legal, financial or tax advice. Please do not misuse the site or its forms.</p>
         <h2>17. Governing law and disputes</h2>
-        <p>The governing law and jurisdiction for an engagement are stated in your proposal or service agreement; otherwise these terms are governed by the laws of the state named here ${tbc('governing-law state')}. We will first try to resolve any dispute in good faith.</p>
+        <p>The governing law and jurisdiction for an engagement are stated in your proposal or service agreement.${tbc('governing-law state', '')} We will first try to resolve any dispute in good faith.</p>
         <h2>18. Changes and contact</h2>
         <p>We may update these terms; the version in force when you approve a proposal applies to that engagement. Questions: ${mail}.</p>`;
 }

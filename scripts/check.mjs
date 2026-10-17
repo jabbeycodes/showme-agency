@@ -97,6 +97,8 @@ async function main() {
     const US = usView(raw);
     const GH = ghView(raw);
     tbcCount += (raw.match(/\[TO CONFIRM:/g) || []).length;
+    if (/TO CONFIRM/.test(raw)) errors.push(`${rel}: unresolved "TO CONFIRM" placeholder on page (production must never show one)`);
+    if (/<!--tbc:\d+-->|class="tbc(-block)?"/.test(raw)) errors.push(`${rel}: placeholder marker left in page`);
 
     // ---- Region, claims and spelling (every hit is reported)
     const report = (re, text, label) => { for (const m of hits(re, text)) errors.push(`${rel}: ${label} "${m[0]}": …${context(text, m)}…`); };
@@ -227,7 +229,7 @@ async function main() {
     }
   }
 
-  console.log(`Checked ${files.length} HTML pages in US and Ghana views (${tbcCount} TO CONFIRM placeholders rendered).`);
+  console.log(`Checked ${files.length} HTML pages in US and Ghana views (${tbcCount} TO CONFIRM placeholders rendered; any is an error).`);
   if (warnings.length) { console.log(`\nWarnings (${warnings.length}):`); warnings.forEach(w => console.log('  ! ' + w)); }
   if (errors.length) {
     console.error(`\nErrors (${errors.length}):`);

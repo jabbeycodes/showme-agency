@@ -185,7 +185,7 @@ export function industryPage(i) {
           <p class="eyebrow">Common challenges</p>
           <h2>What we often hear</h2>
           ${list(i.challenges, 'crosslist')}
-          ${i.note ? `<p class="note">${esc(i.note)}${i.noteTbc ? ' ' + tbc(i.noteTbc) : ''}</p>` : ''}
+          ${i.note ? `<p class="note">${esc(i.note)}${i.noteTbc ? tbc(i.noteTbc) : ''}</p>` : ''}
         </div>
         <div class="panel">
           <h3>Where to start</h3>

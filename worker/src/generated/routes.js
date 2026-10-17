@@ -26,4 +26,4 @@ export const REDIRECTS = {
   "/free-audit/": "/technology-assessment/",
   "/services/seo-programme/": "/services/seo-program/"
 };
-export const SECURITY_TXT = "Contact: mailto:info@showmeworld.app\nExpires: 2027-09-11T00:00:00.000Z\nPreferred-Languages: en\nCanonical: https://agency.showmeworld.app/.well-known/security.txt\n";
+export const SECURITY_TXT = "Contact: mailto:info@showmeworld.app\nExpires: 2027-09-12T00:00:00.000Z\nPreferred-Languages: en\nCanonical: https://agency.showmeworld.app/.well-known/security.txt\n";

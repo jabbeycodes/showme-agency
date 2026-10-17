@@ -50,10 +50,18 @@ export function ghOnly(html) { return html ? `<template data-gh-block>${html}</t
 export function byRegion(us, gh, tag = 'div') { return usOnly(us, tag) + ghOnly(gh); }
 
 // ---- Placeholders awaiting Josh's confirmation -----------------------------
-// Rendered visibly so nobody mistakes them for confirmed facts; the build
-// lists every one in repositioning/placeholders.md.
-export function tbc(text) { return `<span class="tbc">[TO CONFIRM: ${esc(text)}]</span>`; }
-export function tbcBlock(text) { return `<p class="tbc-block">[TO CONFIRM: ${esc(text)}]</p>`; }
+// Production renders safe, general wording (`live`) that makes no specific
+// commitment. Each call leaves an invisible marker that the build strips and
+// uses to list every open item, with its live wording, in
+// repositioning/placeholders.md. The check fails if "TO CONFIRM" ever renders.
+export const PLACEHOLDERS = []; // { question, live }
+function tbcMark(question, live) {
+  let i = PLACEHOLDERS.findIndex(x => x.question === question && x.live === live);
+  if (i < 0) i = PLACEHOLDERS.push({ question, live }) - 1;
+  return `<!--tbc:${i}-->`;
+}
+export function tbc(question, live = '') { return (live ? esc(live) : '') + tbcMark(question, live); }
+export function tbcBlock(question, live = '') { return (live ? `<p>${esc(live)}</p>` : '') + tbcMark(question, live); }
 
 // ---- Icons (single consistent line set, 24px grid) -------------------------
 const ICON_PATHS = {
@@ -255,7 +263,7 @@ export function footer() {
       <div class="footer-brand">
         <a class="brand" href="/" aria-label="ShowMe Digital Agency home">${BRAND_FOOTER}</a>
         <p>Managed IT, AI and automation, software and digital marketing from one accountable technology partner. ${esc(site.facts.experience)} of experience and ${esc(site.facts.businessesHelped)} businesses helped.</p>
-        ${byRegion(`<p>Founded by ${esc(site.founder)} · ${tbc('city, state')}</p>`, `<p>${esc(site.locationLine)}.</p>`)}
+        ${byRegion(`<p>Founded by ${esc(site.founder)} · ${tbc('city, state', 'US-based')}</p>`, `<p>${esc(site.locationLine)}.</p>`)}
         ${regionSwitch()}
       </div>
       ${col('Solutions', [{ href: '/managed-it-services/', label: 'Managed IT Services' }, ...PILLARS.map(p => ({ href: '/solutions/' + p.slug + '/', label: p.short }))], ghServices)}

@@ -109,7 +109,7 @@ export const TIERS = [
     forWho: 'Small teams (about 3 to 10 people) that need someone to call and their accounts set up properly.',
     items: [
       'Remote help desk by email and phone, business hours',
-      { t: 'Monthly help desk hours cap', tbc: 'help desk hours included per month' },
+      { t: 'Monthly help desk hours cap', tbc: 'help desk hours included per month', live: 'Monthly help desk hours, set in your service agreement' },
       'Microsoft 365 or Google Workspace admin: users, passwords, mailboxes, sign-in setup (including MFA)',
       'Email delivery settings (SPF, DKIM, DMARC) checked and set up',
       'Device inventory and an update check',
@@ -123,7 +123,7 @@ export const TIERS = [
     forWho: 'Growing teams (about 10 to 50 people) that rely on their systems every day.',
     items: [
       'Everything in Essentials',
-      { t: 'Remote help desk for covered issues without an hours cap', tbc: 'fair-use policy' },
+      { t: 'Remote help desk for covered issues without an hours cap', tbc: 'fair-use policy', live: 'Remote help desk for covered issues without an hours cap, under the fair-use terms in your agreement' },
       'Remote device monitoring and scheduled updates',
       'Backup extended to key devices or a local server, with a quarterly restore test',
       'Remote support for router and Wi-Fi',
@@ -138,7 +138,7 @@ export const TIERS = [
     forWho: 'Businesses that want an outsourced IT department, including planning and vendor management.',
     items: [
       'Everything in Business',
-      { t: 'A named technology lead acting as your virtual IT manager', tbc: 'who the named lead is' },
+      { t: 'A named technology lead acting as your virtual IT manager', tbc: 'who the named lead is', live: 'A named technology lead acting as your virtual IT manager' },
       'Full device lifecycle: purchasing advice, setup, rollout and retirement',
       'Network design and documentation, including staff and guest Wi-Fi',
       'Vendor management: internet provider, software vendors, printers',
@@ -152,7 +152,7 @@ export const TIERS = [
 // Comparison rows: [label, essentials, business, complete]. Cell values are
 // plain text, or { tbc: '…' } for an item still to be confirmed.
 export const TIER_MATRIX = [
-  ['Remote help desk', 'Business hours, capped', 'Business hours, no cap for covered issues', { tbc: 'extended-hours option' }],
+  ['Remote help desk', 'Business hours, capped', 'Business hours, no cap for covered issues', { tbc: 'extended-hours option', live: 'Available by agreement' }],
   ['Microsoft 365 / Google Workspace admin', 'Users, passwords, mailboxes, sign-in setup (incl. MFA), email delivery settings', '+ groups, shared drives, license management', '+ advanced configuration, retention settings, tenant documentation'],
   ['Device management', 'Inventory and update checks', 'Remote monitoring and scheduled updates', '+ setup, rollout and retirement (full lifecycle)'],
   ['Backup', 'Cloud email and file backup', '+ key devices or server, quarterly restore test', '+ monthly restore test, documented recovery steps'],
@@ -160,7 +160,7 @@ export const TIER_MATRIX = [
   ['Network', 'Advice only', 'Remote support for router and Wi-Fi', '+ network design, staff and guest Wi-Fi, documentation'],
   ['Planning', 'Annual check-in', 'Quarterly review', 'Monthly check-in and quarterly roadmap (virtual IT manager)'],
   ['Reporting', 'Quarterly summary', 'Monthly report', 'Monthly report and quarterly business review'],
-  ['On-site visits', 'Not included (billable)', { tbc: 'on-site visits' }, { tbc: 'included visits per month or quarter' }]
+  ['On-site visits', 'Not included (billable)', { tbc: 'on-site visits', live: 'By agreement' }, { tbc: 'included visits per month or quarter', live: 'As agreed in your plan' }]
 ];
 export const BOUNDARIES = [
   'Hardware, software licenses and third-party subscriptions (billed separately at cost or as quoted)',
@@ -172,12 +172,12 @@ export const BOUNDARIES = [
   'Out-of-hours monitoring or support unless separately agreed and confirmed'
 ];
 export const ADDONS = [
-  ['On-site support', 'Scheduled or urgent visits', { tbc: 'travel area per city' }],
-  ['After-hours support', 'Help outside standard hours for critical issues', { tbc: 'availability' }],
+  ['On-site support', 'Scheduled or urgent visits', { tbc: 'travel area per city', live: 'Quoted for your location' }],
+  ['After-hours support', 'Help outside standard hours for critical issues', { tbc: 'after-hours availability', live: 'By agreement' }],
   ['Cloud migration', 'Move email and files to Microsoft 365 or Google Workspace, or between them', 'Scoped per project'],
   ['New office or network setup', 'Router and Wi-Fi design and installation, cabling coordination, printers', 'Hardware separate'],
   ['Device rollout', 'New laptops and desktops bought, set up and delivered ready to use', 'Hardware separate'],
-  ['Team tool training', 'Short sessions on Microsoft 365 or Google Workspace, shared drives, Teams or Meet', { tbc: 'attendees per session' }],
+  ['Team tool training', 'Short sessions on Microsoft 365 or Google Workspace, shared drives, Teams or Meet', { tbc: 'attendees per session', live: 'Quoted per session' }],
   ['Website care', 'Hosting oversight, updates, backups, uptime checks and small edits', 'Redesigns quoted separately'],
   ['Marketing growth', 'SEO, Google Business Profile, social media and ads management', 'Ad spend paid separately'],
   ['AI & automation build', 'A defined automation, chatbot or AI assistant', 'Scoped after an automation review'],
