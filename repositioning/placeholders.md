@@ -7,7 +7,7 @@ The check fails the build if "TO CONFIRM" ever appears on a page. Regenerated on
 | # | To confirm | Live wording used | Pages |
 |---|---|---|---|
 | 1 | standard support hours and time zone | _(nothing shown until confirmed)_ | /faq/ |
-| 2 | city, state | US-based | every page (68; site footer) |
+| 2 | city, state | US-based | every page (69; site footer) |
 | 3 | pricing unit (per user, per device or per site), minimum users, onboarding fee and prices | Pricing depends on your team, devices and plan, and is set out in your written proposal. | /managed-it-services/ |
 | 4 | delivery model and tools per plan | Your proposal also sets out who delivers each item and which tools we use. | /managed-it-services/ |
 | 5 | help desk hours included per month | Monthly help desk hours, set in your service agreement | /managed-it-services/ |

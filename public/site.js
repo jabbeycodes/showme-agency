@@ -97,7 +97,8 @@
       timeline: 'Timeline',
       services: 'Services of interest',
       challenge: 'Biggest challenge',
-      consent: 'OK to review public website and domain info'
+      consent: 'OK to review public website and domain info',
+      tools_used: 'Tools they use'
     };
 
     function val(name) {

@@ -36,7 +36,12 @@ function reg(routePath, html, priority = 0.7, changefreq = 'monthly') {
 // ---- Register every page ----------------------------------------------------
 reg('/', pages.home(), 1.0, 'weekly');
 reg('/solutions/', pages.solutionsHub(), 0.9);
-for (const p of PILLARS) reg('/solutions/' + p.slug + '/', pillarPage(p, p.slug === 'digital-marketing' ? pages.marketingPackages() : ''), 0.9);
+for (const p of PILLARS) {
+  const extra = p.slug === 'digital-marketing' ? pages.marketingPackages()
+    : p.slug === 'ai-automation' ? pages.aiAgentSetupBand()
+    : '';
+  reg('/solutions/' + p.slug + '/', pillarPage(p, extra), 0.9);
+}
 reg('/managed-it-services/', pages.managedIt(), 1.0);
 for (const s of services) reg('/services/' + s.slug + '/', serviceDetail(s), 0.7);
 reg('/industries/', pages.industriesHub(), 0.8);
@@ -51,6 +56,7 @@ reg('/insights/', pages.insightsIndex(), 0.6, 'weekly');
 for (const a of insights) reg('/insights/' + a.slug + '/', pages.insightArticle(a), 0.4);
 reg('/contact/', pages.contact(), 0.9, 'yearly');
 reg('/technology-assessment/', pages.technologyAssessment(), 0.9);
+reg('/ai-agent-setup/', pages.aiAgentSetup(), 0.9);
 reg('/faq/', pages.faqPage(), 0.5);
 reg('/privacy/', pages.privacy(), 0.3, 'yearly');
 reg('/terms/', pages.terms(), 0.3, 'yearly');

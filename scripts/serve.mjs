@@ -27,6 +27,11 @@ async function readIfExists(p) {
 
 const server = http.createServer(async (req, res) => {
   let pathname = decodeURIComponent(req.url.split('?')[0]);
+  // Mirror the preview worker: forms succeed locally without storing a lead.
+  if (req.method === 'POST' && (pathname === '/api/lead' || pathname === '/api/event')) {
+    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+    return res.end(JSON.stringify({ ok: true, preview: true }));
+  }
   const candidates = [];
   if (pathname.endsWith('/')) candidates.push(path.join(OUT, pathname, 'index.html'));
   else {
