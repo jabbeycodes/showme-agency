@@ -1,242 +1,246 @@
 {
   "/": {
-    "hash": "77fde01745f6a804",
-    "date": "2026-10-17"
+    "hash": "8d08018c624b7443",
+    "date": "2026-11-07"
   },
   "/solutions/": {
-    "hash": "1938eb4793beb040",
-    "date": "2026-10-17"
+    "hash": "2162826df3dee22c",
+    "date": "2026-11-07"
   },
   "/solutions/managed-it/": {
-    "hash": "b382f259e00a9234",
-    "date": "2026-10-17"
+    "hash": "c446ae4a357a574a",
+    "date": "2026-11-07"
   },
   "/solutions/digital-marketing/": {
-    "hash": "fb35e52c37086c26",
-    "date": "2026-10-17"
+    "hash": "cdf94a420896ff31",
+    "date": "2026-11-07"
   },
   "/solutions/ai-automation/": {
-    "hash": "ff15eb80e715eb94",
-    "date": "2026-10-17"
+    "hash": "617c964bed8a9b70",
+    "date": "2026-11-07"
   },
   "/solutions/software-consulting/": {
-    "hash": "094c27dfdafba77a",
-    "date": "2026-10-17"
+    "hash": "5e8e756ed0bb1e4c",
+    "date": "2026-11-07"
   },
   "/managed-it-services/": {
-    "hash": "7723c6fc4c8c3871",
-    "date": "2026-10-17"
+    "hash": "1d62ae4b88eee44e",
+    "date": "2026-11-07"
   },
   "/services/business-websites/": {
-    "hash": "92f661704f681edb",
-    "date": "2026-10-17"
+    "hash": "23a692ee4e590853",
+    "date": "2026-11-07"
   },
   "/services/ecommerce/": {
-    "hash": "93d12467dae9de56",
-    "date": "2026-10-17"
+    "hash": "71537927f3611d1e",
+    "date": "2026-11-07"
   },
   "/services/landing-pages-funnels/": {
-    "hash": "c4cb4956d1841fab",
-    "date": "2026-10-17"
+    "hash": "ebebdee33fea02b7",
+    "date": "2026-11-07"
   },
   "/services/booking-online-ordering/": {
-    "hash": "38039cbb6279aedf",
-    "date": "2026-10-17"
+    "hash": "e17d7d6c35b241ba",
+    "date": "2026-11-07"
   },
   "/services/website-care/": {
-    "hash": "c531b0e6688c3eb5",
-    "date": "2026-10-17"
+    "hash": "e624f469234d97e5",
+    "date": "2026-11-07"
   },
   "/services/growth-retainer/": {
-    "hash": "2ea7723f87b8a291",
-    "date": "2026-10-17"
+    "hash": "7c3b93183c75671f",
+    "date": "2026-11-07"
   },
   "/services/local-seo-gbp/": {
-    "hash": "a8d8867eb5367808",
-    "date": "2026-10-17"
+    "hash": "248fdbd0ae40af79",
+    "date": "2026-11-07"
   },
   "/services/seo-program/": {
-    "hash": "1afd5f551b53bf0b",
-    "date": "2026-10-17"
+    "hash": "c8e986f4ed13125a",
+    "date": "2026-11-07"
   },
   "/services/ai-search-visibility/": {
-    "hash": "7d5c0cbca0900991",
-    "date": "2026-10-17"
+    "hash": "cc669534c6f34cec",
+    "date": "2026-11-07"
   },
   "/services/paid-ads/": {
-    "hash": "02fa471626e0ae92",
-    "date": "2026-10-17"
+    "hash": "65e5b4e96273427c",
+    "date": "2026-11-07"
   },
   "/services/social-media/": {
-    "hash": "9389492024df9942",
-    "date": "2026-10-17"
+    "hash": "b0dc81a7498efcaa",
+    "date": "2026-11-07"
   },
   "/services/content-marketing/": {
-    "hash": "37fad9df9e8f19e7",
-    "date": "2026-10-17"
+    "hash": "2ba8ac7faf3df5fc",
+    "date": "2026-11-07"
   },
   "/services/email-sms/": {
-    "hash": "9d6c2678a9f92df8",
-    "date": "2026-10-17"
+    "hash": "493e9b5a1093be3e",
+    "date": "2026-11-07"
   },
   "/services/analytics-reporting/": {
-    "hash": "cd3d6dbe12707b13",
-    "date": "2026-10-17"
+    "hash": "2a3d1a51c49b38ef",
+    "date": "2026-11-07"
   },
   "/services/brand-identity/": {
-    "hash": "ab3d93bf991bb115",
-    "date": "2026-10-17"
+    "hash": "4941d06800c5133e",
+    "date": "2026-11-07"
   },
   "/services/marketing-collateral/": {
-    "hash": "fe0183e0530050e0",
-    "date": "2026-10-17"
+    "hash": "6f8a29b8d0120fc2",
+    "date": "2026-11-07"
   },
   "/services/pitch-decks/": {
-    "hash": "b547ea5fac46098e",
-    "date": "2026-10-17"
+    "hash": "597ce6a7a283e1b9",
+    "date": "2026-11-07"
   },
   "/services/microsoft-365/": {
-    "hash": "d925c534ce21ce2c",
-    "date": "2026-10-17"
+    "hash": "c4c63cae3ec5e497",
+    "date": "2026-11-07"
   },
   "/services/cloud-document-management/": {
-    "hash": "53a514ed2e3d136f",
-    "date": "2026-10-17"
+    "hash": "f40a5fcbb3d96c87",
+    "date": "2026-11-07"
   },
   "/services/crm-setup/": {
-    "hash": "0ec297032d517c6f",
-    "date": "2026-10-17"
+    "hash": "0629a5ef84b1208c",
+    "date": "2026-11-07"
   },
   "/services/technology-consulting/": {
-    "hash": "f29fec73c12cf894",
-    "date": "2026-10-17"
+    "hash": "1205fa6220f8ff53",
+    "date": "2026-11-07"
   },
   "/services/ai-assistants-chatbots/": {
-    "hash": "16669d19ae3ff9f1",
-    "date": "2026-10-17"
+    "hash": "7b55035dd309e543",
+    "date": "2026-11-07"
   },
   "/services/business-process-automation/": {
-    "hash": "84d8cd0521af9269",
-    "date": "2026-10-17"
+    "hash": "c71d98cf2db812ca",
+    "date": "2026-11-07"
   },
   "/services/automation-audit/": {
-    "hash": "982cf399ecf907e6",
-    "date": "2026-10-17"
+    "hash": "4ca4eb6da52a5fe3",
+    "date": "2026-11-07"
   },
   "/services/ai-knowledge-base/": {
-    "hash": "8937c12dc195d495",
-    "date": "2026-10-17"
+    "hash": "b394d0c72613ccaa",
+    "date": "2026-11-07"
   },
   "/services/custom-web-apps/": {
-    "hash": "b441ab2e6045e274",
-    "date": "2026-10-17"
+    "hash": "57fd1b3f97c404e7",
+    "date": "2026-11-07"
   },
   "/services/mobile-apps/": {
-    "hash": "1931b5e1881fbbce",
-    "date": "2026-10-17"
+    "hash": "b712aa5ef02e1e42",
+    "date": "2026-11-07"
   },
   "/services/dashboards-internal-systems/": {
-    "hash": "393e1456d45f4700",
-    "date": "2026-10-17"
+    "hash": "72e362aa39c82491",
+    "date": "2026-11-07"
   },
   "/services/integrations-saas/": {
-    "hash": "692c08e901e3895d",
-    "date": "2026-10-17"
+    "hash": "b45940829a3d4cfb",
+    "date": "2026-11-07"
   },
   "/industries/": {
-    "hash": "05034bb51feff165",
-    "date": "2026-10-17"
+    "hash": "ec448205956f1992",
+    "date": "2026-11-07"
   },
   "/industries/healthcare-clinics/": {
-    "hash": "8392207c95774efe",
-    "date": "2026-10-17"
+    "hash": "b9826c332fdab95c",
+    "date": "2026-11-07"
   },
   "/industries/professional-services/": {
-    "hash": "b7a701cb50a9e9d2",
-    "date": "2026-10-17"
+    "hash": "58c39c2043682d38",
+    "date": "2026-11-07"
   },
   "/industries/schools/": {
-    "hash": "08cb8da078dddb2a",
-    "date": "2026-10-17"
+    "hash": "af11409f83e0fb74",
+    "date": "2026-11-07"
   },
   "/industries/nonprofits/": {
-    "hash": "2844c06932111bf6",
-    "date": "2026-10-17"
+    "hash": "6903ef2c60fd9a80",
+    "date": "2026-11-07"
   },
   "/industries/retail-hospitality/": {
-    "hash": "91e87dc64932f565",
-    "date": "2026-10-17"
+    "hash": "cfad835c9db9fbd8",
+    "date": "2026-11-07"
   },
   "/industries/startups-smes/": {
-    "hash": "d80996a97e7d5a50",
-    "date": "2026-10-17"
+    "hash": "4e73b6f91c7974fe",
+    "date": "2026-11-07"
   },
   "/industries/home-services-contractors/": {
-    "hash": "44588c91fd567cdb",
-    "date": "2026-10-17"
+    "hash": "0f58a9e6c530ec7b",
+    "date": "2026-11-07"
   },
   "/industries/salons-spas/": {
-    "hash": "25fb3e02973b7357",
-    "date": "2026-10-17"
+    "hash": "ba3b78da46f46a16",
+    "date": "2026-11-07"
   },
   "/industries/auto-services/": {
-    "hash": "7a80618a8ffe1cd0",
-    "date": "2026-10-17"
+    "hash": "ae3de12688d46af2",
+    "date": "2026-11-07"
   },
   "/industries/fitness-studios/": {
-    "hash": "69a4cc2314752e3e",
-    "date": "2026-10-17"
+    "hash": "f592c68c351cbedc",
+    "date": "2026-11-07"
   },
   "/how-we-work/": {
-    "hash": "b039cacee01f2273",
-    "date": "2026-10-17"
+    "hash": "8f47be6d56aaddd6",
+    "date": "2026-11-07"
   },
   "/pricing/": {
-    "hash": "49a8d05cfaeb9fb3",
-    "date": "2026-10-17"
+    "hash": "9b5198814aa8a4d4",
+    "date": "2026-11-07"
   },
   "/about/": {
-    "hash": "8e0a1b0c90b2f0ff",
-    "date": "2026-10-17"
+    "hash": "2d3879e6e4320166",
+    "date": "2026-11-07"
   },
   "/capabilities/": {
-    "hash": "61d265814ab44de7",
-    "date": "2026-10-17"
+    "hash": "9a46de0f993b49c8",
+    "date": "2026-11-07"
   },
   "/trust/": {
-    "hash": "9ad36fb887f97338",
-    "date": "2026-10-17"
+    "hash": "03cc11c736c762e8",
+    "date": "2026-11-07"
   },
   "/insights/": {
-    "hash": "36ffae39c5adbbd8",
-    "date": "2026-10-17"
+    "hash": "8ace2b679b2664ac",
+    "date": "2026-11-07"
   },
   "/insights/get-recommended-by-ai-assistants/": {
-    "hash": "8dfcce52222c7433",
-    "date": "2026-10-17"
+    "hash": "ba5e972ff8c44874",
+    "date": "2026-11-07"
   },
   "/insights/follow-up-every-whatsapp-lead/": {
-    "hash": "c4f8f39255872df6",
-    "date": "2026-10-17"
+    "hash": "0f7d2f398e3707b8",
+    "date": "2026-11-07"
   },
   "/contact/": {
-    "hash": "04a80b5639620746",
-    "date": "2026-10-17"
+    "hash": "d91d5fd7728aec7c",
+    "date": "2026-11-07"
   },
   "/technology-assessment/": {
-    "hash": "3882f624e7511536",
-    "date": "2026-10-17"
+    "hash": "84eb9a06f96ef7fa",
+    "date": "2026-11-07"
+  },
+  "/ai-agent-setup/": {
+    "hash": "f6d6bc8a8d815464",
+    "date": "2026-11-07"
   },
   "/faq/": {
-    "hash": "ce498a7053f4da3e",
-    "date": "2026-10-17"
+    "hash": "50174305242ff7df",
+    "date": "2026-11-07"
   },
   "/privacy/": {
-    "hash": "f3952cad4d8aab89",
-    "date": "2026-10-17"
+    "hash": "de1a81080bb8ed37",
+    "date": "2026-11-07"
   },
   "/terms/": {
-    "hash": "831ed8c5f2a7b9bd",
-    "date": "2026-10-17"
+    "hash": "446fa794e9193ca7",
+    "date": "2026-11-07"
   }
 }

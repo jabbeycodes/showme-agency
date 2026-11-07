@@ -228,7 +228,7 @@ export function header() {
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="navPanel" aria-label="Menu"><span></span></button>
     <div class="nav-panel" id="navPanel">
       <ul class="nav-links">
-      ${menu('menuSolutions', 'Solutions', solutions, '<div class="menu-foot"><a href="/solutions/">All solutions</a></div>')}
+      ${menu('menuSolutions', 'Solutions', solutions, '<div class="menu-foot"><a href="/ai-agent-setup/">AI agent setup<small>Configure an account, connect tools, hand over a workflow</small></a><a href="/solutions/">All solutions</a></div>')}
       ${menu('menuIndustries', 'Industries', inds, `<div class="menu-foot">${ghInds ? `<ul>${ghInds}</ul>` : ''}<a href="/industries/">All industries</a></div>`)}
       <li><a href="/how-we-work/">How we work</a></li>
       <li><a href="/insights/">Insights</a></li>
@@ -280,6 +280,7 @@ export function footer() {
       ${col('Contact', [
         { href: '/contact/', label: 'Book a Technology Consultation' },
         { href: '/technology-assessment/', label: 'Free Technology Assessment' },
+        { href: '/ai-agent-setup/', label: 'AI agent setup' },
         { href: 'tel:' + site.phoneE164, label: 'Call ' + site.phoneDisplay },
         { href: 'sms:' + site.phoneE164, label: 'Text ' + site.phoneDisplay },
         { href: 'mailto:' + site.email, label: site.email },
@@ -340,7 +341,7 @@ export function page({ title, description, path, jsonLd = [], main, noindex, ogT
   return `${head({ title, description, path, jsonLd, noindex, ogType, ogImage })}
 <body>
   ${header()}
-  <main id="main">
+  <main id="main" tabindex="-1">
 ${main}
   </main>
   ${footer()}

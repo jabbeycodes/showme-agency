@@ -3,7 +3,7 @@
 // full HTML document string. Region differences use usOnly/ghOnly/byRegion
 // (see render.mjs); placeholders awaiting Josh use tbc()/tbcBlock().
 // ============================================================================
-import { site, serviceBySlug, insights as ALL_INSIGHTS } from './data.mjs';
+import { site, serviceBySlug, insights as ALL_INSIGHTS, wa } from './data.mjs';
 import { BUNDLES, PAYMENT } from './prices.mjs';
 import {
   PILLARS, TIERS, TIER_MATRIX, BOUNDARIES, ADDONS, CLIENT_RESPONSIBILITIES, RESPONSE_ROWS, ONBOARDING,
@@ -16,6 +16,7 @@ import {
 import { ghPrivacyBody, ghTermsBody } from './legal-gh.mjs';
 
 const WA = 'https://wa.me/' + site.whatsappNumber;
+const WA_AGENT_SETUP = wa("Hi ShowMe, I would like to talk about AI agent setup for my business.\n\nMy name:\nBusiness:\nThe workflow I have in mind:\nTools we use:");
 const list = (items, cls = 'ticklist') => `<ul class="${cls}">${items.map(d => `<li>${esc(d)}</li>`).join('')}</ul>`;
 export const HERO = {
   h1: 'Technology That Runs Your Business. Solutions That Power Its Growth.',
@@ -265,6 +266,12 @@ export function solutionsHub() {
       <div class="wrap">
         <a class="card" href="/managed-it-services/" style="margin-bottom:28px" data-reveal>${icon('flagship')}<p class="card-kicker">Flagship service</p><h2 style="font-size:1.45rem">Your Complete IT Department. Without the Cost of Building One.</h2><p>Managed IT as a monthly service: support, administration, devices, backups and planning.</p><span class="card-cta">See the managed IT packages</span></a>
         <div class="grid grid-2">${pillarCards()}</div>
+        <a class="card aas-hub-card" href="/ai-agent-setup/" data-reveal>
+          <p class="card-kicker">Current offer</p>
+          <h2>AI agent setup for small businesses</h2>
+          <p>Configure an AI agent account, connect supported tools with the owner's permission, set up one useful workflow, test it and hand it over.</p>
+          <span class="card-cta">See how it works</span>
+        </a>
       </div>
     </section>
 
@@ -932,6 +939,244 @@ export function terms() {
     usBody: usTermsBody(mail), ghBody: ghTermsBody(mail),
     title: 'Terms of Service | ' + site.name,
     description: 'ShowMe Digital Agency terms: proposals and scope, payment, preview before final payment, managed services, ownership, confidentiality and liability.'
+  });
+}
+
+// ---- AI agent setup (campaign landing; not a priced service page) --------------
+const AGENT_JOBS = [
+  { t: 'Lead capture and qualification', d: 'Collect the questions you always ask a new inquiry, score whether it is worth a call, and pass a clean summary to whoever should reply.' },
+  { t: 'Appointment booking and reminders', d: 'Take a booking request, check the times you make available, and send a reminder before the appointment. Confirmations stay under your rules.' },
+  { t: 'Customer FAQs', d: 'Answer the questions you already have in writing: hours, pricing ranges, service area, what to bring, how to prepare. Anything else goes to a person.' },
+  { t: 'Quote-request intake', d: 'Walk a prospect through the details you need for a quote, then deliver a structured request your team can price. The agent does not invent prices.' },
+  { t: 'Invoice reminders', d: 'Nudge overdue invoices on a schedule you approve, with wording you sign off, and stop when the invoice is marked paid.' },
+  { t: 'Review requests', d: 'Ask happy customers for a review after a job is done, using a template you approve, and skip anyone you flag as a poor fit.' },
+  { t: 'Internal task routing', d: 'Turn an inbound request into a task for the right person, with the fields your team needs, instead of a pile of forwarded emails.' }
+];
+
+const AGENT_STEPS = [
+  { t: 'Set up the account', d: 'We walk you through creating or configuring the AI agent account in your name. You stay the owner. We do not provision accounts automatically, and we never ask you to send passwords through this site.' },
+  { t: 'Connect supported tools', d: 'With the owner\'s permission, we connect tools that platform actually supports and that you already use. If a connection is not available, we say so before you approve any work.' },
+  { t: 'Configure one useful workflow', d: 'We set up a single job that saves your team time this month, using your wording, your hand-off rules and a clear list of what still needs a person.' },
+  { t: 'Test it with you', d: 'We run real examples together, fix what breaks, and agree what the agent may do on its own versus what waits for approval.' },
+  { t: 'Hand it over', d: 'You keep the account, the connections and short notes on how to use and adjust the workflow. If you later want a larger build, that is a separate proposal.' }
+];
+
+const AGENT_FAQS = [
+  { q: 'Which AI platforms can you set up?', a: 'We work with the agent platforms and connections that fit the workflow you want. Compatibility depends on the systems you already use and the access you can grant. We confirm what is possible in writing before you approve a proposal. We do not claim that every tool will connect.' },
+  { q: 'Do you create the account for me?', a: 'The account stays in your name. We guide you through setup and configuration. We do not provision accounts automatically, and we never ask you to email or message us a password.' },
+  { q: 'Will the agent send messages or take payments on its own?', a: 'No. We do not set up unsupervised outbound messaging or payments. Anything that reaches a customer, books a time that costs money, or moves a payment stays on human approval.' },
+  { q: 'What if my tools cannot connect?', a: 'We tell you that in the proposal and suggest a simpler first workflow, or a different service such as a website assistant or a process-automation build. You are not asked to pay for connections we cannot make.' },
+  { q: 'How much does this cost?', a: 'A custom quote for the workflow we agree, after we understand the job and the tools involved. Monthly Growth retainer pricing does not apply to this setup work.' },
+  { q: 'How is this different from your other AI services?', a: 'This offer is a guided setup and handover of an agent account around one useful job. A custom chatbot on your website, a private knowledge assistant, or a multi-step automation across many apps are separate services we can quote once we understand the work.' },
+  { q: 'Do I own the setup when you are done?', a: 'Yes. Accounts, connections and the workflow configuration are yours. We hand over access and short notes on how to use and adjust it.' }
+];
+
+function agentSetupForm() {
+  const id = 'agent';
+  const workflows = [...AGENT_JOBS.map(j => j.t), 'Something else'];
+  const fields = [
+    fieldText(id + 'Name', 'name', 'Your name', { required: true, auto: 'name' }),
+    fieldText(id + 'Business', 'business', 'Business name', { auto: 'organization' }),
+    fieldText(id + 'Email', 'email', 'Work email', { type: 'email', required: true, auto: 'email' }),
+    fieldText(id + 'Phone', 'phone', 'Phone', { type: 'tel', auto: 'tel' }),
+    fieldText(id + 'Tools', 'tools_used', 'Tools you already use', { full: true, extra: ' placeholder="Calendar, inbox, CRM, invoicing, booking tool"' }),
+    fieldChecks(id + 'Job', 'interests', 'First workflow you have in mind', workflows),
+    `<div class="field full"><label for="${id}Message">What should the agent do? <span class="hint">(optional)</span></label><textarea id="${id}Message" name="message" placeholder="The job you want handled, who should approve replies, and anything that must not happen without a person"></textarea></div>`
+  ].join('\n        ');
+  return formShell({ id, kind: 'AI agent setup', fields, submit: 'Discuss this workflow' });
+}
+
+const AAS_BOARD = `<svg class="aas-board" viewBox="0 0 440 440" role="img" aria-label="Abstract diagram of an AI agent account connected to business tools, with a tested workflow handed over to the owner">
+  <rect x="12" y="12" width="416" height="416" rx="28" fill="#071326" stroke="#1c3358"/>
+  <g stroke="#1e3a5f" stroke-width="1" fill="none" opacity=".9">
+    <path d="M12 112h416M12 212h416M12 312h416M112 12v416M212 12v416M312 12v416"/>
+  </g>
+  <g fill="none" stroke="#3d5a82" stroke-width="1.6">
+    <path d="M220 86v52M86 220h52M220 302v52M302 220h52M132 132l40 40M308 132l-40 40M132 308l40-40M308 308l-40-40"/>
+  </g>
+  <g fill="#0b1b33" stroke="#0a58a8" stroke-width="2">
+    <rect x="186" y="186" width="68" height="68" rx="16" fill="#0a58a8" stroke="#7eb6f0"/>
+    <rect x="186" y="48" width="68" height="52" rx="12"/>
+    <rect x="48" y="186" width="52" height="68" rx="12"/>
+    <rect x="186" y="340" width="68" height="52" rx="12"/>
+    <rect x="340" y="186" width="52" height="68" rx="12"/>
+  </g>
+  <g fill="none" stroke="#8fd3c9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M204 68h32M220 60v16"/>
+    <path d="M62 210v20h20"/>
+    <path d="M204 368l12 10 20-22"/>
+    <path d="M356 210h20v20"/>
+    <path d="M204 210h32M220 196v32"/>
+  </g>
+  <g fill="#e6ecf5" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="700" letter-spacing=".08em">
+    <text x="220" y="128" text-anchor="middle">ACCOUNT</text>
+    <text x="74" y="178" text-anchor="middle">TOOLS</text>
+    <text x="366" y="178" text-anchor="middle">WORKFLOW</text>
+    <text x="220" y="330" text-anchor="middle">TEST</text>
+    <text x="220" y="412" text-anchor="middle" fill="#8fd3c9">HANDOVER</text>
+  </g>
+</svg>`;
+
+export function aiAgentSetupBand() {
+  return `
+    <section class="section-alt aas-band">
+      <div class="wrap split center-y">
+        <div>
+          <p class="eyebrow">For small businesses</p>
+          <h2>Need the agent account set up, not a custom build?</h2>
+          <p>We help you configure an AI agent account, connect supported tools with the owner's permission, set up one useful workflow, test it and hand it over. Quoted for the job you want done.</p>
+        </div>
+        <div class="btn-row"><a class="btn" href="/ai-agent-setup/">See AI agent setup</a><a class="btn secondary" href="/contact/">Book a Technology Consultation</a></div>
+      </div>
+    </section>`;
+}
+
+export function aiAgentSetup() {
+  const path = '/ai-agent-setup/';
+  const crumbs = [
+    { name: 'Home', path: '/' },
+    { name: 'Solutions', path: '/solutions/' },
+    { name: 'AI, Automation & BI', path: '/solutions/ai-automation/' },
+    { name: 'AI agent setup', path }
+  ];
+  const title = 'AI Agent Setup for Small Businesses | ' + site.name;
+  const description = 'We help small businesses set up an AI agent account, connect supported tools with owner permission, configure one useful workflow, then test and hand it over.';
+  const locationFact = byRegion('US-based team', esc(site.locationLine), 'span');
+  const main = `    <article class="aas">
+    <section class="aas-hero">
+      <div class="wrap aas-hero-grid">
+        <div>
+          ${breadcrumb(crumbs)}
+          <p class="eyebrow">AI agent setup</p>
+          <h1>Set up an AI agent around one real job in your business.</h1>
+          <p class="lead">We help small businesses configure an AI agent account, connect the tools that platform supports (with the owner's permission), set up one useful workflow, test it, and hand it over. You keep the accounts. You approve anything that reaches a customer or moves money.</p>
+          <div class="btn-row">
+            <a class="btn on-dark" href="#discuss">Discuss your workflow</a>
+            <a class="btn ghost-dark" href="${WA_AGENT_SETUP}" target="_blank" rel="noopener">WhatsApp ${esc(site.whatsappDisplay)}</a>
+          </div>
+          <p class="aas-hero-alt">Or <a href="mailto:${site.email}">email ${esc(site.email)}</a>, or start with a <a href="/technology-assessment/">Free Technology Assessment</a>.</p>
+          <dl class="aas-facts">
+            <div><dt>${esc(site.facts.experience)}</dt><dd>helping businesses with digital work</dd></div>
+            <div><dt>${esc(site.facts.businessesHelped)}</dt><dd>businesses helped</dd></div>
+            <div><dt>${locationFact}</dt><dd>leading every engagement</dd></div>
+          </dl>
+        </div>
+        ${AAS_BOARD}
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">The offer</p>
+          <h2>Setup, configuration and handover. Not a mystery build.</h2>
+          <p class="lead">This is a guided engagement for owners who want an AI agent working on one concrete job, without handing over passwords or buying a custom software project first.</p>
+        </div>
+        <ol class="aas-rail">
+          ${AGENT_STEPS.map(s => `<li data-reveal><h3>${esc(s.t)}</h3><p>${esc(s.d)}</p></li>`).join('')}
+        </ol>
+      </div>
+    </section>
+
+    <section class="section-alt">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">First workflows</p>
+          <h2>What we can often set up as that first job</h2>
+          <p class="lead">These are practical starting points. Whether a workflow is possible depends on your systems, the connections they allow, and the permission you grant. We confirm that before you approve a proposal.</p>
+        </div>
+        <ol class="aas-jobs">
+          ${AGENT_JOBS.map(j => `<li data-reveal><h3>${esc(j.t)}</h3><p>${esc(j.d)}</p></li>`).join('')}
+        </ol>
+        <p class="aas-more">If you later need a custom website assistant, a private knowledge base for staff, or automations across several apps, those are <a href="/solutions/ai-automation/">separate AI and automation services</a> we can quote on their own.</p>
+        <ul class="aas-related">
+          <li><a href="/services/ai-assistants-chatbots/">AI Assistants &amp; Chatbots</a></li>
+          <li><a href="/services/ai-knowledge-base/">AI Knowledge Base</a></li>
+          <li><a href="/services/business-process-automation/">Business Process Automation</a></li>
+          <li><a href="/services/automation-audit/">Automation Audit</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap aas-split">
+        <div>
+          <p class="eyebrow">How it actually works</p>
+          <h2>Compatibility depends on your systems. You stay in control.</h2>
+          <p>We do not assume a tool will connect, and we do not create accounts behind your back. Before work starts you get a written proposal that names the workflow, the tools we expect to use, and what still needs a person.</p>
+          ${list([
+            'The AI agent account is created or configured in your name.',
+            'Tool connections are made with the owner signed in, granting only the access needed for the agreed workflow.',
+            'Consequential actions (customer messages, bookings that cost money, payments) stay on human approval.',
+            'You can revoke access or pause the workflow at any time; it is your account.'
+          ])}
+        </div>
+        <div class="aas-limits" data-reveal>
+          <h3>What this offer is not</h3>
+          ${list([
+            'Unsupervised outbound messaging or payments',
+            'Automatic account provisioning in your name',
+            'A claim that every platform or plugin will connect',
+            'A promised number of leads, bookings or hours saved',
+            'A substitute for a custom chatbot, knowledge base or multi-app automation project'
+          ], 'crosslist')}
+          <p class="hint">Growth retainer pricing does not apply to this setup work. Adjacent builds are quoted separately.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-alt" id="discuss" tabindex="-1">
+      <div class="wrap aas-discuss">
+        <div>
+          <p class="eyebrow">Discuss your workflow</p>
+          <h2>Tell us the job. We will tell you what we can set up.</h2>
+          <p>Share the workflow you have in mind and the tools you already use. We reply ${esc(site.facts.responsePromise)} with what is possible, what still needs a person, and a custom quote. No passwords. No obligation.</p>
+          <ul class="aas-contact">
+            <li><a href="mailto:${site.email}">${esc(site.email)}</a></li>
+            <li><a href="tel:${site.phoneE164}">Call ${esc(site.phoneDisplay)}</a></li>
+            <li><a href="sms:${site.phoneE164}">Text ${esc(site.phoneDisplay)}</a></li>
+            <li><a href="${WA_AGENT_SETUP}" target="_blank" rel="noopener">WhatsApp ${esc(site.whatsappDisplay)}</a></li>
+            <li><a href="/technology-assessment/">Free Technology Assessment</a></li>
+          </ul>
+        </div>
+        <div>
+          ${agentSetupForm()}
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap-narrow">
+        <div class="section-head"><p class="eyebrow">Questions</p><h2>Straight answers before you write to us.</h2></div>
+        ${faqList(AGENT_FAQS)}
+      </div>
+    </section>
+
+    ${ctaBand({
+      heading: 'If the first workflow is not the right starting point.',
+      text: 'Book a technology consultation, or request a Free Technology Assessment. We will recommend the next practical step, whether or not it is this setup offer.',
+      secondaryHref: '/technology-assessment/',
+      secondaryLabel: 'Free Technology Assessment'
+    })}
+    </article>`;
+
+  const crumbsLd = [
+    { name: 'Home', path: '/' },
+    { name: 'Solutions', path: '/solutions/' },
+    { name: 'AI, Automation & BI', path: '/solutions/ai-automation/' },
+    { name: 'AI agent setup', path }
+  ];
+  return page({
+    title,
+    description,
+    path,
+    jsonLd: [
+      orgLd(),
+      serviceLd({ name: 'AI agent setup for small businesses', description, path, serviceType: 'AI agent setup' }),
+      breadcrumbLd(crumbsLd),
+      faqLd(AGENT_FAQS)
+    ],
+    main
   });
 }
 
